@@ -2,7 +2,7 @@
 
 ## Group Information 
 
-Group name: Android Aces
+Group name: Android Aces  
 Group number: 16
 
 Name: Taylor Smith  
