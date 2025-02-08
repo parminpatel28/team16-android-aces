@@ -5,36 +5,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.munchies.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
 
-private var _binding: FragmentProfileBinding? = null
-  // This property is only valid between onCreateView and
-  // onDestroyView.
-  private val binding get() = _binding!!
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
-    val profileViewModel =
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val profileViewModel =
             ViewModelProvider(this).get(ProfileViewModel::class.java)
 
-    _binding = FragmentProfileBinding.inflate(inflater, container, false)
-    val root: View = binding.root
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
-    val textView: TextView = binding.textHome
-    profileViewModel.text.observe(viewLifecycleOwner) {
-      textView.text = it
+        // Bind UI elements
+        val textName: TextView = binding.textProfileName
+        val textEmail: TextView = binding.textProfileEmail
+        val btnLogout: Button = binding.btnLogout
+
+        // Observe data from ViewModel and update UI
+        profileViewModel.userName.observe(viewLifecycleOwner) {
+            textName.text = it
+        }
+        profileViewModel.userEmail.observe(viewLifecycleOwner) {
+            textEmail.text = it
+        }
+
+        // Handle Logout Button Click
+        btnLogout.setOnClickListener {
+            // Call the ViewModel to handle logout logic
+            profileViewModel.logout()
+        }
+
+        return root
     }
-    return root
-  }
 
-override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
