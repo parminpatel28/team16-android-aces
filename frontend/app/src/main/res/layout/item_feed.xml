@@ -57,7 +57,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
 
             <!-- Comment Button (Bottom Left) -->
@@ -71,7 +71,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
 
             <!-- Save Button (Bottom Right) -->
@@ -84,7 +84,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
 
         </RelativeLayout>

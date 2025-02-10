@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 class FriendsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "These are your friends!" +
-                "You currently have none :("
+        value = "These are your friends! \nYou currently have none :("
     }
     val text: LiveData<String> = _text
 }
