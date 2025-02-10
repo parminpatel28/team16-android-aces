@@ -22,6 +22,16 @@
             android:text="Username"
             android:textStyle="bold" />
 
+        <!-- Restaurant Name -->
+        <TextView
+            android:id="@+id/restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restaurant Name"
+            android:textStyle="italic"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="2dp"/>
+
         <!-- Feed Content -->
         <TextView
             android:id="@+id/feed_content"

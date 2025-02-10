@@ -33,8 +33,8 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
 
         // Observe the LiveData from the ViewModel
-        homeViewModel.feedItems.observe(viewLifecycleOwner) { feedList ->
-            adapter.submitList(feedList)  // Update the list in the RecyclerView
+        homeViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
+            adapter.submitList(reviewList)  // Update the list in the RecyclerView
         }
 
         return root

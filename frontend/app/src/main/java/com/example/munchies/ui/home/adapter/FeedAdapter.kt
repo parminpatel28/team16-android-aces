@@ -1,42 +1,41 @@
 package com.example.munchies.ui.home.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.databinding.ItemFeedBinding
-import com.example.munchies.ui.home.model.FeedItem
+import com.example.munchies.model.Review
+import com.example.munchies.ui.review.ReviewActivity
 
-class FeedAdapter : ListAdapter<FeedItem, FeedAdapter.FeedViewHolder>(FeedDiffCallback()) {
+class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val binding = ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FeedViewHolder(binding)
+        return ReviewViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        val feedItem = getItem(position)
-        holder.bind(feedItem)
+    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
+        val review = getItem(position)
+        holder.bind(review)
     }
 
-    inner class FeedViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(feedItem: FeedItem) {
-            // binding.feedItem = feedItem
-            // Load profile image and feed image (if URLs are used)
-
-            // Set text views
-            binding.userName.text = feedItem.title
-            binding.feedContent.text = feedItem.content
+    inner class ReviewViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(review: Review) {
+            binding.userName.text = review.user
+            binding.feedContent.text = review.content
+            binding.restaurantName.text = review.restaurant
         }
     }
 
-    class FeedDiffCallback : DiffUtil.ItemCallback<FeedItem>() {
-        override fun areItemsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
+    class ReviewDiffCallback : DiffUtil.ItemCallback<Review>() {
+        override fun areItemsTheSame(oldItem: Review, newItem: Review): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
+        override fun areContentsTheSame(oldItem: Review, newItem: Review): Boolean {
             return oldItem == newItem
         }
     }
