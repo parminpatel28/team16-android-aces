@@ -117,6 +117,11 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "GitIgnore"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
@@ -248,6 +253,7 @@
       <updated>1738600507245</updated>
       <workItem from="1739300362372" duration="339000" />
       <workItem from="1739308861838" duration="613000" />
+      <workItem from="1739309532227" duration="436000" />
     </task>
     <servers />
   </component>
