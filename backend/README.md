@@ -14,5 +14,6 @@ This project is using `Java 17` and `JDK 18`
 
 1. In project directory (`./backend`) run `./gradlew build`
 2. To run the server execute `./gradlew bootRun` within the terminal
+3. Make a Curl request using this command `curl http://localhost:8080` (it will throw a 404 but that is expected)
 
 
