@@ -1,48 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.review.ReviewActivity">
 
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"/>
-
-    <TextView
-        android:id="@+id/restaurantName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Restaurant Name"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/userName"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"/>
-
-    <ImageView
-        android:id="@+id/reviewImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toBottomOf="@id/restaurantName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/reviewContent"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Review Content"
-        app:layout_constraintTop_toBottomOf="@id/reviewImage"
-        android:layout_margin="16dp"/>
+        android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/orange"
+            app:titleTextColor="@color/white"
+            app:title="@string/leave_review"
+            app:navigationIcon="@drawable/arrow_left"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="16dp"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overall_rating"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <RatingBar
+                android:id="@+id/overallRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="0"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/food_quality"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <RatingBar
+                android:id="@+id/foodRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="0"/>
+
+            <EditText
+                android:id="@+id/reviewText"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="@string/review_hint"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:gravity="top|start"
+                android:layout_marginTop="16dp"/>
+
+            <Button
+                android:id="@+id/submitReviewButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submit_review"
+                android:backgroundTint="@color/orange"
+                android:textColor="@color/white"
+                android:padding="12dp"
+                android:textAllCaps="false"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

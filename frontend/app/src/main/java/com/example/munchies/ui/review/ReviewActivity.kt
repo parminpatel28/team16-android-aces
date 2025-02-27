@@ -1,41 +1,60 @@
 package com.example.munchies.ui.review
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.munchies.R
+import com.example.munchies.databinding.ActivityReviewBinding
 import com.example.munchies.model.Review
 
 class ReviewActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityReviewBinding
+    private val reviewViewModel: ReviewViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_review)
 
-        val reviewId = intent.getIntExtra("review_id", -1)
+        binding = ActivityReviewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Simulated data (replace with real fetching logic)
-        val review = getReviewById(reviewId)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Leave a Review"
 
-        // Bind review details to UI
-        findViewById<TextView>(R.id.userName).text = review?.user
-        findViewById<TextView>(R.id.restaurantName).text = review?.restaurant
-        findViewById<TextView>(R.id.reviewContent).text = review?.content
+        binding.submitReviewButton.setOnClickListener {
+            val overallRating = binding.overallRatingBar.rating.toInt()
+            val foodRating = binding.foodRatingBar.rating.toInt()
+            val reviewText = binding.reviewText.text.toString().trim()
 
-        // TODO: Images and timestamp?
+            if (reviewText.isEmpty()) {
+                Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val newReview = Review(
+                reviewID = (0..1000).random(),
+                poster = "Anonymous",
+                caption = reviewText,
+                restaurants = listOf("Unknown Restaurant"),
+                location = null,
+                date = "2024-02-26",
+                rating = overallRating,
+                likes = 0
+            )
+
+            reviewViewModel.addReview(newReview)
+            Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
-    // Simulated function to fetch a review (replace with backend call)
-    private fun getReviewById(id: Int): Review? {
-        val reviews = listOf(
-            Review(1, "Friend #1", "McDonald's", "The junior chicken is really good!"),
-            Review(2, "Friend #2", "Lazeez", "I <3 their chicken on the rocks!"),
-            Review(3, "Friend #3", "Los Rolling Tacos", "5 stars for the birria tacos!"),
-            Review(4, "Friend #4", "Nuri Village", "Just tried it... YUM!!"),
-            Review(5, "Friend #5", "Kabob Hut", "Highly recommend the lamb skewers!"),
-            Review(6, "Friend #6", "Taco Bell", "DO NOT TRY THE SUSHI XXX")
-        )
-        return reviews.find { it.id == id }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

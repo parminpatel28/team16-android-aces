@@ -24,15 +24,24 @@ class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiff
 
     inner class ReviewViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
-            binding.userName.text = review.user
-            binding.feedContent.text = review.content
-            binding.restaurantName.text = review.restaurant
+            binding.userName.text = review.poster
+            binding.feedContent.text = review.caption
+            binding.restaurantName.text = review.restaurants.firstOrNull()?: "Unknown Restaurant"
+
+            // Navigate to ReviewActivity when clicked
+            binding.root.setOnClickListener {
+                val context = binding.root.context
+                val intent = Intent(context, ReviewActivity::class.java).apply {
+                    putExtra("review_id", review.reviewID)
+                }
+                context.startActivity(intent)
+            }
         }
     }
 
     class ReviewDiffCallback : DiffUtil.ItemCallback<Review>() {
         override fun areItemsTheSame(oldItem: Review, newItem: Review): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.reviewID == newItem.reviewID
         }
 
         override fun areContentsTheSame(oldItem: Review, newItem: Review): Boolean {

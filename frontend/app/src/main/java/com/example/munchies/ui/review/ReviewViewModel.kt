@@ -3,11 +3,28 @@ package com.example.munchies.ui.review
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.munchies.model.Review
 
 class ReviewViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is for reviews!"
+    private val _reviews = MutableLiveData<MutableList<Review>>(mutableListOf())
+    val reviews: LiveData<MutableList<Review>> = _reviews
+
+    init {
+        // ✅ Add test data to verify RecyclerView is working
+        _reviews.value = mutableListOf(
+            Review(
+                1, "Test User", "Test Restaurant",
+                location = "Location",
+                date = "Today",
+                rating = 5,
+            )
+        )
     }
-    val text: LiveData<String> = _text
+
+    fun addReview(review: Review) {
+        val currentReviews = _reviews.value ?: mutableListOf()
+        currentReviews.add(0, review) // Add new review to the top
+        _reviews.value = currentReviews
+    }
 }
