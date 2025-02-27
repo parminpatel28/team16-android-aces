@@ -13,6 +13,7 @@ public class MunchiesBackendApplication {
 
 		DatabaseConnection db_connection = new DatabaseConnection();
 
+		db_connection.getConnection();
 
 	}
 

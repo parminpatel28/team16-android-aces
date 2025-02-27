@@ -8,24 +8,26 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     private static final Dotenv dotenv = Dotenv.load();
-    private static final String url = dotenv.get("DB_URL");
-    private static final String username = dotenv.get("DB_USER");
-    private static final String password = dotenv.get("DB_PASSWORD");
+    private final String url;
+    private final String username;
+    private final String password;
 
-    public static Connection getConnection() {
+    public DatabaseConnection() {
 
-        try {
-            return DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            throw new RuntimeException("Database connection Failed: " + e.getMessage());
-        }
+        url = dotenv.get("DB_URL");
+        password = dotenv.get("DB_PASSWORD");
+        username = dotenv.get("DB_USER");
+
     }
 
-    public static void main(String[] args) {
-        try (Connection conn = getConnection()) {
+    public Connection getConnection() {
+        try (Connection conn = DriverManager.getConnection(url, username, password); ) {
+
             System.out.println("✅ Successfully connected to the database!");
-        } catch (Exception e) {
+            return conn;
+        } catch (SQLException e) {
             System.err.println("❌ Connection failed: " + e.getMessage());
+            throw new RuntimeException("Database connection Failed: " + e.getMessage());
         }
     }
 }
