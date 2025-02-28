@@ -14,4 +14,5 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-02-26,1,1,1,1,1,1,planned demo 2 and scheduled next meeting
 2025-02-26,1.5,0,0,0,0,0,set up class and basic structure for review functionality
 2025-02-26,0,0,4,0,0,0,worked on creating/connecting to database hosted on AWS RDS
-2025-02-27,0,0,4,0,0,0, setup the database connection through backend server 
+2025-02-27,0,0,4,0,0,0,setup the database connection through backend server 
+2025-02-27,3.5,0,0,0,0,0,added frontend for review pages
