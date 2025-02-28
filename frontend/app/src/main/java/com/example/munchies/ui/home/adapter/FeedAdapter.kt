@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.databinding.ItemFeedBinding
 import com.example.munchies.model.Review
-import com.example.munchies.ui.review.ReviewActivity
+import com.example.munchies.ui.review.ReviewDetailsActivity
 
 class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
@@ -28,10 +28,9 @@ class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiff
             binding.feedContent.text = review.caption
             binding.restaurantName.text = review.restaurants.firstOrNull()?: "Unknown Restaurant"
 
-            // Navigate to ReviewActivity when clicked
             binding.root.setOnClickListener {
                 val context = binding.root.context
-                val intent = Intent(context, ReviewActivity::class.java).apply {
+                val intent = Intent(context, ReviewDetailsActivity::class.java).apply {
                     putExtra("review_id", review.reviewID)
                 }
                 context.startActivity(intent)

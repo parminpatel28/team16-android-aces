@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.databinding.ItemReviewBinding
 import com.example.munchies.model.Review
 
-class ReviewAdapter : ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
+class ReviewAdapter(private val onItemClick: (Review) -> Unit) :
+    ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val binding = ItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,12 +19,15 @@ class ReviewAdapter : ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(Review
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = getItem(position)
         holder.bind(review)
+        holder.itemView.setOnClickListener { onItemClick(review) }
     }
 
-    inner class ReviewViewHolder(private val binding: ItemReviewBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ReviewViewHolder(private val binding: ItemReviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
         fun bind(review: Review) {
             binding.reviewCaption.text = review.caption
-            binding.userName.text = review.poster
+//            binding.overallRatingBar.rating = review.rating.toFloat()
             binding.reviewDate.text = review.date
         }
     }

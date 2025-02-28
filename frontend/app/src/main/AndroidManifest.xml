@@ -29,6 +29,9 @@
             android:name=".ui.review.ReviewActivity"
             android:exported="true"
             android:theme="@style/Theme.Munchies.NoActionBar"/>
+        <activity
+            android:name=".ui.review.ReviewDetailsActivity"
+            android:theme="@style/Theme.Munchies.NoActionBar"/>
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ class ReviewViewModel : ViewModel() {
     val reviews: LiveData<MutableList<Review>> = _reviews
 
     init {
-        // ✅ Add test data to verify RecyclerView is working
+        // random seed review for now
         _reviews.value = mutableListOf(
             Review(
                 1, "Test User", "Test Restaurant",
@@ -24,7 +24,7 @@ class ReviewViewModel : ViewModel() {
 
     fun addReview(review: Review) {
         val currentReviews = _reviews.value ?: mutableListOf()
-        currentReviews.add(0, review) // Add new review to the top
+        currentReviews.add(0, review)
         _reviews.value = currentReviews
     }
 }

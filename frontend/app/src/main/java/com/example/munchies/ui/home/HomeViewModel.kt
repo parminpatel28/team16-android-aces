@@ -15,7 +15,7 @@ class HomeViewModel : ViewModel() {
     // Simulated backend fetch
     fun fetchReviews() {
         viewModelScope.launch {
-            // Replace with actual backend API call when available
+            // Replace with actual backend call
             val data = listOf(
                 Review(1, "Friend #1", "The junior chicken is rly good!", emptyList(), emptyList(), listOf("McDonalds"), null, "2024-02-26", 5, 12),
                 Review(2, "Friend #2", "I <3 lazeez", emptyList(), emptyList(), listOf("Lazeez Shawarma"), null, "2024-02-25", 4, 8),

@@ -7,7 +7,7 @@
     <string name="title_friends">Friends</string>
     <string name="title_profile">You</string>
 
-    <!--Review-->
+    <!--Reviews-->
     <string name="add_review">Add Review</string>
     <string name="leave_review">Leave a Review</string>
     <string name="overall_rating">Overall Rating</string>

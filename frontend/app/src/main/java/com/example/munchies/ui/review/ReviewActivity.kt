@@ -25,7 +25,6 @@ class ReviewActivity : AppCompatActivity() {
 
         binding.submitReviewButton.setOnClickListener {
             val overallRating = binding.overallRatingBar.rating.toInt()
-            val foodRating = binding.foodRatingBar.rating.toInt()
             val reviewText = binding.reviewText.text.toString().trim()
 
             if (reviewText.isEmpty()) {

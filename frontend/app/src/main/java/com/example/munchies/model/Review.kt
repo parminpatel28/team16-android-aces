@@ -1,5 +1,9 @@
 package com.example.munchies.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Review(
     val reviewID: Int,
     val poster: String, // should be a user, string for now
@@ -12,4 +16,4 @@ data class Review(
     val rating: Int,
     val likes: Int = 0,
 //    val comments: List<Comment> = emptyList()
-)
+) : Parcelable
