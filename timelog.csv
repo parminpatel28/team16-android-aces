@@ -4,6 +4,15 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-01-27,0.75,0.75,0.75,0.75,0.75,0.75,started proposal draft
 2025-01-29,1,1,1,1,1,1,worked on and edited proposal draft
 2025-02-03,0.75,0.75,0.75,0.75,0.75,0.75,assigned roles for iteration 1
+2025-02-03,0,0,1.5,0,0,0,worked on setting up kotlin app 
+2025-02-05,0,0,0.5,0,0,0,resolved directory issues to support backend 
 2025-02-08,1.5,0,0,0,0,0,worked on basic navigation functionality
 2025-02-10,0.5,0.5,0.5,0.5,0.5,0.5,worked on demo 1
 2025-02-10,3,0,0,0,0,0,worked on home page and review components
+2025-02-11,1,1,1,1,1,1,worked on class/package diagram and planned for demo
+2025-02-24,0.25,0.25,0.25,0.25,0.25,0.25,discuss demo 2
+2025-02-26,1,1,1,1,1,1,planned demo 2 and scheduled next meeting
+2025-02-26,1.5,0,0,0,0,0,set up class and basic structure for review functionality
+2025-02-26,0,0,4,0,0,0,worked on creating/connecting to database hosted on AWS RDS
+2025-02-27,0,0,4,0,0,0,setup the database connection through backend server 
+2025-02-27,3.5,0,0,0,0,0,added frontend for review pages
