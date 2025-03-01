@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Munchies</string>
     <string name="title_home">Feed</string>
     <string name="title_review">Review</string>
@@ -10,4 +10,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
+
+    <string name="dont_have_account">Don\'t Have An Account?</string>
+    <string name="already_have_account">Already Have An Account?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="client_id" tools:ignore="TypographyDashes">176346144139-553qs9ntri8u875ir5itkd91l4tpputp.apps.googleusercontent.com</string>
 </resources>
