@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.review.ReviewActivity">
 
+    <!-- Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +25,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,6 +39,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Rating Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,21 +53,151 @@
                 android:layout_height="wrap_content"
                 android:progressTint="@color/yellow"
                 android:secondaryProgressTint="@color/yellow"
+                android:backgroundTint="@color/gray"
                 android:numStars="5"
-                android:stepSize="1.0"
-                android:rating="0"/>
+                android:stepSize="0.5"
+                android:rating="0"
+                android:layout_marginTop="8dp"/>
 
-            <EditText
-                android:id="@+id/reviewText"
+            <!-- Review Caption -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/review_hint"
-                android:background="@android:drawable/edit_text"
-                android:padding="12dp"
-                android:textSize="14sp"
-                android:gravity="top|start"
-                android:layout_marginTop="16dp"/>
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/orange"
+                app:boxStrokeWidth="2dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/reviewText"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:gravity="top|start"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Photo Upload Section -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/photoUploadLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Upload a Photo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeColor="@color/gray">
+
+                <LinearLayout
+                    android:id="@+id/photoUploadContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/uploadImageIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_upload"
+                        app:tint="@color/gray"/>
+
+                    <TextView
+                        android:id="@+id/uploadText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload a photo"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginStart="8dp"/>
+                </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Tag Friends -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tagFriendsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tag Friends"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeColor="@color/orange">
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/tagFriendsDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:paddingVertical="12dp"
+                    android:minHeight="48dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingStart="16dp"
+                    android:textSize="14sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tagFriendsChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleLine="false"
+                app:chipSpacing="8dp"/>
+
+            <!-- Tag Restaurant -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tagRestaurantLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeColor="@color/orange"
+                android:hint="Tag Restaurants">
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/tagRestaurantsDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:paddingVertical="12dp"
+                    android:minHeight="48dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingStart="16dp"
+                    android:textSize="14sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tagRestaurantChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleLine="false"
+                app:chipSpacing="8dp"/>
+
+
+            <!-- TODO: Select Location -->
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/selectLocationLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:hint="Select Location">-->
+
+<!--                <AutoCompleteTextView-->
+<!--                    android:id="@+id/selectLocationDropdown"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:paddingVertical="12dp"-->
+<!--                    android:minHeight="48dp"-->
+<!--                    android:inputType="text"/>-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+            <!-- Submit Button -->
             <Button
                 android:id="@+id/submitReviewButton"
                 android:layout_width="match_parent"
@@ -78,5 +210,4 @@
                 android:layout_marginTop="16dp"/>
         </LinearLayout>
     </ScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

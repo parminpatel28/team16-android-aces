@@ -2,6 +2,7 @@ package com.example.munchies.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
 
 @Parcelize
 data class Review(
@@ -12,8 +13,8 @@ data class Review(
     val taggedUsers: List<String> = emptyList(), // should be list of users, string for now
     val restaurants: List<String> = emptyList(), // should be restaurant list, string for now
     val location: String?, // should be location, string for now
-    val date: String,
-    val rating: Int,
+    val date: Instant,
+    val rating: Double,
     val likes: Int = 0,
 //    val comments: List<Comment> = emptyList()
 ) : Parcelable

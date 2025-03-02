@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.databinding.ItemReviewBinding
 import com.example.munchies.model.Review
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class ReviewAdapter(private val onItemClick: (Review) -> Unit) :
     ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
@@ -28,7 +30,7 @@ class ReviewAdapter(private val onItemClick: (Review) -> Unit) :
         fun bind(review: Review) {
             binding.reviewCaption.text = review.caption
 //            binding.overallRatingBar.rating = review.rating.toFloat()
-            binding.reviewDate.text = review.date
+//            binding.reviewDate.text = review.date
         }
     }
 

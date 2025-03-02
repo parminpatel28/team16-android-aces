@@ -20,7 +20,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
             binding.reviewText.text = it.caption
             binding.restaurantName.text = it.restaurants.joinToString()
             binding.overallRatingBar.rating = it.rating.toFloat()
-            binding.reviewDate.text = it.date
+//            binding.reviewDate.text = it.date
         }
 
         binding.backButton.setOnClickListener {
