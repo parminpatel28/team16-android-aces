@@ -2,6 +2,7 @@ package com.example.munchies
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -14,26 +15,38 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize FirebaseAuth
-        auth = FirebaseAuth.getInstance()
-
-        // Set the login layout
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Check if user is already logged in
+        auth = FirebaseAuth.getInstance()
+
         if (auth.currentUser != null) {
-            // Redirect to MainActivity if the user is already logged in
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
-        // Handle sign-in button click
-        binding.signIn.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-            finish() // Closes LoginActivity so the user can't go back
+        binding.loginBtn.setOnClickListener {  // Updated ID
+            val email = binding.emailLogin.text.toString()
+            val password = binding.passwordLogin.text.toString()
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            } else {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.registerTV.setOnClickListener { // Updated ID
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
+
 }

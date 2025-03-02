@@ -4,27 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.munchies.databinding.ActivityRegisterBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.example.munchies.databinding.ActivityRegisterBinding
+import com.google.firebase.auth.GoogleAuthProvider
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        supportActionBar?.title = "Register"
 
-        // Initialize FirebaseAuth
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         auth = FirebaseAuth.getInstance()
 
-        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.client_id))
             .requestEmail()
@@ -42,14 +41,18 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.passwordRegister.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        finish()
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        } else {
+                            val exception = task.exception
+                            Toast.makeText(this, "Registration failed: ${exception?.message}", Toast.LENGTH_LONG).show()
+                        }
                     }
-                }.addOnFailureListener {
-                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
-                }
+            } else {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -61,10 +64,14 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 13 && resultCode == RESULT_OK) {
+        if (requestCode == 13) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account = task.getResult(ApiException::class.java)!!
-            firebaseAuthWithGoogle(account.idToken!!)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -75,9 +82,9 @@ class RegisterActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
+                } else {
+                    Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_LONG).show()
                 }
-            }.addOnFailureListener {
-                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
             }
     }
 }
