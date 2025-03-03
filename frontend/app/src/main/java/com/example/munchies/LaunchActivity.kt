@@ -11,6 +11,7 @@ class LaunchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val auth = FirebaseAuth.getInstance()
+        auth.signOut()
 
         if (auth.currentUser != null) {
             // User is logged in, go to MainActivity
