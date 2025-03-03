@@ -16,6 +16,6 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-02-26,0,0,4,0,0,0,worked on creating/connecting to database hosted on AWS RDS
 2025-02-27,0,0,4,0,0,0,setup the database connection through backend server 
 2025-02-27,3.5,0,0,0,0,0,added frontend for review pages
-2025-03-01,0,0,5,0,0,0,created the JPA entity, services and controller 
+2025-03-01,0,0,5,0,0,0,"created the JPA entity, services and controller" 
 2025-03-02,6,0,0,0,0,0,worked on review frontend and backend
 2025-03-03,0.25,0.25,0.25,0.25,0.25,0.25,check in for demo 2 and discuss blockers
