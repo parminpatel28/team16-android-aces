@@ -10,23 +10,40 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/restaurantName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User Name"
+            android:text="Restaurant Name"
             android:textStyle="bold"
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/reviewCaption"
+            android:id="@+id/reviewText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Review caption"
             android:textSize="14sp"
             android:layout_marginTop="4dp"/>
 
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/yellow"
+            android:secondaryProgressTint="@color/yellow"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:rating="0"
+            android:focusable="false"
+            android:background="@android:color/transparent"
+            android:foreground="@android:color/transparent"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            style="?android:attr/ratingBarStyleSmall"
+            android:isIndicator="true"/>
+
         <TextView
-            android:id="@+id/reviewDate"
+            android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"

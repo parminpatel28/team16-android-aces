@@ -9,53 +9,47 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
-import android.view.ViewGroup.MarginLayoutParams
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
+import com.example.munchies.model.Review
+import java.time.Instant
 
 class ReviewFragment : Fragment() {
 
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
     private lateinit var reviewViewModel: ReviewViewModel
-    private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var adapter: ReviewAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
+        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.addReviewButton) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updateLayoutParams<MarginLayoutParams> {
-                bottomMargin = systemBars.bottom + 24 // Moves FAB up dynamically
-            }
-            insets
+        setupRecyclerView()
+        loadMockReviews()
+
+        binding.addReviewButton.setOnClickListener {
+            startActivity(Intent(requireContext(), ReviewActivity::class.java))
         }
 
-        reviewAdapter = ReviewAdapter { selectedReview ->
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        adapter = ReviewAdapter { selectedReview ->
             val intent = Intent(requireContext(), ReviewDetailsActivity::class.java)
             intent.putExtra("review", selectedReview)
             startActivity(intent)
         }
+        binding.recyclerReviews.layoutManager = LinearLayoutManager(context)
+        binding.recyclerReviews.adapter = adapter
+    }
 
-        val recyclerView = binding.recyclerReviews
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = reviewAdapter
-
-        reviewViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
-            reviewAdapter.submitList(reviewList)
-        }
-
-        binding.addReviewButton.setOnClickListener {
-            val intent = Intent(requireContext(), com.example.munchies.ui.review.ReviewActivity::class.java)
-            startActivity(intent)
-        }
-
-        return binding.root
+    private fun loadMockReviews() {
+        val mockReviews = listOf(
+            Review(1, "Taylor", "Great place!", location = "Waterloo", date = Instant.now(), rating = 4.5, restaurants = listOf("Taco Bell")),
+            Review(2, "Taylor", "Loved the sushi!", location = "Waterloo", date = Instant.now(), rating = 4.0, restaurants = listOf("Ye's Sushi")),
+            Review(3, "Taylor", "Not bad", location = "Waterloo", date = Instant.now(), rating = 2.5, restaurants = listOf("Burger King"))
+        )
+        adapter.submitList(mockReviews) // TEMPORARY until backend is ready
     }
 
     override fun onDestroyView() {

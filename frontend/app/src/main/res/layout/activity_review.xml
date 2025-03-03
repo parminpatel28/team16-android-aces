@@ -57,6 +57,15 @@
                 android:numStars="5"
                 android:stepSize="0.5"
                 android:rating="0"
+                android:isIndicator="false"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="1.25"
+                android:scaleY="1.25"
+                android:layout_gravity="center_horizontal"
+                android:focusableInTouchMode="true"
+                android:background="@android:color/transparent"
+                android:foreground="@android:color/transparent"
                 android:layout_marginTop="8dp"/>
 
             <!-- Review Caption -->
