@@ -1,18 +1,17 @@
 package com.example.munchies.ui.review
 
-import android.R
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityReviewBinding
 import com.example.munchies.model.Review
-import java.time.Instant
-import android.widget.MultiAutoCompleteTextView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.time.Instant
 
 
 class ReviewActivity : AppCompatActivity() {
@@ -114,7 +113,7 @@ class ReviewActivity : AppCompatActivity() {
                 photos = selectedPhotos,
                 taggedUsers = taggedUsers,
                 restaurants = taggedRestaurants,
-                location = selectedLocation,
+                location = selectedLocation ?: "",
                 date = Instant.now(),
                 rating = overallRating,
                 likes = 0
