@@ -1,8 +1,29 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--Pages-->
     <string name="app_name">Munchies</string>
     <string name="title_home">Feed</string>
-    <string name="title_review">Review</string>
+    <string name="title_review">Reviews</string>
     <string name="title_map">Map</string>
     <string name="title_friends">Friends</string>
     <string name="title_profile">You</string>
+    <string name="no_data">Not Signed In</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+
+    <string name="dont_have_account">Don\'t Have An Account?</string>
+    <string name="already_have_account">Already Have An Account?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="client_id" tools:ignore="TypographyDashes">176346144139-553qs9ntri8u875ir5itkd91l4tpputp.apps.googleusercontent.com</string>
+
+    <!--Reviews-->
+    <string name="add_review">Add Review</string>
+    <string name="leave_review">Leave a Review</string>
+    <string name="overall_rating">Overall Rating</string>
+    <string name="food_quality">Food Quality</string>
+    <string name="review_hint">Tell us about your experience...</string>
+    <string name="submit_review">Submit Review</string>
 </resources>
