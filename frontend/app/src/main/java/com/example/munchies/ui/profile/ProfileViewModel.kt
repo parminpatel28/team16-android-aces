@@ -1,11 +1,14 @@
 package com.example.munchies.ui.profile
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.munchies.model.Review
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel() : ViewModel() {
+
 
     // User Profile Data
     private val _userName = MutableLiveData<String>().apply { value = "John Doe" }
@@ -20,7 +23,7 @@ class ProfileViewModel : ViewModel() {
     private val _userFriends = MutableLiveData<List<Int>>().apply {value = listOf()}
     val userFriends: LiveData<List<Int>> = _userFriends
 
-    private val _userBio = MutableLiveData<String>().apply {value = "I loooove eating food"}
+    private val _userBio = MutableLiveData<String>().apply {value = "I loooove eating food\nFollow for more reviews"}
     val userBio: LiveData<String> = _userBio
 
     private val _userPfp = MutableLiveData<String>().apply {value = "https://e.snmc.io/i/fullres/w/92a83a11be8d457d5fc32ac7477db0c3/11130567"}
@@ -33,5 +36,7 @@ class ProfileViewModel : ViewModel() {
         _userName.value = "Logged out"
         _userEmail.value = "No email available"
         _userBio.value = "..."
+
+
     }
 }
