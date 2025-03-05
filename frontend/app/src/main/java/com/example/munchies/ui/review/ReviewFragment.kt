@@ -1,27 +1,26 @@
 package com.example.munchies.ui.review
 
+//import ReviewViewModelFactory
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
 import com.example.munchies.model.Review
+import com.example.munchies.repository.ReviewRepository
 import java.time.Instant
 
 class ReviewFragment : Fragment() {
 
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
-    private lateinit var reviewViewModel: ReviewViewModel
     private lateinit var adapter: ReviewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
-        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
 
         setupRecyclerView()
         loadMockReviews()

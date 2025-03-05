@@ -19,6 +19,10 @@ public class Review {
     @Column(name = "review_id", nullable = false)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Column(name = "caption", length = Integer.MAX_VALUE)
     private String caption;
 
@@ -54,6 +58,14 @@ public class Review {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getCaption() {

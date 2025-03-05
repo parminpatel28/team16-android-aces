@@ -1,6 +1,8 @@
 package com.example.munchies.ui.review
 
+//import ReviewViewModelFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
@@ -8,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityReviewBinding
-import com.example.munchies.model.Review
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -90,6 +91,8 @@ class ReviewActivity : AppCompatActivity() {
         binding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Log.d("ReviewActivity", "onCreate: ReviewActivity started")
+
         setupUserTagging()
         setupRestaurantTagging()
 
@@ -98,30 +101,36 @@ class ReviewActivity : AppCompatActivity() {
         supportActionBar?.title = "Leave a Review"
 
         binding.submitReviewButton.setOnClickListener {
-            val overallRating = binding.overallRatingBar.rating.toDouble()
-            val reviewText = binding.reviewText.text.toString().trim()
+            Log.d("ReviewActivity", "Submit Review clicked")
+            try{
+                val overallRating = binding.overallRatingBar.rating.toDouble()
+                val reviewText = binding.reviewText.text.toString().trim()
 
-            if (reviewText.isEmpty()) {
-                Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (reviewText.isEmpty()) {
+                    Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                // TODO: fix type mismatch and use Review object
+                val reviewData = mapOf(
+                    "caption" to reviewText,
+                    "date" to Instant.now().toString(),
+                    "rating" to overallRating,
+                    "likes" to 0,
+                    "taggedUsers" to emptyMap<String, Any>(),
+                    "restaurants" to emptyMap<String, Any>(),
+                    "user" to mapOf("id" to 1)
+                )
+
+                Log.d("ReviewActivity", "Submitting Review")
+                reviewViewModel.submitReview(reviewData)
+
+                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+                finish()
+            } catch (e: Exception) {
+                Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
+                e.printStackTrace()
             }
-
-            val newReview = Review(
-                reviewID = (0..1000).random(),
-                poster = "Anonymous",
-                caption = reviewText,
-                photos = selectedPhotos,
-                taggedUsers = taggedUsers,
-                restaurants = taggedRestaurants,
-                location = selectedLocation ?: "",
-                date = Instant.now(),
-                rating = overallRating,
-                likes = 0
-            )
-
-            reviewViewModel.addReview(newReview)
-            Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
-            finish()
         }
     }
 
