@@ -60,6 +60,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.auth)
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.play.services.maps)
+    implementation(libs.androidx.fragment.ktx)
+    
 
 
 }
