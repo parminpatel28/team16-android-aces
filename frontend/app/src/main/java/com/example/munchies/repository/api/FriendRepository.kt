@@ -17,7 +17,7 @@ class FriendRepository {
     fun getUserFriends(userId: Long, onResult: (Map<Int,Any>?) -> Unit) {
         val gson = Gson()
 
-        Log.d("FriendRepository", "Final JSON Payload")
+        Log.d("FriendRepository")
 
         apiService.getUserFriends(userId).enqueue(object : Callback<Map<Int,Any>> {
             override fun onResponse(call: Call<Map<Int, Any>>, response: Response<Map<Int, Any>>) {
