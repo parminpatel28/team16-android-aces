@@ -46,7 +46,7 @@ public class User {
     @ColumnDefault("'[]'::jsonb")
     @Column(name = "friends")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> friends;
+    private Map<Integer, Object> friends;
 
     @ColumnDefault("'[]'::jsonb")
     @Column(name = "saved_reviews")
@@ -117,11 +117,11 @@ public class User {
         this.location = location;
     }
 
-    public Map<String, Object> getFriends() {
+    public Map<Integer, Object> getFriends() {
         return friends;
     }
 
-    public void setFriends(Map<String, Object> friends) {
+    public void setFriends(Map<Integer, Object> friends) {
         this.friends = friends;
     }
 

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,27 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.friends.FriendsFragment" >
+    android:fitsSystemWindows="true"
+    tools:context=".ui.friends.FriendSearchActivity">
 
     <SearchView
-        android:id="@+id/searchFriends"
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:layout_marginTop="20dp"
         android:queryHint="Search For Friends" />
 
-    <Button
-        android:id="@+id/btnAddFriends"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_friends"
-        android:layout_marginHorizontal="32dp" />
-
-    <!-- RecyclerView to display the feed -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerFriends"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="10dp"/>
-
+        android:layout_marginTop="20dp"/>
 </LinearLayout>
