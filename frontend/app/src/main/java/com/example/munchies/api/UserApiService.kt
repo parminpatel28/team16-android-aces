@@ -15,7 +15,7 @@ interface UserApiService {
     @GET("api/user")
     fun getUsers(): Call<List<User>>
 
-    // Fetch all user
+    // Fetch all user friends
     @GET("api/user/friend")
     fun getUserFriends(userId: Long): Call<Map<Int, Any>>
 
