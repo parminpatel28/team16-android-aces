@@ -35,24 +35,11 @@ class ReviewDetailsActivity : AppCompatActivity() {
         val review: Review? = intent.getParcelableExtra<Review>("review")
 
         review?.let {
-            binding.reviewerName.text = it.poster
+//            binding.reviewerName.text = it.user // TODO: pull username from db
             binding.reviewText.text = it.caption
-            binding.restaurantName.text = it.restaurants.joinToString()
             binding.overallRatingBar.rating = it.rating.toFloat()
-            binding.reviewDate.text = formatDate(it.date.toString())
+            binding.reviewDate.text = formatDate(it.date)
             binding.likesCount.text = it.likes.toString()
-
-            if (review.taggedUsers.isNotEmpty()) {
-                binding.taggedFriendsLabel.visibility = View.VISIBLE
-                binding.taggedFriendsContainer.visibility = View.VISIBLE
-
-                review.taggedUsers.forEach { friend ->
-                    val chip = Chip(this)
-                    chip.text = friend
-                    chip.isCloseIconVisible = false
-                    binding.taggedFriendsContainer.addView(chip)
-                }
-            }
 
         }
 

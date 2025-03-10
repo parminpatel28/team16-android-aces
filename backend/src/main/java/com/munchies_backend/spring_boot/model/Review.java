@@ -1,14 +1,12 @@
 package com.munchies_backend.spring_boot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Map;
 
 @Entity
 @Table(name = "reviews", schema = "public")
@@ -18,10 +16,6 @@ public class Review {
     @SequenceGenerator(name = "reviews_id_gen", sequenceName = "reviews_review_id_seq", allocationSize = 1)
     @Column(name = "review_id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Column(name = "caption", length = Integer.MAX_VALUE)
     private String caption;
@@ -42,15 +36,10 @@ public class Review {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ColumnDefault("'[]'::jsonb")
-    @Column(name = "tagged_users")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> taggedUsers;
-
-    @ColumnDefault("'[]'::jsonb")
-    @Column(name = "restaurants")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> restaurants;
+    @JsonIgnore // TODO: remove when user class is fixed
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Integer getId() {
         return id;
@@ -58,14 +47,6 @@ public class Review {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getCaption() {
@@ -108,20 +89,12 @@ public class Review {
         this.location = location;
     }
 
-    public Map<String, Object> getTaggedUsers() {
-        return taggedUsers;
+    public User getUser() {
+        return user;
     }
 
-    public void setTaggedUsers(Map<String, Object> taggedUsers) {
-        this.taggedUsers = taggedUsers;
-    }
-
-    public Map<String, Object> getRestaurants() {
-        return restaurants;
-    }
-
-    public void setRestaurants(Map<String, Object> restaurants) {
-        this.restaurants = restaurants;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

@@ -1,15 +1,17 @@
 package com.example.munchies.ui.review
 
-//import ReviewViewModelFactory
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
+import com.example.munchies.model.Location
 import com.example.munchies.model.Review
+import com.example.munchies.model.User
 import com.example.munchies.repository.ReviewRepository
 import java.time.Instant
 
@@ -18,12 +20,14 @@ class ReviewFragment : Fragment() {
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ReviewAdapter
+    private val reviewRepository = ReviewRepository()
+    private val userId = 1  // TODO: Replace with actual logged-in user ID
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
 
         setupRecyclerView()
-        loadMockReviews()
+        fetchReviewsByUser(userId)
 
         binding.addReviewButton.setOnClickListener {
             startActivity(Intent(requireContext(), ReviewActivity::class.java))
@@ -42,13 +46,14 @@ class ReviewFragment : Fragment() {
         binding.recyclerReviews.adapter = adapter
     }
 
-    private fun loadMockReviews() {
-        val mockReviews = listOf(
-            Review(1, "Taylor", "Great place!", location = "Waterloo", date = Instant.now(), rating = 4.5, restaurants = listOf("Taco Bell")),
-            Review(2, "Taylor", "Loved the sushi!", location = "Waterloo", date = Instant.now(), rating = 4.0, restaurants = listOf("Ye's Sushi")),
-            Review(3, "Taylor", "Not bad", location = "Waterloo", date = Instant.now(), rating = 2.5, restaurants = listOf("Burger King"))
-        )
-        adapter.submitList(mockReviews) // TEMPORARY until backend is ready
+    private fun fetchReviewsByUser(userId: Int) {
+        reviewRepository.getReviewsByUser(userId) { reviews ->
+            if (reviews != null) {
+                adapter.submitList(reviews)
+            } else {
+                Log.e("ReviewFragment", "Failed to fetch reviews")
+            }
+        }
     }
 
     override fun onDestroyView() {

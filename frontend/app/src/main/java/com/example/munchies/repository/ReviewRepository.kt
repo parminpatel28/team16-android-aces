@@ -14,14 +14,8 @@ class ReviewRepository {
 
     private val apiService = ApiClient.reviewService
 
-    fun createReview(reviewData: Map<String, Any>, onResult: (Review?) -> Unit) {
-        val gson = Gson()
-        val json = gson.toJson(reviewData)
-        val requestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
-
-        Log.d("ReviewRepository", "Final JSON Payload: $json")
-
-        apiService.createReview(requestBody).enqueue(object : Callback<Review> {
+    fun createReview(review: Review, onResult: (Review?) -> Unit) {
+        apiService.createReview(review).enqueue(object : Callback<Review> {
             override fun onResponse(call: Call<Review>, response: Response<Review>) {
                 if (response.isSuccessful) {
                     Log.d("ReviewRepository", "Review submitted successfully! Response: ${response.body()}")
@@ -33,6 +27,25 @@ class ReviewRepository {
             }
 
             override fun onFailure(call: Call<Review>, t: Throwable) {
+                Log.e("ReviewRepository", "API request failed: ${t.message}")
+                onResult(null)
+            }
+        })
+    }
+
+    fun getReviewsByUser(userId: Int, onResult: (List<Review>?) -> Unit) {
+        apiService.getReviewsByUser(userId).enqueue(object : Callback<List<Review>> {
+            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+                if (response.isSuccessful) {
+                    Log.d("ReviewRepository", "Fetched reviews successfully: ${response.body()}")
+                    onResult(response.body())
+                } else {
+                    Log.e("ReviewRepository", "Error fetching reviews: ${response.code()}, Body: ${response.errorBody()?.string()}")
+                    onResult(null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
                 Log.e("ReviewRepository", "API request failed: ${t.message}")
                 onResult(null)
             }

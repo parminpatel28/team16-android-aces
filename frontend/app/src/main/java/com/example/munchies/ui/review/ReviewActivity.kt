@@ -1,6 +1,5 @@
 package com.example.munchies.ui.review
 
-//import ReviewViewModelFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -10,6 +9,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityReviewBinding
+import com.example.munchies.model.Location
+import com.example.munchies.model.Review
+import com.example.munchies.model.User
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -19,33 +21,6 @@ class ReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReviewBinding
     private val reviewViewModel: ReviewViewModel by viewModels()
-
-    private var selectedPhotos: MutableList<String> = mutableListOf()
-    private var taggedUsers: MutableList<String> = mutableListOf()
-    private var taggedRestaurants: MutableList<String> = mutableListOf()
-    private var selectedLocation: String? = null
-
-    private fun setupUserTagging() {
-        val friendsList = listOf("Taylor", "Elaine", "Parmin", "Matthew", "Kailin", "Annan")
-        val friendsAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, friendsList)
-
-        binding.tagFriendsDropdown.setAdapter(friendsAdapter)
-        binding.tagFriendsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
-
-        // Store selected friends
-        val selectedFriends = mutableSetOf<String>()
-
-        // Handle tag selection
-        binding.tagFriendsDropdown.setOnItemClickListener { _, _, position, _ ->
-            val selectedFriend = friendsAdapter.getItem(position) ?: return@setOnItemClickListener
-
-            // Prevent duplicate selection
-            if (selectedFriends.add(selectedFriend)) {
-                addChipToGroup(selectedFriend, binding.tagFriendsChipGroup, selectedFriends)
-            }
-            binding.tagFriendsDropdown.text.clear()
-        }
-    }
 
     private fun setupRestaurantTagging() {
         val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
@@ -93,7 +68,6 @@ class ReviewActivity : AppCompatActivity() {
 
         Log.d("ReviewActivity", "onCreate: ReviewActivity started")
 
-        setupUserTagging()
         setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
@@ -111,19 +85,24 @@ class ReviewActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                // TODO: fix type mismatch and use Review object
-                val reviewData = mapOf(
-                    "caption" to reviewText,
-                    "date" to Instant.now().toString(),
-                    "rating" to overallRating,
-                    "likes" to 0,
-                    "taggedUsers" to emptyMap<String, Any>(),
-                    "restaurants" to emptyMap<String, Any>(),
-                    "user" to mapOf("id" to 1)
+                if (overallRating < 0.5) {
+                    Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val review = Review(
+                    reviewID = 0,
+                    user = User(id = 1),
+                    caption = reviewText,
+                    photos = emptyList(),
+                    location = Location(id = 1),
+                    date = Instant.now().toString(),
+                    rating = overallRating,
+                    likes = 0
                 )
 
                 Log.d("ReviewActivity", "Submitting Review")
-                reviewViewModel.submitReview(reviewData)
+                reviewViewModel.submitReview(review)
 
                 Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
                 finish()

@@ -14,13 +14,7 @@ class ReviewViewModel : ViewModel() {
     private val _reviews = MutableLiveData<MutableList<Review>>(mutableListOf())
     val reviews: LiveData<MutableList<Review>> = _reviews
 
-    init {
-        _reviews.value = mutableListOf(
-            Review(1, "Test User", "Test Restaurant", location = "Location", date = Instant.now(), rating = 5.0)
-        )
-    }
-
-    fun submitReview(reviewData: Map<String, Any>) {
+    fun submitReview(reviewData: Review) {
         repository.createReview(reviewData) { response ->
             if (response != null) {
                 Log.d("ReviewViewModel", "Review submitted successfully!")

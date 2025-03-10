@@ -11,12 +11,13 @@ interface ReviewApiService {
     @GET("api/reviews/{reviewId}")
     fun getReviewById(@Path("reviewId") reviewId: Long): Call<Review>
 
+    // Fetch reviews by user
+    @GET("api/reviews/user/{userId}")
+    fun getReviewsByUser(@Path("userId") userId: Int): Call<List<Review>>
+
     // Create a new review
-    // TODO: fix type mismatch and use Review object
-//    @POST("api/reviews")
-//    fun createReview(@Body review: Review): Call<Review>
     @POST("api/reviews")
-    fun createReview(@Body requestBody: RequestBody): Call<Review>
+    fun createReview(@Body review: Review): Call<Review>
 
 
     // Delete review by ID

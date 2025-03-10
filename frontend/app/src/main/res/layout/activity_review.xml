@@ -125,37 +125,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Tag Friends -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tagFriendsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tag Friends"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeColor="@color/orange">
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/tagFriendsDropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:paddingVertical="12dp"
-                    android:minHeight="48dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:paddingStart="16dp"
-                    android:textSize="14sp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tagFriendsChipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:singleLine="false"
-                app:chipSpacing="8dp"/>
-
             <!-- Tag Restaurant -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tagRestaurantLayout"
@@ -178,7 +147,6 @@
                     android:paddingStart="16dp"
                     android:textSize="14sp"/>
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/tagRestaurantChipGroup"

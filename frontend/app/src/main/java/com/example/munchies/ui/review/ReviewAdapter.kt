@@ -27,19 +27,19 @@ class ReviewAdapter(private val onItemClick: (Review) -> Unit) :
     }
 
     class ReviewViewHolder(private val binding: ItemReviewBinding) : RecyclerView.ViewHolder(binding.root) {
-        private fun formatDate(instant: Instant): String {
+        private fun formatDate(instant: String): String {
             return try {
+                val parsedInstant = Instant.parse(instant)
                 val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")
                     .withLocale(Locale.getDefault())
                     .withZone(ZoneId.systemDefault())
-                formatter.format(instant)
+                formatter.format(parsedInstant)
             } catch (e: Exception) {
-                instant.toString()
+                instant
             }
         }
 
         fun bind(review: Review) {
-            binding.restaurantName.text = review.restaurants.joinToString(", ")
             binding.reviewText.text = review.caption
             binding.ratingBar.rating = review.rating.toFloat()
             binding.dateText.text = formatDate(review.date)
