@@ -27,11 +27,11 @@ class ProfileBuilderActivity : AppCompatActivity() {
             val bio = binding.bioEditText.text.toString()
             val location = binding.locationEditText.text.toString()
 
-            if (name.isNotEmpty() && username.isNotEmpty()) {
-                saveProfileData(name, username, bio, location)
-            } else {
-                Toast.makeText(this, "Name and Username are required!", Toast.LENGTH_SHORT).show()
-            }
+//            if (name.isNotEmpty() && username.isNotEmpty()) {
+//                saveProfileData(name, username, bio, location)
+//            } else {
+//                Toast.makeText(this, "Name and Username are required!", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 
