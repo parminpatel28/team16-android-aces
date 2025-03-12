@@ -32,7 +32,7 @@ public class ReviewService {
 
     // Get reviews by user ID
     public List<Review> getReviewsByUserId(Integer userId) {
-        return reviewRepository.findByUserId(userId);
+        return reviewRepository.findByUserIdOrderByDateDesc(userId);
     }
 
     // Delete a review by ID
