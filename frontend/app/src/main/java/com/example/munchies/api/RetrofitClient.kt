@@ -39,23 +39,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-// Define the API service
 interface ApiService {
     @POST("api/users")
     suspend fun createUserProfile(@Body userProfile: UserProfile): retrofit2.Response<UserProfile>
 }
-
-// Retrofit Client to create a Retrofit instance
 object RetrofitClient {
-    private const val BASE_URL = "http://localhost:8080/" // Change to your backend URL
+    private const val BASE_URL = "http://localhost:8080/"
 
-    // Create the Retrofit instance
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    // Create the ApiService instance
     val apiService: ApiService = retrofit.create(ApiService::class.java)
 }
 

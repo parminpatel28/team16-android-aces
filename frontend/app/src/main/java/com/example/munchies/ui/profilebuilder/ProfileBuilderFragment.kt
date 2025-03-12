@@ -1,5 +1,6 @@
 package com.example.munchies
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,22 +29,25 @@ class ProfileBuilderFragment : Fragment() {
 
         // Set the button's click listener
         binding.saveProfileBtn.setOnClickListener {
+            val name = binding.nameEditText.text.toString()
             val username = binding.usernameEditText.text.toString()
             val location = binding.locationEditText.text.toString()
             val bio = binding.bioEditText.text.toString()
             val profilePicture = "https://example.com/pic.jpg" // Placeholder profile picture URL
-            val email = auth.currentUser?.email // Get the email of the currently signed-in user
+            val email = auth.currentUser?.email
 
             if (email != null && username.isNotEmpty()) {
                 // Create the UserProfile object
                 val userProfile = UserProfile(
-                    name = "John Doe", // This could be collected as well from the form
+                    name = name,
                     username = username,
                     profilePicture = profilePicture,
                     userBio = bio,
+                    location_id = location,
                     emailAddress = email,
+                    friends = emptyMap(),
+                    savedReviews = emptyMap()
                 )
-
                 // Call ViewModel to handle the network request
                 viewModel.createUserProfile(userProfile)
             } else {
@@ -51,12 +55,13 @@ class ProfileBuilderFragment : Fragment() {
             }
         }
 
-        // Observe the success status from the ViewModel
         viewModel.profileUpdateSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                // Navigate to MainActivity if successful
                 Toast.makeText(requireContext(), "Profile Created!", Toast.LENGTH_SHORT).show()
-                // You can use navigation here, e.g., findNavController().navigate(R.id.action_profileBuilderFragment_to_mainActivity)
+                // Navigate to MainActivity
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             } else {
                 Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
             }
