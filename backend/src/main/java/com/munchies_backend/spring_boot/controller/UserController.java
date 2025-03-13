@@ -45,21 +45,4 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
-    // Get friends
-    @GetMapping("/{id}/friend")
-    public ResponseEntity<Map<Integer, Object>> getFriends(@PathVariable Integer id) {
-        Optional<Map<Integer, Object>> user = userService.getFriends(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    @PostMapping("/{id}/friend/{friendId}")
-    public ResponseEntity<User> createUserFriend(@PathVariable Integer id, @PathVariable Integer friendId, @RequestBody Object friendData) {
-        User UserFriend = userService.addFriend(id, friendId, friendData);
-        return ResponseEntity.ok(UserFriend);
-    }
-    @DeleteMapping("/{id}/friend/{friendId}")
-    public ResponseEntity<User> deleteUserFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        User UserFriend = userService.deleteFriend(id, friendId);
-        return ResponseEntity.ok(UserFriend);
-    }
 }

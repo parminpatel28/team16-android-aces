@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -46,7 +47,7 @@ public class User {
     @ColumnDefault("'[]'::jsonb")
     @Column(name = "friends")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<Integer, Object> friends;
+    private List<User> friends;
 
     @ColumnDefault("'[]'::jsonb")
     @Column(name = "saved_reviews")
@@ -117,13 +118,9 @@ public class User {
         this.location = location;
     }
 
-    public Map<Integer, Object> getFriends() {
-        return friends;
-    }
+    public List<User> getFriends() { return friends; }
 
-    public void setFriends(Map<Integer, Object> friends) {
-        this.friends = friends;
-    }
+    public void setFriends(List<User> friends) {}
 
     public Map<String, Object> getSavedReviews() {
         return savedReviews;

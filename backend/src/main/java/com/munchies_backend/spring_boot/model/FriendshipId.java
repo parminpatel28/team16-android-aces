@@ -7,12 +7,9 @@ import org.hibernate.Hibernate;
 import java.util.Objects;
 
 @Embeddable
-public class UserFriendId implements java.io.Serializable {
+public class FriendshipId implements java.io.Serializable {
     private static final long serialVersionUID = -8401988947802857157L;
-    @Column(name = "user_id", nullable = false)
     private Integer userId;
-
-    @Column(name = "friend_id", nullable = false)
     private Integer friendId;
 
     public Integer getUserId() {
@@ -35,7 +32,7 @@ public class UserFriendId implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserFriendId entity = (UserFriendId) o;
+        FriendshipId entity = (FriendshipId) o;
         return Objects.equals(this.friendId, entity.friendId) &&
                 Objects.equals(this.userId, entity.userId);
     }
