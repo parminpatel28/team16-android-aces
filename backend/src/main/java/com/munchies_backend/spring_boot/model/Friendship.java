@@ -1,5 +1,6 @@
 package com.munchies_backend.spring_boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import com.munchies_backend.spring_boot.model.FriendRequestStatus;
 import com.munchies_backend.spring_boot.model.User;

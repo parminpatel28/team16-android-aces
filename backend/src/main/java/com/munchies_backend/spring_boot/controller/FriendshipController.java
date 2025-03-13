@@ -20,70 +20,39 @@ public class FriendshipController {
         this.friendshipService = friendshipService;
     }
 
-    // Create a new user
-    @PostMapping
-    public ResponseEntity<Friendship> createFriendship(@RequestBody Friendship friendship) {
-        User savedFriendship = friendshipService.saveFriendship(friendship);
-        return ResponseEntity.ok(savedUserfriend);
+    // Send a friend request
+    @PostMapping("/{senderId}/{receiverId}")
+    public ResponseEntity<Friendship> createFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+        Friendship savedFriendship = friendshipService.saveFriendship(senderId, receiverId);
+        return ResponseEntity.ok(savedFriendship);
     }
 
-//    // Get a friendship by ID
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Friendship> getFriendshipById(@PathVariable Integer id) {
-//        Optional<Friendship> friendship = friendshipService.getFriendshipById(id);
-//        return friendship.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
-//
-//    // Get all friendships
-//    @GetMapping
-//    public ResponseEntity<List<Friendship>> getAllFriendships() {
-//        List<Friendship> friendships = friendshipService.getAllFriendships();
-//        return ResponseEntity.ok(friendships);
-//    }
-//
-//    // Delete a friendship
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteFriendship(@PathVariable Integer id) {
-//        friendshipService.deleteFriendship(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//
-//    // Get friends
-//    @GetMapping("/{id}")
-//    public ResponseEntity<List<Integer>> getFriends(@PathVariable Integer id) {
-//        Optional<Map<Integer, Object>> friendship = friendshipService.getFriends(id);
-//        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
-//    @PostMapping("/{id}/friend/{friendId}")
-//    public ResponseEntity<User> createFriendship(@PathVariable Integer id, @PathVariable Integer friendId, @RequestBody Object friendData) {
-//        User Friendship = userService.addFriend(id, friendId, friendData);
-//        return ResponseEntity.ok(Friendship);
-//    }
-//    @DeleteMapping("/{id}/friend/{friendId}")
-//    public ResponseEntity<User> deleteFriendship(@PathVariable Integer id, @PathVariable Integer friendId) {
-//        User Friendship = userService.deleteFriend(id, friendId);
-//        return ResponseEntity.ok(Friendship);
-//    }
-
-    // Get a friendship by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Friendship> getFriendshipById(@PathVariable Integer id) {
-        Optional<Friendship> friendship = friendshipService.getFriendshipById(id);
-        return friendship.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Get all friendships by userId
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Friendship>> getAllFriendships() {
-        List<Friendship> friendships = friendshipService.getAllFriendships();
-        return ResponseEntity.ok(friendships);
-    }
-
-    // Delete a friendship
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFriendship(@PathVariable Integer id) {
-        friendshipService.deleteFriendship(id);
+    // Delete a friendship/cancel friend request
+    @DeleteMapping("/{userId}/{friendId}")
+    public ResponseEntity<Void> deleteFriendship(@PathVariable Integer userId, @PathVariable Integer friendId) {
+        // TODO STILL
+        friendshipService.deleteFriendship(userId, friendId);
         return ResponseEntity.noContent().build();
+    }
+
+    // Accept a friend request
+    @PostMapping("/{senderId}/{receiverId}/accept")
+    public ResponseEntity<Friendship> acceptFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+        friendshipService.acceptFriendship(senderId, receiverId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Reject a friend request
+    @PostMapping("/{senderId}/{receiverId}/reject")
+    public ResponseEntity<Friendship> rejectFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+        friendshipService.rejectFriendship(senderId, receiverId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Get all of a user's friendships
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<User>> getAcceptedFriends(@PathVariable Integer userId) {
+        List<User> friendships = friendshipService.getAcceptedFriends(userId);
+        return ResponseEntity.ok(friendships);
     }
 }

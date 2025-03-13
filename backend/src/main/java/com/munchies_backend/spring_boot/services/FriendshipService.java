@@ -7,9 +7,7 @@ import com.munchies_backend.spring_boot.model.User;
 import com.munchies_backend.spring_boot.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -20,11 +18,12 @@ import java.util.stream.Stream;
 public class FriendshipService {
 
     private final FriendshipRepository friendshipRepository;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
-    public FriendshipService(FriendshipRepository friendshipRepository) {
+    public FriendshipService(FriendshipRepository friendshipRepository, UserRepository userRepository) {
         this.friendshipRepository = friendshipRepository;
+        this.userRepository = userRepository;
     }
 
     // Get all friendships
@@ -33,28 +32,32 @@ public class FriendshipService {
     }
 
     // Save a friendship
-    public Friendship saveFriendship(Long senderId, Long receiverId) {
-        User sender = userRepository.findById(senderId)
+    public Friendship saveFriendship(Integer senderId, Integer receiverId) {
+        User sender = userRepository.findById(senderId.longValue())
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
-        User receiver = userRepository.findById(receiverId)
+        User receiver = userRepository.findById(receiverId.longValue())
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
-        Friendship friendship = new Friendship();
-        friendship.setUser(sender);
-        friendship.setFriend(receiver);
-        friendship.setStatus(FriendRequestStatus.PENDING);
-        friendship.setUpdatedAt(LocalDateTime.now());
-        return friendshipRepository.save(friendship);
+        Optional<Friendship> existing1 =  friendshipRepository.findByUserIdAndFriendId(senderId, receiverId);
+        Optional<Friendship> existing2 =  friendshipRepository.findByUserIdAndFriendId(receiverId, senderId);
+
+        if (!(existing1.isPresent() || existing2.isPresent())) {
+            Friendship friendship = new Friendship();
+            friendship.setUser(sender);
+            friendship.setFriend(receiver);
+            friendship.setStatus(FriendRequestStatus.PENDING);
+            friendship.setUpdatedAt(LocalDateTime.now());
+            return friendshipRepository.save(friendship);
+        } else if (existing1.isPresent()) {
+            return existing1.get();
+        }
+        return existing2.get();
     }
 
     // Get a friendship by user and friend
-    public Optional<Friendship> findFriendshipBySenderAndUser(Long userId, Long friendId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new RuntimeException("Friend not found"));
-        Optional<Friendship> first =  friendshipRepository.findByUserAndFriend(friend, user);
-        Optional<Friendship> second =  friendshipRepository.findByUserAndFriend(user, friend);
+    public Optional<Friendship> findFriendshipBySenderAndUser(Integer userId, Integer friendId) {
+        Optional<Friendship> first =  friendshipRepository.findByUserIdAndFriendId(friendId, userId);
+        Optional<Friendship> second =  friendshipRepository.findByUserIdAndFriendId(userId, friendId);
         if (first.isPresent()) {
             return first;
         } else {
@@ -63,11 +66,9 @@ public class FriendshipService {
     }
 
     // Get all of a user's Friends
-    public List<User> getAcceptedFriends(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<Friendship> sentRequests = friendshipRepository.findByUserAndStatus(user, FriendRequestStatus.ACCEPTED);
-        List<Friendship> receivedRequests = friendshipRepository.findByFriendAndStatus(user, FriendRequestStatus.ACCEPTED);
+    public List<User> getAcceptedFriends(Integer userId) {
+        List<Friendship> sentRequests = friendshipRepository.findByUserIdAndStatus(userId, FriendRequestStatus.ACCEPTED);
+        List<Friendship> receivedRequests = friendshipRepository.findByFriendIdAndStatus(userId, FriendRequestStatus.ACCEPTED);
 
         List<User> friendsFromSent = sentRequests.stream()
                 .map(Friendship::getFriend)
@@ -82,10 +83,8 @@ public class FriendshipService {
     }
 
     // Get all list of all Users who have sent incoming requests to this user
-    public List<User> getIncomingRequests(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<Friendship> receivedRequests = friendshipRepository.findByFriendAndStatus(user, FriendRequestStatus.PENDING);
+    public List<User> getIncomingRequests(Integer userId) {
+        List<Friendship> receivedRequests = friendshipRepository.findByFriendIdAndStatus(userId, FriendRequestStatus.PENDING);
         List<User> usersFromReceived = receivedRequests.stream()
                 .map(Friendship::getUser)
                 .toList();
@@ -93,57 +92,53 @@ public class FriendshipService {
     }
 
     // Get all list of all Users who have been sent outgoing requests by this user
-    public List<User> getOutgoingRequests(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<Friendship> sentRequests = friendshipRepository.findByUserAndStatus(user, FriendRequestStatus.PENDING);
+    public List<User> getOutgoingRequests(Integer userId) {
+        List<Friendship> sentRequests = friendshipRepository.findByUserIdAndStatus(userId, FriendRequestStatus.PENDING);
         List<User> usersFromSent = sentRequests.stream()
                 .map(Friendship::getFriend)
                 .toList();
         return usersFromSent;
     }
 
-    public void acceptFriendship(Long userId, Long friendId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new RuntimeException("Friend not found"));
-        Friendship friendship = friendshipRepository.findByUserAndFriend(user, friend)
+    public void acceptFriendship(Integer userId, Integer friendId) {
+        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
                 .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
         // Update status
         friendship.accept();
+        friendship.setUpdatedAt(LocalDateTime.now());
         friendshipRepository.save(friendship);
 
         // Optionally, update both users' friend lists
-        User sender = friendship.getUser();
-        User receiver = friendship.getFriend();
-        sender.getFriends().add(receiver);
-        receiver.getFriends().add(sender);
-        userRepository.save(sender);
-        userRepository.save(receiver);
+//        User sender = friendship.getUser();
+//        User receiver = friendship.getFriend();
+//        sender.getFriends().add(receiver);
+//        receiver.getFriends().add(sender);
+//        userRepository.save(sender);
+//        userRepository.save(receiver);
     }
 
-    public void rejectFriendship(Long userId, Long friendId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new RuntimeException("Friend not found"));
-        Friendship friendship = friendshipRepository.findByUserAndFriend(user, friend)
+    public void rejectFriendship(Integer userId, Integer friendId) {
+        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
                 .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
         // Update status
         friendship.reject();
+        friendship.setUpdatedAt(LocalDateTime.now());
         friendshipRepository.save(friendship);
 
         // Optionally, update both users' friend lists
-        User sender = friendship.getUser();
-        User receiver = friendship.getFriend();
-        sender.getFriends().remove(receiver);
-        receiver.getFriends().remove(sender);
-        userRepository.save(sender);
-        userRepository.save(receiver);
+//        User sender = friendship.getUser();
+//        User receiver = friendship.getFriend();
+//        sender.getFriends().remove(receiver);
+//        receiver.getFriends().remove(sender);
+//        userRepository.save(sender);
+//        userRepository.save(receiver);
     }
 
+    public void deleteFriendship(Integer userId, Integer friendId) {
+        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
+                .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
+    }
 }
