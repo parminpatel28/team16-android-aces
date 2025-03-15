@@ -3,6 +3,8 @@ package com.example.munchies.repository
 import android.util.Log
 import com.example.munchies.api.ApiClient
 import com.example.munchies.model.Friend
+import com.example.munchies.model.Friendship
+import com.example.munchies.model.User
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -14,13 +16,13 @@ class FriendRepository {
 
     private val apiService = ApiClient.userService
 
-    fun getUserFriends(userId: Long, onResult: (Map<Int,Any>?) -> Unit) {
+    fun getUserFriends(userId: Int, onResult: (List<User>?) -> Unit) {
         val gson = Gson()
 
-        Log.d("FriendRepository")
+        Log.d("FriendRepository", "Getting friends for user $userId")
 
-        apiService.getUserFriends(userId).enqueue(object : Callback<Map<Int,Any>> {
-            override fun onResponse(call: Call<Map<Int, Any>>, response: Response<Map<Int, Any>>) {
+        apiService.getUserFriends(userId).enqueue(object : Callback<List<User>> {
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
                 if (response.isSuccessful) {
                     Log.d("FriendRepository", "Friends gotten successfully! Response: ${response.body()}")
                     onResult(response.body())
@@ -30,7 +32,7 @@ class FriendRepository {
                 }
             }
 
-            override fun onFailure(call: Call<Map<Int, Any>>, t: Throwable) {
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
                 Log.e("FriendRepository", "API request failed: ${t.message}")
                 onResult(null)
             }
@@ -38,17 +40,15 @@ class FriendRepository {
 
     }
 
-    fun createFriend(userId: Long, friendId: Long, friendData: Map<String, Any>, onResult: (Friend?) -> Unit) {
+    fun createFriend(userId: Int, friendId: Int, onResult: (Friendship?) -> Unit) {
         val gson = Gson()
-        val json = gson.toJson(friendData)
-        val requestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
 
-        Log.d("FriendRepository", "Final JSON Payload: $json")
+        Log.d("FriendRepository", "Adding friend $friendId to user $userId")
 
-        apiService.addUserFriend(userId, friendId).enqueue(object : Callback<Friend> {
-            override fun onResponse(call: Call<Friend>, response: Response<Friend>) {
+        apiService.addUserFriend(userId, friendId).enqueue(object : Callback<Friendship> {
+            override fun onResponse(call: Call<Friendship>, response: Response<Friendship>) {
                 if (response.isSuccessful) {
-                    Log.d("FriendRepository", "Friend added successfully! Response: ${response.body()}")
+                    Log.d("FriendRepository", "Friend request sent successfully! Response: ${response.body()}")
                     onResult(response.body())
                 } else {
                     Log.e("FriendRepository", "Error Response Code: ${response.code()}, Body: ${response.errorBody()?.string()}")
@@ -56,7 +56,7 @@ class FriendRepository {
                 }
             }
 
-            override fun onFailure(call: Call<Friend>, t: Throwable) {
+            override fun onFailure(call: Call<Friendship>, t: Throwable) {
                 Log.e("FriendRepository", "API request failed: ${t.message}")
                 onResult(null)
             }
