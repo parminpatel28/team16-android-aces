@@ -72,23 +72,8 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Log.d("ReviewActivity", "onCreate: ReviewActivity started")
-
-        val auth = FirebaseAuth.getInstance()
-        val curUser = auth.currentUser
-
-        curUser?.getIdToken(true)
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val idToken = task.result?.token
-                    if (idToken != null) {
-                        Log.d("USER", idToken)
-                    }
-//                    apiService.getUserById(idToken)
-                } else {
-                    // Handle error
-                    Log.e("Firebase", "Error getting token", task.exception)
-                }
-            }
+        
+        val curUser = FirebaseAuth.getInstance().currentUser
 
         setupRestaurantTagging()
 

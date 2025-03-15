@@ -35,12 +35,12 @@ class ReviewDetailsActivity : AppCompatActivity() {
         val review: Review? = intent.getParcelableExtra<Review>("review")
 
         review?.let {
-//            binding.reviewerName.text = it.user // TODO: pull username from db
+            binding.restaurantName.text = "Restaurant" // TODO: get location
+            binding.reviewerName.text = it.user.name
             binding.reviewText.text = it.caption
             binding.overallRatingBar.rating = it.rating.toFloat()
             binding.reviewDate.text = formatDate(it.date)
             binding.likesCount.text = it.likes.toString()
-
         }
 
         binding.backButton.setOnClickListener {
