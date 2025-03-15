@@ -9,11 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
-import com.example.munchies.model.Location
-import com.example.munchies.model.Review
-import com.example.munchies.model.User
 import com.example.munchies.repository.ReviewRepository
-import java.time.Instant
 
 class ReviewFragment : Fragment() {
 
@@ -27,7 +23,8 @@ class ReviewFragment : Fragment() {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
 
         setupRecyclerView()
-        fetchReviewsByUser(userId)
+        setupSwipeToRefresh()
+        fetchReviewsByUser(userId)  // Fetch reviews when fragment loads
 
         binding.addReviewButton.setOnClickListener {
             startActivity(Intent(requireContext(), ReviewActivity::class.java))
@@ -38,6 +35,8 @@ class ReviewFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ReviewAdapter { selectedReview ->
+            Log.d("Review Clicked", "Review: $selectedReview")
+            Log.d("Review Clicked", "User: ${selectedReview.user}")
             val intent = Intent(requireContext(), ReviewDetailsActivity::class.java)
             intent.putExtra("review", selectedReview)
             startActivity(intent)
@@ -46,8 +45,17 @@ class ReviewFragment : Fragment() {
         binding.recyclerReviews.adapter = adapter
     }
 
+    private fun setupSwipeToRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            fetchReviewsByUser(userId)  // Refresh reviews
+        }
+    }
+
     private fun fetchReviewsByUser(userId: Int) {
+        binding.swipeRefreshLayout.isRefreshing = true // Show refresh indicator
+
         reviewRepository.getReviewsByUser(userId) { reviews ->
+            binding.swipeRefreshLayout.isRefreshing = false // Hide refresh indicator
             if (reviews != null) {
                 adapter.submitList(reviews)
             } else {

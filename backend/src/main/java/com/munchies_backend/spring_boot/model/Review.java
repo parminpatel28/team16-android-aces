@@ -36,7 +36,6 @@ public class Review {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @JsonIgnore // TODO: remove when user class is fixed
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

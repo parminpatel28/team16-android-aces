@@ -8,6 +8,8 @@ import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.munchies.api.ApiClient
+import com.example.munchies.api.UserApiService
 import com.example.munchies.databinding.ActivityReviewBinding
 import com.example.munchies.model.Location
 import com.example.munchies.model.Review
@@ -15,12 +17,15 @@ import com.example.munchies.model.User
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
+import com.google.firebase.auth.FirebaseAuth
 
 
 class ReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReviewBinding
     private val reviewViewModel: ReviewViewModel by viewModels()
+    private lateinit var auth: FirebaseAuth
+    private val apiService = ApiClient.userService
 
     private fun setupRestaurantTagging() {
         val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
@@ -68,49 +73,66 @@ class ReviewActivity : AppCompatActivity() {
 
         Log.d("ReviewActivity", "onCreate: ReviewActivity started")
 
+        val auth = FirebaseAuth.getInstance()
+        val curUser = auth.currentUser
+
+        curUser?.getIdToken(true)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val idToken = task.result?.token
+                    if (idToken != null) {
+                        Log.d("USER", idToken)
+                    }
+//                    apiService.getUserById(idToken)
+                } else {
+                    // Handle error
+                    Log.e("Firebase", "Error getting token", task.exception)
+                }
+            }
+
         setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Leave a Review"
 
-        binding.submitReviewButton.setOnClickListener {
-            Log.d("ReviewActivity", "Submit Review clicked")
-            try{
-                val overallRating = binding.overallRatingBar.rating.toDouble()
-                val reviewText = binding.reviewText.text.toString().trim()
-
-                if (reviewText.isEmpty()) {
-                    Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                if (overallRating < 0.5) {
-                    Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                val review = Review(
-                    reviewID = 0,
-                    user = User(id = 1),
-                    caption = reviewText,
-                    photos = emptyList(),
-                    location = Location(id = 1),
-                    date = Instant.now().toString(),
-                    rating = overallRating,
-                    likes = 0
-                )
-
-                Log.d("ReviewActivity", "Submitting Review")
-                reviewViewModel.submitReview(review)
-
-                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
-                finish()
-            } catch (e: Exception) {
-                Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
-                e.printStackTrace()
-            }
-        }
+//        binding.submitReviewButton.setOnClickListener {
+//            Log.d("ReviewActivity", "Submit Review clicked")
+//            try{
+//                val overallRating = binding.overallRatingBar.rating.toDouble()
+//                val reviewText = binding.reviewText.text.toString().trim()
+//
+//                if (reviewText.isEmpty()) {
+//                    Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
+//                    return@setOnClickListener
+//                }
+//
+//                if (overallRating < 0.5) {
+//                    Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
+//                    return@setOnClickListener
+//                }
+//
+//                val review = Review(
+//                    reviewID = 0,
+//                    user = User(id = 1),
+//                    caption = reviewText,
+//                    photos = emptyList(),
+//                    location = Location(id = 1),
+//                    date = Instant.now().toString(),
+//                    rating = overallRating,
+//                    likes = 0
+//                )
+//
+//                Log.d("ReviewActivity", "Submitting Review")
+//                reviewViewModel.submitReview(review)
+//
+//                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+//                finish()
+//            } catch (e: Exception) {
+//                Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
+//                e.printStackTrace()
+//            }
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
