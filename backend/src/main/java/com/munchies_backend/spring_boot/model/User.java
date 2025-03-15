@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Map;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -43,15 +43,15 @@ public class User {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ColumnDefault("'[]'::jsonb")
-    @Column(name = "friends")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> friends;
+//    @ColumnDefault("'[]'::jsonb")
+//    @Column(name = "friends")
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    private List<User> friends;
 
-    @ColumnDefault("'[]'::jsonb")
-    @Column(name = "saved_reviews")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> savedReviews;
+//    @ColumnDefault("'[]'::jsonb")
+//    @Column(name = "saved_reviews")
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    private List<Review> savedReviews;
 
     public Integer getId() {
         return id;
@@ -117,20 +117,16 @@ public class User {
         this.location = location;
     }
 
-    public Map<String, Object> getFriends() {
-        return friends;
-    }
+//    public List<User> getFriends() { return friends; }
+//
+//    public void setFriends(List<User> friends) {}
 
-    public void setFriends(Map<String, Object> friends) {
-        this.friends = friends;
-    }
-
-    public Map<String, Object> getSavedReviews() {
-        return savedReviews;
-    }
-
-    public void setSavedReviews(Map<String, Object> savedReviews) {
-        this.savedReviews = savedReviews;
-    }
+//    public List<Review> getSavedReviews() {
+//        return savedReviews;
+//    }
+//
+//    public void setSavedReviews(List<Review> savedReviews) {
+//        this.savedReviews = savedReviews;
+//    }
 
 }
