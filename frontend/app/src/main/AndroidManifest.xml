@@ -16,6 +16,15 @@
         android:theme="@style/Theme.Munchies"
         tools:targetApi="31" >
 
+        <!-- Friend Activity -->
+        <activity
+            android:name=".ui.friends.FriendSearchActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Munchies.NoActionBar"/>
+        <activity
+            android:name=".ui.friends.FriendDetailActivity"
+            android:theme="@style/Theme.Munchies.NoActionBar"/>
+
         <!-- Review Activity -->
         <activity
             android:name=".ui.review.ReviewActivity"
