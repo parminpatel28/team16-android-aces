@@ -1,9 +1,7 @@
 package com.example.munchies.model
 
-import android.location.Location
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.time.Instant
 
 @Parcelize
 data class User(

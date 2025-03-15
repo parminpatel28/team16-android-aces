@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.munchies.model.Review
 import com.example.munchies.repository.ReviewRepository
-import java.time.Instant
 
 class ReviewViewModel : ViewModel() {
     private val repository = ReviewRepository()

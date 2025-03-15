@@ -1,11 +1,9 @@
 package com.example.munchies.ui.review
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityReviewDetailsBinding
 import com.example.munchies.model.Review
-import com.google.android.material.chip.Chip
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
