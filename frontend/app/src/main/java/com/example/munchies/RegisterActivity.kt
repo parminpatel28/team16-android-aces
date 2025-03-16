@@ -44,7 +44,7 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, ProfileBuilderActivity::class.java))
                             finish()
                         } else {
                             val exception = task.exception
@@ -82,7 +82,11 @@ class RegisterActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    if (task.result?.additionalUserInfo?.isNewUser == true) {
+                        startActivity(Intent(this, ProfileBuilderActivity::class.java))
+                    } else {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
                     finish()
                 } else {
                     Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_LONG).show()

@@ -59,6 +59,9 @@
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ProfileBuilderActivity"
+            android:exported="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDk5Au-odk_HsBK8dRT_6GvFWnwS8EeQjA" />
