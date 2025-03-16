@@ -6,16 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.munchies.api.CreateUserRequest
+import com.example.munchies.api.UserService
 import com.example.munchies.databinding.ActivityProfileBuilderBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class ProfileBuilderActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBuilderBinding
     private lateinit var auth: FirebaseAuth
     private var selectedImageUri: Uri? = null
+    private lateinit var userService: UserService
     
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
@@ -30,6 +37,14 @@ class ProfileBuilderActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         auth = FirebaseAuth.getInstance()
+        
+        // Initialize Retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080/") // Android emulator localhost
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        
+        userService = retrofit.create(UserService::class.java)
         
         // Pre-fill email if available
         auth.currentUser?.email?.let { email ->
@@ -71,7 +86,7 @@ class ProfileBuilderActivity : AppCompatActivity() {
             imageRef.putFile(selectedImageUri!!)
                 .addOnSuccessListener { taskSnapshot ->
                     imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                        saveUserProfile(userId, name, username, bio, email, downloadUrl.toString())
+                        createUserProfile(userId, name, username, bio, email, downloadUrl.toString())
                     }
                 }
                 .addOnFailureListener { e ->
@@ -79,11 +94,11 @@ class ProfileBuilderActivity : AppCompatActivity() {
                 }
         } else {
             // Save profile without image
-            saveUserProfile(userId, name, username, bio, email, null)
+            createUserProfile(userId, name, username, bio, email, null)
         }
     }
 
-    private fun saveUserProfile(
+    private fun createUserProfile(
         userId: String,
         name: String,
         username: String,
@@ -91,9 +106,43 @@ class ProfileBuilderActivity : AppCompatActivity() {
         email: String,
         profilePictureUrl: String?
     ) {
-        // TODO: Implement your backend API call here to save the user profile
-        // For now, we'll just redirect to MainActivity
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        val request = CreateUserRequest(
+            firebaseUserId = userId,
+            name = name,
+            username = username,
+            profilePicture = profilePictureUrl,
+            userBio = bio.takeIf { it.isNotEmpty() },
+            emailAddress = email
+        )
+
+        lifecycleScope.launch {
+            try {
+                val response = userService.createUser(request)
+                if (response.isSuccessful) {
+                    startActivity(Intent(this@ProfileBuilderActivity, MainActivity::class.java))
+                    finish()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    android.util.Log.e("ProfileBuilder", "Error creating profile: $errorBody")
+                    android.util.Log.e("ProfileBuilder", "Response code: ${response.code()}")
+                    
+                    // Show a dialog with the full error message
+                    androidx.appcompat.app.AlertDialog.Builder(this@ProfileBuilderActivity)
+                        .setTitle("Error Creating Profile")
+                        .setMessage("Failed to create profile:\n${errorBody ?: "Unknown error"}")
+                        .setPositiveButton("OK", null)
+                        .show()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("ProfileBuilder", "Exception creating profile", e)
+                
+                // Show a dialog with the full error message
+                androidx.appcompat.app.AlertDialog.Builder(this@ProfileBuilderActivity)
+                    .setTitle("Error Creating Profile")
+                    .setMessage("Error creating profile:\n${e.message}\n\n${e.stackTraceToString()}")
+                    .setPositiveButton("OK", null)
+                    .show()
+            }
+        }
     }
 } 

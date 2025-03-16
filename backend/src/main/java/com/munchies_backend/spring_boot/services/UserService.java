@@ -1,12 +1,12 @@
 package com.munchies_backend.spring_boot.services;
 
+import com.munchies_backend.spring_boot.model.CreateUserRequest;
 import com.munchies_backend.spring_boot.model.User;
 import com.munchies_backend.spring_boot.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -24,7 +24,7 @@ public class UserService {
     }
 
     // Get a user by ID
-    public Optional<User> getUserById(long id) {
+    public Optional<User> getUserById(String id) {
         return userRepository.findById(id);
     }
 
@@ -39,7 +39,25 @@ public class UserService {
     }
 
     // Delete a user by ID
-    public void deleteUser(Integer id) {
-        userRepository.deleteById(Long.valueOf(id));
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
+    }
+
+    public User createUser(CreateUserRequest request) {
+        // Check if username is already taken
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already taken");
+        }
+
+        User user = new User();
+        user.setId(request.getFirebaseUserId());
+        user.setName(request.getName());
+        user.setUsername(request.getUsername());
+        user.setProfilePicture(request.getProfilePicture());
+        user.setUserBio(request.getUserBio());
+        user.setEmailAddress(request.getEmailAddress());
+        user.setAccountCreationDate(Instant.now());
+
+        return userRepository.save(user);
     }
 }
