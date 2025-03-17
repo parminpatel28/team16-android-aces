@@ -1,0 +1,29 @@
+package com.example.munchies.api
+
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+data class CreateUserRequest(
+    val firebaseUserId: String,
+    val name: String,
+    val username: String,
+    val profilePicture: String?,
+    val userBio: String?,
+    val emailAddress: String
+)
+
+data class User(
+    val id: String,
+    val name: String,
+    val username: String,
+    val profilePicture: String?,
+    val userBio: String?,
+    val accountCreationDate: String,
+    val emailAddress: String
+)
+
+interface UserService {
+    @POST("api/user")
+    suspend fun createUser(@Body request: CreateUserRequest): Response<User>
+} 

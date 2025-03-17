@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Munchies"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31" >
 
         <!-- Friend Activity -->
@@ -59,6 +60,9 @@
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ProfileBuilderActivity"
+            android:exported="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDk5Au-odk_HsBK8dRT_6GvFWnwS8EeQjA" />
