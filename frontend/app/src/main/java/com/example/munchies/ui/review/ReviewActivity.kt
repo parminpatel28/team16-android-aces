@@ -1,5 +1,6 @@
 package com.example.munchies.ui.review
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,12 +9,17 @@ import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.munchies.MainActivity
 import com.example.munchies.api.ApiClient
 import com.example.munchies.api.UserApiService
+import com.example.munchies.api.UserService
 import com.example.munchies.databinding.ActivityReviewBinding
 import com.example.munchies.model.Location
 import com.example.munchies.model.Review
 import com.example.munchies.model.User
+import com.example.munchies.model.UserManager
+import com.example.munchies.repository.FriendRepository
+import com.example.munchies.repository.ReviewRepository
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -24,8 +30,23 @@ class ReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReviewBinding
     private val reviewViewModel: ReviewViewModel by viewModels()
-    private lateinit var auth: FirebaseAuth
-    private val apiService = ApiClient.userService
+    private lateinit var userService: UserService
+    private val repository = FriendRepository()
+    private val userId = "UPcDzQ2iSuZZkTYDAKtuatiSe7m2" // FirebaseAuth.getInstance().currentUser?.uid
+
+    private fun loadUserIfNeeded(userId: String) {
+        if (UserManager.currentUser == null) {
+            repository.fetchUserById(userId) { user ->
+                if (user != null) {
+                    println("User fetched: ${user.username}")
+                } else {
+                    println("Failed to fetch user")
+                }
+            }
+        } else {
+            println("User already loaded: ${UserManager.currentUser?.username}")
+        }
+    }
 
     private fun setupRestaurantTagging() {
         val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
@@ -72,52 +93,57 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Log.d("ReviewActivity", "onCreate: ReviewActivity started")
-        
-        val curUser = FirebaseAuth.getInstance().currentUser
 
+        if (userId != null) {
+            loadUserIfNeeded(userId)
+        }
         setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Leave a Review"
 
-//        binding.submitReviewButton.setOnClickListener {
-//            Log.d("ReviewActivity", "Submit Review clicked")
-//            try{
-//                val overallRating = binding.overallRatingBar.rating.toDouble()
-//                val reviewText = binding.reviewText.text.toString().trim()
-//
-//                if (reviewText.isEmpty()) {
-//                    Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
-//                    return@setOnClickListener
-//                }
-//
-//                if (overallRating < 0.5) {
-//                    Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
-//                    return@setOnClickListener
-//                }
-//
-//                val review = Review(
-//                    reviewID = 0,
-//                    user = User(id = 1),
-//                    caption = reviewText,
-//                    photos = emptyList(),
-//                    location = Location(id = 1),
-//                    date = Instant.now().toString(),
-//                    rating = overallRating,
-//                    likes = 0
-//                )
-//
-//                Log.d("ReviewActivity", "Submitting Review")
-//                reviewViewModel.submitReview(review)
-//
-//                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
-//                finish()
-//            } catch (e: Exception) {
-//                Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
-//                e.printStackTrace()
-//            }
-//        }
+        binding.submitReviewButton.setOnClickListener {
+            Log.d("ReviewActivity", "Submit Review clicked")
+            try{
+                val overallRating = binding.overallRatingBar.rating.toDouble()
+                val reviewText = binding.reviewText.text.toString().trim()
+
+                if (reviewText.isEmpty()) {
+                    Toast.makeText(this, "Please enter a review", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (overallRating < 0.5) {
+                    Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val review = UserManager.currentUser?.let { it1 ->
+                    Review(
+                        reviewID = 0,
+                        user = it1,
+                        caption = reviewText,
+                        photos = emptyList(),
+                        location = Location(id = 1),
+                        date = Instant.now().toString(),
+                        rating = overallRating,
+                        likes = 0
+                    )
+                }
+
+                Log.d("ReviewActivity", "Submitting Review")
+                if (review != null) {
+                    reviewViewModel.submitReview(review)
+                }
+
+                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+                finish()
+            } catch (e: Exception) {
+                Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

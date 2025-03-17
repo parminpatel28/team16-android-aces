@@ -13,7 +13,7 @@ interface ReviewApiService {
 
     // Fetch reviews by user
     @GET("api/reviews/user/{userId}")
-    fun getReviewsByUser(@Path("userId") userId: Int): Call<List<Review>>
+    fun getReviewsByUser(@Path("userId") userId: String): Call<List<Review>>
 
     // Create a new review
     @POST("api/reviews")

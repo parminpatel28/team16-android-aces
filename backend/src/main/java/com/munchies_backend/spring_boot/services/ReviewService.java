@@ -31,7 +31,7 @@ public class ReviewService {
     }
 
     // Get reviews by user ID
-    public List<Review> getReviewsByUserId(Integer userId) {
+    public List<Review> getReviewsByUserId(String userId) {
         return reviewRepository.findByUserIdOrderByDateDesc(userId);
     }
 

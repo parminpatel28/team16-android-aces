@@ -5,6 +5,7 @@ import com.example.munchies.api.ApiClient
 import com.example.munchies.model.Friend
 import com.example.munchies.model.Friendship
 import com.example.munchies.model.User
+import com.example.munchies.model.UserManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -61,5 +62,30 @@ class FriendRepository {
                 onResult(null)
             }
         })
+    }
+
+    fun fetchUserById(userId: String, onResult: (User?) -> Unit) {
+        val gson = Gson()
+
+        Log.d("FriendRepository", "Fetching user $userId")
+
+        apiService.getUserById(userId).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    Log.d("FriendRepository", "User fetched successfully! Response: ${response.body()}")
+                    UserManager.currentUser = response.body()
+                    onResult(response.body())
+                } else {
+                    Log.e("FriendRepository", "Error Response Code: ${response.code()}, Body: ${response.errorBody()?.string()}")
+                    onResult(null)
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("FriendRepository", "API request failed: ${t.message}")
+                onResult(null)
+            }
+        })
+
     }
 }

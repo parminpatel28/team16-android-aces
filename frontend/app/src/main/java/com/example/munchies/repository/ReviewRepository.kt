@@ -33,7 +33,7 @@ class ReviewRepository {
         })
     }
 
-    fun getReviewsByUser(userId: Int, onResult: (List<Review>?) -> Unit) {
+    fun getReviewsByUser(userId: String, onResult: (List<Review>?) -> Unit) {
         apiService.getReviewsByUser(userId).enqueue(object : Callback<List<Review>> {
             override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
                 if (response.isSuccessful) {
