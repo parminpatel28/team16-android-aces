@@ -22,36 +22,35 @@ public class FriendshipController {
 
     // Send a friend request
     @PostMapping("/{senderId}/{receiverId}")
-    public ResponseEntity<Friendship> createFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+    public ResponseEntity<Friendship> createFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
         Friendship savedFriendship = friendshipService.saveFriendship(senderId, receiverId);
         return ResponseEntity.ok(savedFriendship);
     }
 
     // Delete a friendship/cancel friend request
     @DeleteMapping("/{userId}/{friendId}")
-    public ResponseEntity<Void> deleteFriendship(@PathVariable Integer userId, @PathVariable Integer friendId) {
-        // TODO STILL
+    public ResponseEntity<Void> deleteFriendship(@PathVariable String userId, @PathVariable String friendId) {
         friendshipService.deleteFriendship(userId, friendId);
         return ResponseEntity.noContent().build();
     }
 
     // Accept a friend request
     @PostMapping("/{senderId}/{receiverId}/accept")
-    public ResponseEntity<Friendship> acceptFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+    public ResponseEntity<Friendship> acceptFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
         friendshipService.acceptFriendship(senderId, receiverId);
         return ResponseEntity.noContent().build();
     }
 
     // Reject a friend request
     @PostMapping("/{senderId}/{receiverId}/reject")
-    public ResponseEntity<Friendship> rejectFriendship(@PathVariable Integer senderId, @PathVariable Integer receiverId) {
+    public ResponseEntity<Friendship> rejectFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
         friendshipService.rejectFriendship(senderId, receiverId);
         return ResponseEntity.noContent().build();
     }
 
     // Get all of a user's friendships
     @GetMapping("/{userId}")
-    public ResponseEntity<List<User>> getAcceptedFriends(@PathVariable Integer userId) {
+    public ResponseEntity<List<User>> getAcceptedFriends(@PathVariable String userId) {
         List<User> friendships = friendshipService.getAcceptedFriends(userId);
         return ResponseEntity.ok(friendships);
     }

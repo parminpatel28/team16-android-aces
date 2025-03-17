@@ -8,19 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface FriendshipRepository  extends JpaRepository<Friendship, Long> {
-
+public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     List<Friendship> findByUser(User user);
     List<Friendship> findByFriend(User friend);
-    List<Friendship> findByUserId(Integer user);
-    List<Friendship> findByFriendId(Integer friend);
+    List<Friendship> findByUserId(String user);
+    List<Friendship> findByFriendId(String friend);
 
     Optional<Friendship> findByUserAndFriend(User user, User friend);
-    Optional<Friendship> findByUserIdAndFriendId(Integer userId, Integer friendId);
+    Optional<Friendship> findByUserIdAndFriendId(String userId, String friendId);
 
     List<Friendship> findByUserAndStatus(User user, FriendRequestStatus status);
     List<Friendship> findByFriendAndStatus(User friend, FriendRequestStatus status);
 
-    List<Friendship> findByUserIdAndStatus(Integer userId, FriendRequestStatus status);
-    List<Friendship> findByFriendIdAndStatus(Integer friendId, FriendRequestStatus status);
+    List<Friendship> findByUserIdAndStatus(String userId, FriendRequestStatus status);
+    List<Friendship> findByFriendIdAndStatus(String friendId, FriendRequestStatus status);
 }

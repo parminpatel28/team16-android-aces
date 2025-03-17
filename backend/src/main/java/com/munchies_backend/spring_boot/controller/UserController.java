@@ -1,5 +1,6 @@
 package com.munchies_backend.spring_boot.controller;
 
+import com.munchies_backend.spring_boot.model.CreateUserRequest;
 import com.munchies_backend.spring_boot.model.User;
 import com.munchies_backend.spring_boot.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +19,25 @@ public class UserController {
         this.userService = userService;
     }
 
-//    // Create a new user
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody User user) {
-//        User savedUser = userService.saveUser(user);
-//        return ResponseEntity.ok(savedUser);
-//    }
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
+        try {
+            User savedUser = userService.createUser(request);
+            return ResponseEntity.ok(savedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     // Get a user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
         Optional<User> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Get a user by username
-    @GetMapping("/username/{id}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userService.getUserByUsername(username);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -48,7 +52,7 @@ public class UserController {
 
     // Delete a user
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

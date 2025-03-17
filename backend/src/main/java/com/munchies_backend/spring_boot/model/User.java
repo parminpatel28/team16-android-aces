@@ -16,10 +16,8 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_gen")
-    @SequenceGenerator(name = "users_id_gen", sequenceName = "users_user_id_seq", allocationSize = 1)
     @Column(name = "user_id", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -50,11 +48,11 @@ public class User {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Review> savedReviews;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

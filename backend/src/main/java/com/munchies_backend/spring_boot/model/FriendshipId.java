@@ -8,22 +8,22 @@ import java.util.Objects;
 @Embeddable
 public class FriendshipId implements java.io.Serializable {
     private static final long serialVersionUID = -8401988947802857157L;
-    private Integer user;
-    private Integer friend;
+    private String user;
+    private String friend;
 
-    public Integer getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(Integer user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public Integer getFriend() {
+    public String getFriend() {
         return friend;
     }
 
-    public void setFriend(Integer friend) {
+    public void setFriend(String friend) {
         this.friend = friend;
     }
 
