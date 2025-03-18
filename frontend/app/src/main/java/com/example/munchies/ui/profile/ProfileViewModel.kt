@@ -1,6 +1,7 @@
 package com.example.munchies.ui.profile
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,8 @@ import com.example.munchies.api.User
 import com.example.munchies.api.UserService
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -45,8 +48,19 @@ class ProfileViewModel : ViewModel() {
     private val userService: UserService
 
     init {
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            Log.d("ProfileViewModel", "OkHttp: $message")
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080/") // Android emulator localhost
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -57,26 +71,39 @@ class ProfileViewModel : ViewModel() {
     private fun loadUserData() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         if (firebaseUser == null) {
+            Log.e("ProfileViewModel", "No Firebase user found")
             _error.value = "User not logged in"
             return
         }
+
+        Log.d("ProfileViewModel", "Loading user data for Firebase UID: ${firebaseUser.uid}")
 
         viewModelScope.launch {
             try {
                 _isLoading.value = true
                 val response = userService.getUserById(firebaseUser.uid)
+                Log.d("ProfileViewModel", "Response code: ${response.code()}")
+                
                 if (response.isSuccessful) {
                     response.body()?.let { user ->
+                        Log.d("ProfileViewModel", "User data received: $user")
                         _userName.value = user.name
                         _userEmail.value = user.emailAddress
                         _userBio.value = user.userBio ?: "No bio yet"
                         _userPfp.value = user.profilePicture
+                    } ?: run {
+                        Log.e("ProfileViewModel", "Response body is null")
+                        _error.value = "User data is null"
                     }
                 } else {
-                    _error.value = "Failed to load user data: ${response.errorBody()?.string()}"
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ProfileViewModel", "Error response: $errorBody")
+                    _error.value = "Failed to load user data: $errorBody"
                 }
             } catch (e: Exception) {
+                Log.e("ProfileViewModel", "Exception loading user data", e)
                 _error.value = "Error loading user data: ${e.message}"
+                e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
