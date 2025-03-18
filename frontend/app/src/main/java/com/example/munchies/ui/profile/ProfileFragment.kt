@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.bumptech.glide.Glide
+import com.example.munchies.ProfileEditActivity
+import com.example.munchies.ui.review.ReviewActivity
 import com.google.android.material.textfield.TextInputEditText
 import java.net.URL
 
@@ -44,6 +46,7 @@ class ProfileFragment : Fragment() {
         val textReviews: TextView = binding.textProfileReviews
         val textFriends: TextView = binding.textProfileFriends
         val imagePfp: ImageView = binding.imageProfilePicture
+        val imageEdit: ImageView = binding.imageEdit
         val btnLogout: Button = binding.btnLogout
         val textBio: TextView = binding.textProfileBio
         val textInputBio: TextInputEditText = binding.textInputProfileBio
@@ -63,9 +66,6 @@ class ProfileFragment : Fragment() {
         }
 
         profileViewModel.userPfp.observe(viewLifecycleOwner) {
-            //val url =  URL(it)
-            //val image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            //imagePfp.setImageBitmap(image);
             Glide.with(context).load(it).into(imagePfp)
         }
 
@@ -90,6 +90,10 @@ class ProfileFragment : Fragment() {
 
             }
             logoutBuilder.create().show()
+        }
+
+        imageEdit.setOnClickListener{
+            startActivity(Intent(requireContext(), ProfileEditActivity::class.java))
         }
 
         return root

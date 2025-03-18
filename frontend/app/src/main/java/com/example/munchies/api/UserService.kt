@@ -2,6 +2,7 @@ package com.example.munchies.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 data class CreateUserRequest(
@@ -24,6 +25,9 @@ data class User(
 )
 
 interface UserService {
+    @GET("api/user")
+    suspend fun getUserById(@Body userId: Int): Response<User>
+
     @POST("api/user")
     suspend fun createUser(@Body request: CreateUserRequest): Response<User>
 } 
