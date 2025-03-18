@@ -20,7 +20,7 @@ class ReviewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ReviewAdapter
     private val reviewRepository = ReviewRepository()
-    private val userId = "UPcDzQ2iSuZZkTYDAKtuatiSe7m2" // FirebaseAuth.getInstance().currentUser?.uid
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
