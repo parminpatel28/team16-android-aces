@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.munchies.LoginActivity
 import com.example.munchies.databinding.FragmentProfileBinding
+import com.example.munchies.model.UserManager
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileFragment : Fragment() {
@@ -75,6 +76,7 @@ class ProfileFragment : Fragment() {
                 .setTitle("Confirm logout?")
                 .setPositiveButton("Confirm") { _, _ ->
                     profileViewModel.logout()
+                    UserManager.currentUser = null;
                     startActivity(Intent(context, LoginActivity::class.java))
                     activity?.finish()
                 }

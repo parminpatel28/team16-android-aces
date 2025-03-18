@@ -1,20 +1,19 @@
 package com.example.munchies.model
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import java.time.Instant
 
 @Parcelize
 data class Review(
-    val reviewID: Int,
-    val poster: String, // should be a user, string for now
-    val caption: String,
-    val photos: List<String> = emptyList(),
-    val taggedUsers: List<String> = emptyList(), // should be list of users, string for now
-    val restaurants: List<String> = emptyList(), // should be restaurant list, string for now
-    val location: String, // should be location, string for now
-    val date: Instant,
-    val rating: Double,
-    val likes: Int = 0,
+    @SerializedName("review_id") val reviewID: Int,
+    @SerializedName("user") val user: User,
+    @SerializedName("caption") val caption: String,
+    @SerializedName("photos") val photos: List<String>? = emptyList(),
+//    @SerializedName("location_id") val location: Location?,
+    @SerializedName("date") val date: String,
+    @SerializedName("rating") val rating: Double,
+    @SerializedName("likes") val likes: Int = 0,
+    @SerializedName("savedReviews") val savedReviews: List<Review>? = emptyList()
 //    val comments: List<Comment> = emptyList()
 ) : Parcelable

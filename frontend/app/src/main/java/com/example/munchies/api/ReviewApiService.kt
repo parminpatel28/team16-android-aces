@@ -1,0 +1,26 @@
+package com.example.munchies.api
+
+import com.example.munchies.model.Review
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.http.*
+
+interface ReviewApiService {
+
+    // Fetch review by ID
+    @GET("api/reviews/{reviewId}")
+    fun getReviewById(@Path("reviewId") reviewId: Long): Call<Review>
+
+    // Fetch reviews by user
+    @GET("api/reviews/user/{userId}")
+    fun getReviewsByUser(@Path("userId") userId: String): Call<List<Review>>
+
+    // Create a new review
+    @POST("api/reviews")
+    fun createReview(@Body review: Review): Call<Review>
+
+
+    // Delete review by ID
+    @DELETE("api/reviews/{reviewId}")
+    fun deleteReview(@Path("reviewId") reviewId: Long): Call<Void>
+}
