@@ -11,6 +11,10 @@ interface UserApiService {
     @GET("api/user/{userId}")
     fun getUserById(@Path("userId") userId: Int): Call<User>
 
+    // Fetch user by username
+    @GET("api/user/username/{username}")
+    fun getUserByUsername(@Path("username") userId: Int): Call<User>
+
     // Fetch all user
     @GET("api/user")
     fun getUsers(): Call<List<User>>
@@ -18,7 +22,6 @@ interface UserApiService {
     // Delete user by ID
     @DELETE("api/user/{userId}")
     fun deleteUser(@Path("userId") userId: Int): Call<Void>
-
 
     // Fetch all user friends
     @GET("api/friendship/{userId}")
