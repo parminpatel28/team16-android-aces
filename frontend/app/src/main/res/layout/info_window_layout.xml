@@ -3,23 +3,31 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="8dp"
     android:background="@android:color/white">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:textSize="14sp"
         android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/snippet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginTop="4dp"/>
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"/>
+
+    <Button
+        android:id="@+id/writeReviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write Review"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:background="@color/orange"/>
 
 </LinearLayout> 
