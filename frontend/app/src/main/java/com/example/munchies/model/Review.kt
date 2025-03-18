@@ -10,9 +10,10 @@ data class Review(
     @SerializedName("user") val user: User,
     @SerializedName("caption") val caption: String,
     @SerializedName("photos") val photos: List<String>? = emptyList(),
-    @SerializedName("location") val location: Location,
+//    @SerializedName("location_id") val location: Location?,
     @SerializedName("date") val date: String,
     @SerializedName("rating") val rating: Double,
     @SerializedName("likes") val likes: Int = 0,
+    @SerializedName("savedReviews") val savedReviews: List<Review>? = emptyList()
 //    val comments: List<Comment> = emptyList()
 ) : Parcelable

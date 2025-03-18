@@ -1,5 +1,6 @@
 package com.example.munchies.ui.review
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -34,7 +35,7 @@ class ReviewActivity : AppCompatActivity() {
     private var taggedRestaurants: MutableList<String> = mutableListOf()
     private var selectedLocation: String? = null
     private val repository = FriendRepository()
-    private val userId = "UPcDzQ2iSuZZkTYDAKtuatiSe7m2" // FirebaseAuth.getInstance().currentUser?.uid
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     private fun loadUserIfNeeded(userId: String) {
         if (UserManager.currentUser == null) {
@@ -52,7 +53,7 @@ class ReviewActivity : AppCompatActivity() {
 
     private fun setupRestaurantTagging() {
         val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
-        val restaurantAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, restaurantList)
+        val restaurantAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, restaurantList)
 
         binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
         binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
@@ -143,12 +144,13 @@ class ReviewActivity : AppCompatActivity() {
                 }
 
                 val review = UserManager.currentUser?.let { it1 ->
+                    Log.d("ReviewActivity", "User: ${it1}")
                     Review(
                         reviewID = 0,
                         user = it1,
                         caption = reviewText,
                         photos = emptyList(),
-                        location = Location(id = 1), // selectedLocation ?: "",
+//                        location = Location(id = 1), // selectedLocation ?: "",
                         date = Instant.now().toString(),
                         rating = overallRating,
                         likes = 0
@@ -170,7 +172,7 @@ class ReviewActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+        if (item.itemId == R.id.home) {
             finish()
             return true
         }
