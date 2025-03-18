@@ -9,7 +9,7 @@ interface UserApiService {
 
     // Fetch user by ID
     @GET("api/user/{userId}")
-    fun getUserById(@Path("userId") userId: Int): Call<User>
+    fun getUserById(@Path("userId") userId: String): Call<User>
 
     // Fetch all user
     @GET("api/user")

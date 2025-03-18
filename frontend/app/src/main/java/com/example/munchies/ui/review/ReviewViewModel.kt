@@ -1,31 +1,25 @@
 package com.example.munchies.ui.review
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.munchies.model.Review
-import java.time.Instant
+import com.example.munchies.repository.ReviewRepository
 
 class ReviewViewModel : ViewModel() {
+    private val repository = ReviewRepository()
 
     private val _reviews = MutableLiveData<MutableList<Review>>(mutableListOf())
     val reviews: LiveData<MutableList<Review>> = _reviews
 
-    init {
-        // random seed review for now
-        _reviews.value = mutableListOf(
-            Review(
-                1, "Test User", "Test Restaurant",
-                location = "Location",
-                date = Instant.now(),
-                rating = 5.0,
-            )
-        )
-    }
-
-    fun addReview(review: Review) {
-        val currentReviews = _reviews.value ?: mutableListOf()
-        currentReviews.add(0, review)
-        _reviews.value = currentReviews
+    fun submitReview(reviewData: Review) {
+        repository.createReview(reviewData) { response ->
+            if (response != null) {
+                Log.d("ReviewViewModel", "Review submitted successfully!")
+            } else {
+                Log.e("ReviewViewModel", "Failed to submit review")
+            }
+        }
     }
 }

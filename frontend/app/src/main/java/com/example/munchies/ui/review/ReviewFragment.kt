@@ -2,29 +2,35 @@ package com.example.munchies.ui.review
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
-import com.example.munchies.model.Review
-import java.time.Instant
+import com.example.munchies.model.UserManager
+import com.example.munchies.repository.FriendRepository
+import com.example.munchies.repository.ReviewRepository
+import com.google.firebase.auth.FirebaseAuth
 
 class ReviewFragment : Fragment() {
 
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
-    private lateinit var reviewViewModel: ReviewViewModel
     private lateinit var adapter: ReviewAdapter
+    private val reviewRepository = ReviewRepository()
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
-        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
 
         setupRecyclerView()
-        loadMockReviews()
+        setupSwipeToRefresh()
+        if (userId != null) {
+            Log.d("ReviewFragment", "UserId: ${userId}")
+            fetchReviewsByUser(userId)
+        }  // Fetch reviews when fragment loads
 
         binding.addReviewButton.setOnClickListener {
             startActivity(Intent(requireContext(), ReviewActivity::class.java))
@@ -35,6 +41,8 @@ class ReviewFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ReviewAdapter { selectedReview ->
+            Log.d("Review Clicked", "Review: $selectedReview")
+            Log.d("Review Clicked", "User: ${selectedReview.user}")
             val intent = Intent(requireContext(), ReviewDetailsActivity::class.java)
             intent.putExtra("review", selectedReview)
             startActivity(intent)
@@ -43,13 +51,25 @@ class ReviewFragment : Fragment() {
         binding.recyclerReviews.adapter = adapter
     }
 
-    private fun loadMockReviews() {
-        val mockReviews = listOf(
-            Review(1, "Taylor", "Great place!", location = "Waterloo", date = Instant.now(), rating = 4.5, restaurants = listOf("Taco Bell")),
-            Review(2, "Taylor", "Loved the sushi!", location = "Waterloo", date = Instant.now(), rating = 4.0, restaurants = listOf("Ye's Sushi")),
-            Review(3, "Taylor", "Not bad", location = "Waterloo", date = Instant.now(), rating = 2.5, restaurants = listOf("Burger King"))
-        )
-        adapter.submitList(mockReviews) // TEMPORARY until backend is ready
+    private fun setupSwipeToRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            if (userId != null) {
+                fetchReviewsByUser(userId)
+            }  // Refresh reviews
+        }
+    }
+
+    private fun fetchReviewsByUser(userId: String) {
+        binding.swipeRefreshLayout.isRefreshing = true // Show refresh indicator
+
+        reviewRepository.getReviewsByUser(userId) { reviews ->
+            binding.swipeRefreshLayout.isRefreshing = false // Hide refresh indicator
+            if (reviews != null) {
+                adapter.submitList(reviews)
+            } else {
+                Log.e("ReviewFragment", "Failed to fetch reviews")
+            }
+        }
     }
 
     override fun onDestroyView() {

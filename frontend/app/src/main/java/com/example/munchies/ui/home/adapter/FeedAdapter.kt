@@ -24,9 +24,7 @@ class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiff
 
     inner class ReviewViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
-            binding.userName.text = review.poster
             binding.feedContent.text = review.caption
-            binding.restaurantName.text = review.restaurants.firstOrNull()?: "Unknown Restaurant"
 
             binding.root.setOnClickListener {
                 val context = binding.root.context
