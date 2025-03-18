@@ -39,7 +39,6 @@ class CustomInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWind
                 context.startActivity(intent)
             }
         }
-
         return view
     }
 } 

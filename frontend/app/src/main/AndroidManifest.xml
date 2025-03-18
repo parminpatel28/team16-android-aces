@@ -36,10 +36,11 @@
             android:name=".ui.review.ReviewDetailsActivity"
             android:theme="@style/Theme.Munchies.NoActionBar"/>
 
+        <!-- Landing Activity -->
         <activity
-            android:name=".LaunchActivity"
+            android:name=".LandingActivity"
             android:exported="true"
-            android:theme="@style/Theme.Munchies.NoActionBar">
+            android:theme="@style/Theme.Munchies.NoTitle">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,11 +57,13 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Munchies.NoTitle"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Munchies.NoTitle"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".ProfileBuilderActivity"
