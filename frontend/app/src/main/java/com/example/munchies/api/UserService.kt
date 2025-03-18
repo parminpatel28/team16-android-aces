@@ -2,7 +2,9 @@ package com.example.munchies.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 data class CreateUserRequest(
     val firebaseUserId: String,
@@ -26,4 +28,7 @@ data class User(
 interface UserService {
     @POST("api/user")
     suspend fun createUser(@Body request: CreateUserRequest): Response<User>
+
+    @GET("api/user/{id}")
+    suspend fun getUserById(@Path("id") id: String): Response<User>
 } 

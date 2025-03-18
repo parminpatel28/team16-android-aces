@@ -31,6 +31,8 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReviewBinding
     private val reviewViewModel: ReviewViewModel by viewModels()
     private lateinit var userService: UserService
+    private var taggedRestaurants: MutableList<String> = mutableListOf()
+    private var selectedLocation: String? = null
     private val repository = FriendRepository()
     private val userId = "UPcDzQ2iSuZZkTYDAKtuatiSe7m2" // FirebaseAuth.getInstance().currentUser?.uid
 
@@ -55,22 +57,30 @@ class ReviewActivity : AppCompatActivity() {
         binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
         binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
-        // Store selected restaurants
-        val selectedRestaurants = mutableSetOf<String>()
-
         // Handle tag selection
         binding.tagRestaurantsDropdown.setOnItemClickListener { _, _, position, _ ->
             val selectedRestaurant = restaurantAdapter.getItem(position) ?: return@setOnItemClickListener
 
             // Prevent duplicate selection
-            if (selectedRestaurants.add(selectedRestaurant)) {
-                addChipToGroup(selectedRestaurant, binding.tagRestaurantChipGroup, selectedRestaurants)
-                binding.tagRestaurantsDropdown.text.clear()
+            if (!taggedRestaurants.contains(selectedRestaurant)) {
+                taggedRestaurants.add(selectedRestaurant)
+                addChipToGroupList(selectedRestaurant, binding.tagRestaurantChipGroup)
             }
             binding.tagRestaurantsDropdown.text.clear()
         }
     }
 
+    private fun addChipToGroupList(text: String, chipGroup: ChipGroup) {
+        val chip = Chip(this).apply {
+            this.text = text
+            this.isCloseIconVisible = true
+            this.setOnCloseIconClickListener {
+                chipGroup.removeView(this)
+                taggedRestaurants.remove(text)
+            }
+        }
+        chipGroup.addView(chip)
+    }
 
     private fun addChipToGroup(text: String, chipGroup: ChipGroup, selectedItems: MutableSet<String>) {
         val chip = Chip(this).apply {
@@ -84,8 +94,6 @@ class ReviewActivity : AppCompatActivity() {
         chipGroup.addView(chip)
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,6 +105,21 @@ class ReviewActivity : AppCompatActivity() {
         if (userId != null) {
             loadUserIfNeeded(userId)
         }
+        // Get pre-filled restaurant info if available
+        val restaurantName = intent.getStringExtra("RESTAURANT_NAME")
+        val restaurantId = intent.getStringExtra("RESTAURANT_ID")
+        val restaurantAddress = intent.getStringExtra("RESTAURANT_ADDRESS")
+
+        // Pre-fill restaurant if provided
+        if (restaurantName != null) {
+            binding.tagRestaurantsDropdown.setText(restaurantName)
+            // Add the restaurant as a chip
+            if (!taggedRestaurants.contains(restaurantName)) {
+                taggedRestaurants.add(restaurantName)
+                addChipToGroupList(restaurantName, binding.tagRestaurantChipGroup)
+            }
+        }
+
         setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
@@ -125,7 +148,7 @@ class ReviewActivity : AppCompatActivity() {
                         user = it1,
                         caption = reviewText,
                         photos = emptyList(),
-                        location = Location(id = 1),
+                        location = Location(id = 1), // selectedLocation ?: "",
                         date = Instant.now().toString(),
                         rating = overallRating,
                         likes = 0

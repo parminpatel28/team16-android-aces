@@ -1,6 +1,5 @@
 package com.munchies_backend.spring_boot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @Column(name = "user_id", nullable = false)
@@ -43,10 +41,15 @@ public class User {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ColumnDefault("'[]'::jsonb")
-    @Column(name = "saved_reviews")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Review> savedReviews;
+//    @ColumnDefault("'[]'::jsonb")
+//    @Column(name = "friends")
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    private List<User> friends;
+
+//    @ColumnDefault("'[]'::jsonb")
+//    @Column(name = "saved_reviews")
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    private List<Review> savedReviews;
 
     public String getId() {
         return id;
@@ -112,13 +115,16 @@ public class User {
         this.location = location;
     }
 
+//    public List<User> getFriends() { return friends; }
+//
+//    public void setFriends(List<User> friends) {}
 
-    public List<Review> getSavedReviews() {
-        return savedReviews;
-    }
-
-    public void setSavedReviews(List<Review> savedReviews) {
-        this.savedReviews = savedReviews;
-    }
+//    public List<Review> getSavedReviews() {
+//        return savedReviews;
+//    }
+//
+//    public void setSavedReviews(List<Review> savedReviews) {
+//        this.savedReviews = savedReviews;
+//    }
 
 }
