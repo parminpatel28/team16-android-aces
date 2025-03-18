@@ -12,18 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.munchies.LoginActivity
+import com.example.munchies.ProfileEditActivity
 import com.example.munchies.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-<<<<<<< HEAD
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import com.bumptech.glide.Glide
-import com.example.munchies.ProfileEditActivity
-import com.example.munchies.ui.review.ReviewActivity
-import com.google.android.material.textfield.TextInputEditText
-import java.net.URL
-=======
->>>>>>> 322dd40efee7449da3ec05db121ba53709914d6f
+import java.io.Serializable
 
 class ProfileFragment : Fragment() {
 
@@ -39,21 +31,8 @@ class ProfileFragment : Fragment() {
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-<<<<<<< HEAD
-        // Bind UI elements
-        val textName: TextView = binding.textProfileName
-        val textEmail: TextView = binding.textProfileEmail
-        val textReviews: TextView = binding.textProfileReviews
-        val textFriends: TextView = binding.textProfileFriends
-        val imagePfp: ImageView = binding.imageProfilePicture
-        val imageEdit: ImageView = binding.imageEdit
-        val btnLogout: Button = binding.btnLogout
-        val textBio: TextView = binding.textProfileBio
-        val textInputBio: TextInputEditText = binding.textInputProfileBio
-=======
         setupObservers()
         setupClickListeners()
->>>>>>> 322dd40efee7449da3ec05db121ba53709914d6f
 
         return binding.root
     }
@@ -67,14 +46,9 @@ class ProfileFragment : Fragment() {
             binding.textProfileEmail.text = it
         }
 
-<<<<<<< HEAD
-        profileViewModel.userPfp.observe(viewLifecycleOwner) {
-            Glide.with(context).load(it).into(imagePfp)
-=======
         profileViewModel.userBio.observe(viewLifecycleOwner) {
             binding.textProfileBio.text = it
             binding.textInputProfileBio.hint = it
->>>>>>> 322dd40efee7449da3ec05db121ba53709914d6f
         }
 
         profileViewModel.userPfp.observe(viewLifecycleOwner) { url ->
@@ -110,18 +84,21 @@ class ProfileFragment : Fragment() {
                 .show()
         }
 
-<<<<<<< HEAD
-        imageEdit.setOnClickListener{
-            startActivity(Intent(requireContext(), ProfileEditActivity::class.java))
-        }
-
-        return root
-=======
         binding.swipeRefreshLayout.setOnRefreshListener {
             profileViewModel.refreshUserData()
             binding.swipeRefreshLayout.isRefreshing = false
         }
->>>>>>> 322dd40efee7449da3ec05db121ba53709914d6f
+
+        binding.imageEdit.setOnClickListener({
+            val intent = Intent(context, ProfileEditActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("userName", profileViewModel.userName.value)
+            bundle.putString("userEmail", profileViewModel.userEmail.value)
+            bundle.putString("userBio", profileViewModel.userBio.value)
+            bundle.putString("userPfp", profileViewModel.userPfp.value)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        })
     }
 
     override fun onDestroyView() {
