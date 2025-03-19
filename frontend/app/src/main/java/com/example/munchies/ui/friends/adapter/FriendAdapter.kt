@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.databinding.ItemFriendBinding
-import com.example.munchies.model.Friend
 import android.widget.Filter
+import com.example.munchies.model.User
 import com.example.munchies.ui.friends.FriendDetailActivity
 
-class FriendAdapter(private var friendList: List<Friend>) :
-    ListAdapter<Friend, FriendAdapter.FriendViewHolder>(FriendDiffCallback()), Filterable {
+class FriendAdapter(private var friendList: MutableList<User>) :
+    ListAdapter<User, FriendAdapter.FriendViewHolder>(FriendDiffCallback()), Filterable {
 //    RecyclerView.Adapter<FriendAdapter.FriendViewHolder>(), Filterable {
-    var filteredFriendList: List<Friend> = friendList
+    var filteredFriendList: List<User> = friendList
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -32,14 +32,18 @@ class FriendAdapter(private var friendList: List<Friend>) :
     override fun getItemCount(): Int {
         return filteredFriendList.size
     }
-    fun updateList(newList: List<Friend>) {
-        friendList = newList
-        filteredFriendList = newList
+    fun updateList(newList: List<User>?) {
+        if (newList != null) {
+            friendList = newList as MutableList<User>
+        }
+        if (newList != null) {
+            filteredFriendList = newList
+        }
         notifyDataSetChanged()
     }
 
     inner class FriendViewHolder(private val binding: ItemFriendBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(friend: Friend) {
+        fun bind(friend: User) {
             binding.friendProfilePicture.contentDescription = friend.profilePicture
             binding.friendname.text = friend.name
             binding.friendUserName.text = friend.username
@@ -48,7 +52,7 @@ class FriendAdapter(private var friendList: List<Friend>) :
                 val context = binding.root.context
                 val intent =
                     Intent(context, FriendDetailActivity::class.java).apply {
-                    putExtra("friend_id", friend.userId)
+                    putExtra("friend_id", friend.id)
                 }
                 context.startActivity(intent)
             }
@@ -72,17 +76,17 @@ class FriendAdapter(private var friendList: List<Friend>) :
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredFriendList = results?.values as List<Friend>
+                filteredFriendList = results?.values as List<User>
                 notifyDataSetChanged()
             }
         }
     }
-    class FriendDiffCallback : DiffUtil.ItemCallback<Friend>() {
-        override fun areItemsTheSame(oldItem: Friend, newItem: Friend): Boolean {
-            return oldItem.userId == newItem.userId
+    class FriendDiffCallback : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Friend, newItem: Friend): Boolean {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem == newItem
         }
     }

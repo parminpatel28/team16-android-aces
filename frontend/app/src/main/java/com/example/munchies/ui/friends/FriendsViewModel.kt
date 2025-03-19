@@ -1,39 +1,49 @@
 package com.example.munchies.ui.friends
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.munchies.model.Friend
+import com.example.munchies.model.User
+import com.example.munchies.repository.FriendRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.Instant
 
 class FriendsViewModel : ViewModel() {
+
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private val repository = FriendRepository()
 
     private val _text = MutableLiveData<String>().apply {
         value = "These are your friends! \nYou currently have none :("
     }
     val text: LiveData<String> = _text
 
-    private val _friendsList = MutableLiveData<List<Friend>>()
-    val friendsList: LiveData<List<Friend>> = _friendsList
+    private val _friendsList = MutableLiveData<List<User>?>()
+    val friendsList: MutableLiveData<List<User>?> = _friendsList
 
-    private val _filteredFriendsList = MutableLiveData<List<Friend>>()
-    val filteredFriendsList: LiveData<List<Friend>> = _filteredFriendsList
+    private val _filteredFriendsList = MutableLiveData<List<User>?>()
+    val filteredFriendsList: MutableLiveData<List<User>?> = _filteredFriendsList
 
-
-    // Simulated backend fetch
     private fun fetchFriends() {
         viewModelScope.launch {
-            // Replace with actual backend call
+            if (userId != null) {
+                repository.getUserFriends(
+                    userId
+                ) { response ->
+                    if (response != null) {
+                        _friendsList.value = response
+                        _filteredFriendsList.value = response
+                    } else {
+                        Log.e("FriendsViewModel", "Failed to get friends")
+                    }
+                }
 
-            val data = listOf(
-                Friend(userId = 1, username = "elaine", name = "Elaine", profilePicture = ""),
-                Friend(userId = 2, username = "elaine", name = "Elaine", profilePicture = ""),
-                Friend(userId = 3, username = "elaine", name = "Elaine", profilePicture = ""),
-            )
-            _friendsList.value = data
-            _filteredFriendsList.value = data
+            }
+
         }
     }
 
