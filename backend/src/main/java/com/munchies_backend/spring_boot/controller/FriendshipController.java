@@ -22,9 +22,9 @@ public class FriendshipController {
 
     // Send a friend request
     @PostMapping("/{senderId}/{receiverId}")
-    public ResponseEntity<Friendship> createFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
+    public ResponseEntity<Void> createFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
         Friendship savedFriendship = friendshipService.saveFriendship(senderId, receiverId);
-        return ResponseEntity.ok(savedFriendship);
+        return ResponseEntity.noContent().build();
     }
 
     // Delete a friendship/cancel friend request
@@ -52,6 +52,20 @@ public class FriendshipController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<User>> getAcceptedFriends(@PathVariable String userId) {
         List<User> friendships = friendshipService.getAcceptedFriends(userId);
+        return ResponseEntity.ok(friendships);
+    }
+
+    // Get all of a user's incoming friend requests
+    @GetMapping("/{userId}/incoming")
+    public ResponseEntity<List<User>> getIncomingRequests(@PathVariable String userId) {
+        List<User> friendships = friendshipService.getIncomingRequests(userId);
+        return ResponseEntity.ok(friendships);
+    }
+
+    // Get all of a user's incoming friend requests
+    @GetMapping("/{userId}/outgoing")
+    public ResponseEntity<List<User>> getOutgoingRequests(@PathVariable String userId) {
+        List<User> friendships = friendshipService.getOutgoingRequests(userId);
         return ResponseEntity.ok(friendships);
     }
 }

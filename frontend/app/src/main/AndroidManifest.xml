@@ -30,6 +30,9 @@
         <activity
             android:name=".ui.friends.FriendDetailActivity"
             android:theme="@style/Theme.Munchies.NoActionBar"/>
+        <activity
+            android:name=".ui.friends.FriendRequestsActivity"
+            android:theme="@style/Theme.Munchies.NoActionBar"/>
 
         <!-- Review Activity -->
         <activity
