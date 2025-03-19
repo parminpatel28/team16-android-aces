@@ -1,32 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.friends.FriendsFragment" >
+    tools:context=".ui.friends.FriendsFragment">
 
     <SearchView
         android:id="@+id/searchFriends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:queryHint="Search For Friends" />
+        android:queryHint="Search For Friends" >
 
-    <Button
-        android:id="@+id/btnAddFriends"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"></LinearLayout>
+    </SearchView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_friends"
-        android:layout_marginHorizontal="32dp" />
+        android:orientation="horizontal">
 
-    <!-- RecyclerView to display the feed -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerFriends"
+        <Button
+            android:id="@+id/btnAddFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/add_friends" />
+
+        <Button
+            android:id="@+id/btnFriendRequests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="0dp"
+            android:text="@string/view_friend_requests" />
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="10dp"/>
+        android:layout_height="match_parent">
+
+        <!-- RecyclerView to display the feed -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerFriends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
