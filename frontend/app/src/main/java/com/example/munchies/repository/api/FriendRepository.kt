@@ -19,6 +19,7 @@ class FriendRepository {
 
     fun getUserFriends(userId: String, onResult: (List<User>?) -> Unit) {
 
+
         Log.d("FriendRepository", "Getting friends for user $userId")
 
         apiService.getUserFriends(userId).enqueue(object : Callback<List<User>> {

@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.io.Serializable
 
 data class CreateUserRequest(
     val firebaseUserId: String,
@@ -26,6 +27,7 @@ data class User(
 )
 
 interface UserService {
+
     @POST("api/user")
     suspend fun createUser(@Body request: CreateUserRequest): Response<User>
 

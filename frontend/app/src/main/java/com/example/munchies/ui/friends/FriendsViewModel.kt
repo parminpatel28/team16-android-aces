@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.munchies.model.Friend
 import com.example.munchies.model.User
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository

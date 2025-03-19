@@ -12,9 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.munchies.LoginActivity
+import com.example.munchies.ProfileEditActivity
 import com.example.munchies.databinding.FragmentProfileBinding
 import com.example.munchies.model.UserManager
 import com.google.firebase.auth.FirebaseAuth
+import java.io.Serializable
 
 class ProfileFragment : Fragment() {
 
@@ -88,6 +90,17 @@ class ProfileFragment : Fragment() {
             profileViewModel.refreshUserData()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+
+        binding.imageEdit.setOnClickListener({
+            val intent = Intent(context, ProfileEditActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("userName", profileViewModel.userName.value)
+            bundle.putString("userEmail", profileViewModel.userEmail.value)
+            bundle.putString("userBio", profileViewModel.userBio.value)
+            bundle.putString("userPfp", profileViewModel.userPfp.value)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        })
     }
 
     override fun onDestroyView() {

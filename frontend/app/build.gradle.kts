@@ -55,7 +55,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation(libs.firebase.auth)
     implementation(libs.firebase.auth.ktx)
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation(libs.firebase.appcheck.playintegrity)
+    implementation(libs.places)
+    implementation(libs.androidx.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -65,8 +67,8 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("com.google.firebase:firebase-appcheck-playintegrity")
-    implementation("com.google.android.libraries.places:places:3.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
+    
+
+
 }

@@ -18,6 +18,10 @@ firebaseAuth = "23.2.0"
 firebaseAuthKtx = "23.2.0"
 playServicesAuth = "20.7.0"
 playServicesMaps = "18.1.0"
+activity = "1.8.0"
+firebaseAppcheckPlayintegrity = "18.0.0"
+places = "4.1.0"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +40,10 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebaseAppcheckPlayintegrity" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

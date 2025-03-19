@@ -17,6 +17,10 @@
         android:theme="@style/Theme.Munchies"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31" >
+        <activity
+            android:name=".ProfileEditActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Munchies.NoActionBar"/>
 
         <!-- Friend Activity -->
         <activity
@@ -39,11 +43,10 @@
             android:name=".ui.review.ReviewDetailsActivity"
             android:theme="@style/Theme.Munchies.NoActionBar"/>
 
-        <!-- Landing Activity -->
         <activity
-            android:name=".LandingActivity"
+            android:name=".LaunchActivity"
             android:exported="true"
-            android:theme="@style/Theme.Munchies.NoTitle">
+            android:theme="@style/Theme.Munchies.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,13 +63,11 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Munchies.NoTitle"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Munchies.NoTitle"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".ProfileBuilderActivity"
