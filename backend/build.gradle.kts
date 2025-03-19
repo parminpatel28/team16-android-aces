@@ -24,6 +24,10 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	runtimeOnly("org.postgresql:postgresql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation("software.amazon.awssdk:s3:2.20.32")
+	implementation("software.amazon.awssdk:auth:2.20.32")  // Provides `AwsCredentials`
+	implementation("software.amazon.awssdk:core:2.20.32")
+	implementation("software.amazon.awssdk:regions:2.20.32")
 }
 
 tasks.withType<Test> {
