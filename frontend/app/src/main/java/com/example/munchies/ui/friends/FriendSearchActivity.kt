@@ -25,7 +25,7 @@ class FriendSearchActivity: AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
 
         // Sample friend list
-        friendList.add(User("1", "Alice Johnson", "alice_j", "", "", "", ""))
+        friendList.add(User("1", "Alice Johnson", "alice_j", "", "", "",""))
 
         friendAdapter = FriendAdapter(friendList)
         recyclerView.layoutManager = LinearLayoutManager(this)
