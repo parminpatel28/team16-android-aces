@@ -16,8 +16,7 @@ class FriendRepository {
 
     private val apiService = ApiClient.userService
 
-    fun getUserFriends(userId: Int, onResult: (List<User>?) -> Unit) {
-        val gson = Gson()
+    fun getUserFriends(userId: String, onResult: (List<User>?) -> Unit) {
 
         Log.d("FriendRepository", "Getting friends for user $userId")
 
@@ -40,7 +39,7 @@ class FriendRepository {
 
     }
 
-    fun createFriend(userId: Int, friendId: Int, onResult: (Friendship?) -> Unit) {
+    fun createFriend(userId: String, friendId: Int, onResult: (Friendship?) -> Unit) {
         val gson = Gson()
 
         Log.d("FriendRepository", "Adding friend $friendId to user $userId")

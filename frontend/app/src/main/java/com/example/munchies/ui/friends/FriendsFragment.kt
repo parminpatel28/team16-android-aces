@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.munchies.R
 import com.example.munchies.databinding.FragmentFriendsBinding
-import com.example.munchies.model.Friend
+import com.example.munchies.model.User
 import com.example.munchies.ui.home.adapter.FriendAdapter
-import java.time.Instant
 
 class FriendsFragment : Fragment() {
 
@@ -23,7 +20,7 @@ private var _binding: FragmentFriendsBinding? = null
   // This property is only valid between onCreateView and
   // onDestroyView.
   private val binding get() = _binding!!
-    private var friendList = mutableListOf<Friend>()
+    private var friendList = mutableListOf<User>()
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var friendAdapter: FriendAdapter
@@ -49,7 +46,9 @@ private var _binding: FragmentFriendsBinding? = null
 
       // Observe the LiveData from the ViewModel
       friendsViewModel.friendsList.observe(viewLifecycleOwner) { friendList ->
-          friendAdapter.updateList(friendList)  // Update the list in the RecyclerView
+          if (friendList != null) {
+              friendAdapter.updateList(friendList)
+          }  // Update the list in the RecyclerView
       }
 
       btnSearchFriends.setOnClickListener {
