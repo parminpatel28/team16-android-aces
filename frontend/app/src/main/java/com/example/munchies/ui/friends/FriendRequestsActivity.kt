@@ -11,14 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.model.User
 import com.example.munchies.ui.home.adapter.FriendAdapter
-import com.example.munchies.databinding.ActivityFriendSearchBinding
-import com.example.munchies.databinding.ActivityReviewBinding
+import com.example.munchies.databinding.ActivityFriendRequestsBinding
 
 
-class FriendSearchActivity: AppCompatActivity() {
-    private lateinit var _binding: ActivityFriendSearchBinding
+class FriendRequestsActivity: AppCompatActivity() {
+    private lateinit var _binding: ActivityFriendRequestsBinding
 
-    private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var friendAdapter: FriendAdapter
     private var userList = mutableListOf<User>()
@@ -28,44 +26,25 @@ class FriendSearchActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = ActivityFriendSearchBinding.inflate(layoutInflater)
+        _binding = ActivityFriendRequestsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val friendsViewModel =
             ViewModelProvider(this).get(FriendsViewModel::class.java)
         recyclerView = binding.recyclerView
-        searchView = binding.searchView
         recyclerView.layoutManager = LinearLayoutManager(this)
         friendAdapter = FriendAdapter(userList, friendsViewModel, this)
         recyclerView.adapter = friendAdapter
         friendsViewModel.fetchAllUsers()
 
         // Observe the LiveData from the ViewModel
-        friendsViewModel.userList.observe(this) { userList ->
-            if (userList != null) {
-                friendAdapter.updateList(userList)
-            }  // Update the list in the RecyclerView
-        }
         friendsViewModel.incomingRequestsList.observe(this) { userList ->
             if (userList != null) {
-                friendAdapter.updateList(friendsViewModel.userList.value)
-            }  // Update the list in the RecyclerView
-        }
-        friendsViewModel.outgoingRequestsList.observe(this) { userList ->
-            if (userList != null) {
-                friendAdapter.updateList(friendsViewModel.userList.value)
+                friendAdapter.updateList(userList)
+                if (userList.isEmpty()) {
+                    binding.noFriendRequests.visibility = View.VISIBLE
+                }
             }  // Update the list in the RecyclerView
         }
 
-        // Implement search functionality
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                friendAdapter.filter.filter(newText)
-                return true
-            }
-        })
     }
 }
