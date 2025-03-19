@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.R
 import com.example.munchies.model.Friend
+import com.example.munchies.model.User
 import com.example.munchies.ui.home.adapter.FriendAdapter
 import java.time.Instant
 
@@ -14,7 +15,7 @@ class FriendSearchActivity: AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var friendAdapter: FriendAdapter
-    private var friendList = mutableListOf<Friend>()
+    private var friendList = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +25,7 @@ class FriendSearchActivity: AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
 
         // Sample friend list
-        friendList.add(Friend(1, "Alice Johnson", "alice_j", ""))
-        friendList.add(Friend(2, "Bob Smith", "bob_s", ""))
-        friendList.add(Friend(3, "Charlie Brown", "charlie_b", ""))
-        friendList.add(Friend(4, "David Lee", "david_lee", ""))
+        friendList.add(User("1", "Alice Johnson", "alice_j", "", "", "", ""))
 
         friendAdapter = FriendAdapter(friendList)
         recyclerView.layoutManager = LinearLayoutManager(this)

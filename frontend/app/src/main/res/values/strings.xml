@@ -29,8 +29,8 @@
     <string name="add_photos">Upload Photos</string>
     <string name="likes">Likes</string>
     <string name="no_likes">0</string>
-    <string name="reviewed_by">Reviewed by: </string>
-    <string name="reviewed_on">On: </string>
+    <string name="reviewed_by">"Reviewed by: "</string>
+    <string name="reviewed_on">"On: "</string>
 
     <!--Friends-->
     <string name="add_friend">Add Friend</string>
