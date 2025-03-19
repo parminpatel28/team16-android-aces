@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     
 
 

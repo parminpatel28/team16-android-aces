@@ -17,7 +17,7 @@ class FriendRepository {
 
     private val apiService = ApiClient.userService
 
-    fun getUserFriends(userId: Int, onResult: (List<User>?) -> Unit) {
+    fun getUserFriends(userId: String, onResult: (List<User>?) -> Unit) {
         val gson = Gson()
 
         Log.d("FriendRepository", "Getting friends for user $userId")

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.munchies.model.Friend
+import com.example.munchies.repository.FriendRepository
 import kotlinx.coroutines.launch
 import java.time.Instant
 
@@ -21,11 +22,12 @@ class FriendsViewModel : ViewModel() {
     private val _filteredFriendsList = MutableLiveData<List<Friend>>()
     val filteredFriendsList: LiveData<List<Friend>> = _filteredFriendsList
 
-
+    private val friendRepository = FriendRepository()
     // Simulated backend fetch
     private fun fetchFriends() {
         viewModelScope.launch {
-            // Replace with actual backend call
+
+
 
             val data = listOf(
                 Friend(userId = 1, username = "elaine", name = "Elaine", profilePicture = ""),

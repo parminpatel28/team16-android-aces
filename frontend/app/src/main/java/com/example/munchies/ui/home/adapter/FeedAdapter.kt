@@ -1,6 +1,7 @@
 package com.example.munchies.ui.home.adapter
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -28,8 +29,9 @@ class FeedAdapter : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiff
 
             binding.root.setOnClickListener {
                 val context = binding.root.context
+
                 val intent = Intent(context, ReviewDetailsActivity::class.java).apply {
-                    putExtra("review_id", review.reviewID)
+                    putExtra("review", review)
                 }
                 context.startActivity(intent)
             }

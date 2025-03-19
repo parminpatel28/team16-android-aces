@@ -22,7 +22,7 @@ interface UserApiService {
 
     // Fetch all user friends
     @GET("api/friendship/{userId}")
-    fun getUserFriends(@Path("userId") userId: Int): Call<List<User>>
+    fun getUserFriends(@Path("userId") userId: String): Call<List<User>>
 
     // Send a friend request to friendId
     @POST("api/friendship/{userId}/{friendId}")
