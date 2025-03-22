@@ -51,4 +51,22 @@ class ReviewRepository {
             }
         })
     }
+
+    fun requestPresignedUrl(fileName: String, fileType: String, onUrlReceived: (String) -> Unit) {
+        apiService.getPreSignedUrl(fileName, fileType).enqueue(object : Callback<Map<String, String>> {
+            override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
+                if (response.isSuccessful) {
+                    val presignedUrl = response.body()?.get("url") ?: ""
+                    Log.d("S3 Upload", "Pre-Signed URL: $presignedUrl")
+                    onUrlReceived(presignedUrl)
+                } else {
+                    Log.e("S3 Upload", "Failed to get pre-signed URL: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
+                Log.e("S3 Upload", "Error fetching pre-signed URL", t)
+            }
+        })
+    }
 }

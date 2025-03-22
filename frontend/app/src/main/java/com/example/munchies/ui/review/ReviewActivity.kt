@@ -1,13 +1,18 @@
 package com.example.munchies.ui.review
 
 import android.R
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.MainActivity
@@ -25,6 +30,22 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
 import com.google.firebase.auth.FirebaseAuth
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import okio.IOException
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLConnection
 
 
 class ReviewActivity : AppCompatActivity() {
@@ -36,6 +57,23 @@ class ReviewActivity : AppCompatActivity() {
     private var selectedLocation: String? = null
     private val repository = FriendRepository()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private val reviewRepository = ReviewRepository();
+    private val inputStreams: ArrayList<InputStream> = ArrayList<InputStream>();
+    private val outputStreams: ArrayList<OutputStream> = ArrayList<OutputStream>();
+    private var selectedImageUri: List<Uri> = emptyList();
+
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+        if (uris != null) {
+
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uris[0], flag)
+            handleImageUrl(uris.take(3));
+            selectedImageUri = uris.take(3);
+            Log.d("PhotoPicker", "Selected URI: $uris")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     private fun loadUserIfNeeded(userId: String) {
         if (UserManager.currentUser == null) {
@@ -127,6 +165,10 @@ class ReviewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Leave a Review"
 
+        binding.btnChooseFile.setOnClickListener {
+            pickMedia.launch("image/*")
+        }
+
         binding.submitReviewButton.setOnClickListener {
             Log.d("ReviewActivity", "Submit Review clicked")
             try{
@@ -141,6 +183,28 @@ class ReviewActivity : AppCompatActivity() {
                 if (overallRating < 0.5) {
                     Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
+                }
+
+                if(selectedImageUri.isNotEmpty()) {
+
+                    selectedImageUri.forEach { uri ->
+
+                        val file = createTempFile(uri, this);
+
+                        Log.d("PARMIN: ", "${file?.extension}")
+                        file?.name?.let { it1 ->
+                            file.extension.let { it2 ->
+                                reviewRepository.requestPresignedUrl(
+                                    it1, it2,
+                                    onUrlReceived = { url ->
+                                        uploadToS3(url, file)
+                                    }
+                                )
+                            }
+                        };
+
+
+                    }
                 }
 
                 val review = UserManager.currentUser?.let { it1 ->
@@ -177,5 +241,63 @@ class ReviewActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun handleImageUrl(uris: List<Uri>) {
+
+        val ids = listOf(binding.selectedImageView.id, binding.selectedImageView2.id, binding.selectedImageView3.id);
+
+
+        for (idx in uris.indices) {
+            val imageView = findViewById<ImageView>(ids[idx])
+            imageView.setImageURI(uris[idx])
+
+        }
+    }
+
+    private fun createTempFile(uri: Uri, context: Context): File? {
+
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val tempFile = File(this.cacheDir, "upload_${System.currentTimeMillis()}.jpg")
+            inputStream.use { input ->
+                FileOutputStream(tempFile).use { output ->
+                    input?.copyTo(output)
+                }
+            }
+            tempFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun uploadToS3(presignedUrl: String, file: File) {
+        Thread {
+            val client = OkHttpClient()
+            val mediaType = "image/*".toMediaTypeOrNull()  // Make sure this matches exactly
+            val requestBody = file.asRequestBody(mediaType)
+
+            val request = Request.Builder()
+                .url(presignedUrl)
+                .put(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("S3Upload", "Upload failed: ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        Log.d("S3Upload", "Upload successful: ${response.code}")
+                    } else {
+                        val errorBody = response.body?.string()
+                        Log.e("S3Upload", "Upload failed with code: ${response.code}. Error: $errorBody")
+                    }
+                }
+            })
+        }.start()
+
     }
 }

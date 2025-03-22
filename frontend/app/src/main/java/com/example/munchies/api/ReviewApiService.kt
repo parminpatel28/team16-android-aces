@@ -19,6 +19,8 @@ interface ReviewApiService {
     @POST("api/reviews")
     fun createReview(@Body review: Review): Call<Review>
 
+    @GET("/api/s3/presigned-url")
+    fun getPreSignedUrl(@Query ("fileName") fileName: String, @Query ("fileType") fileType: String): Call<Map<String, String>>
 
     // Delete review by ID
     @DELETE("api/reviews/{reviewId}")

@@ -31,15 +31,9 @@ public class S3Service {
 
     public String generatePresignedUrl(String fileName, String contentType) {
         if (accessKeyId == null || secretAccessKey == null || bucketName == null) {
-
-
             throw new IllegalStateException("AWS credentials or bucket name are missing.");
         }
 
-        System.out.println(accessKeyId);
-        System.out.println(secretAccessKey);
-        System.out.println(region);
-        System.out.println(bucketName);
 
         S3Presigner presigner = S3Presigner.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(
@@ -49,7 +43,7 @@ public class S3Service {
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
                 .signatureDuration(Duration.ofMinutes(5))
-                .putObjectRequest(b -> b.bucket(bucketName).key("uploads/" + fileName).contentType(contentType))
+                .putObjectRequest(b -> b.bucket(bucketName).key( fileName).contentType("image/*"))
                 .build();
 
         return presigner.presignPutObject(presignRequest).url().toString();
