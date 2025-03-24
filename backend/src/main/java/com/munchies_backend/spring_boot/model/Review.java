@@ -117,16 +117,4 @@ public class Review {
         this.photos = photos;
     }
 
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", caption='" + caption + '\'' +
-                ", rating=" + rating +
-                ", date='" + date + '\'' +
-                ", likes=" + likes +
-                ", user=" + (user != null ? user.getId() : "null") +
-                '}';
-    }
 }
