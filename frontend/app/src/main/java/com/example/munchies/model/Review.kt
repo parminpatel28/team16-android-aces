@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Review(
-    @SerializedName("id") val reviewID: Int,
+    @SerializedName("id") val reviewID: Int?,
     @SerializedName("user") val user: User,
     @SerializedName("caption") val caption: String,
     @SerializedName("photos") val photos: List<String>? = emptyList(),

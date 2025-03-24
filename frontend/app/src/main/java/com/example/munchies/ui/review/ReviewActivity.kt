@@ -1,7 +1,6 @@
 package com.example.munchies.ui.review
 
 import android.R
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,18 +10,13 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.munchies.MainActivity
-import com.example.munchies.api.ApiClient
-import com.example.munchies.api.UserApiService
+
 import com.example.munchies.api.UserService
 import com.example.munchies.databinding.ActivityReviewBinding
-import com.example.munchies.model.Location
 import com.example.munchies.model.Review
-import com.example.munchies.model.User
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
@@ -39,13 +33,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import okio.IOException
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLConnection
 
 
 class ReviewActivity : AppCompatActivity() {

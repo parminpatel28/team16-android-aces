@@ -19,14 +19,12 @@ class ReviewRepository {
         apiService.createReview(review).enqueue(object : Callback<Review> {
             override fun onResponse(call: Call<Review>, response: Response<Review>) {
                 if (response.isSuccessful) {
-                    Log.d("ReviewRepository", "Review submitted successfully! Response: ${response}")
+                    Log.d("ReviewRepository", "Review submitted successfully! Response: ${response.body()}")
                     onResult(response.body())
                 } else {
                     Log.e("ReviewRepository", "Error Response Code: ${response.code()}, Body: ${response.errorBody()?.string()}")
                     onResult(null)
                 }
-
-
             }
 
             override fun onFailure(call: Call<Review>, t: Throwable) {
@@ -60,10 +58,10 @@ class ReviewRepository {
             override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
                 if (response.isSuccessful) {
                     val presignedUrl = response.body()?.get("url") ?: ""
-                    Log.d("S3 Upload", "Pre-Signed URL: $presignedUrl")
+                    Log.d("ReviewRepository", "Pre-Signed URL: $presignedUrl")
                     onUrlReceived(presignedUrl)
                 } else {
-                    Log.e("S3 Upload", "Failed to get pre-signed URL: ${response.errorBody()?.string()}")
+                    Log.e("ReviewRepository", "Failed to get pre-signed URL: ${response.errorBody()?.string()}")
                 }
             }
 
