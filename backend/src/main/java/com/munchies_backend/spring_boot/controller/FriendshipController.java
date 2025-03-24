@@ -2,14 +2,11 @@ package com.munchies_backend.spring_boot.controller;
 
 import com.munchies_backend.spring_boot.model.User;
 import com.munchies_backend.spring_boot.model.Friendship;
-import com.munchies_backend.spring_boot.services.UserService;
 import com.munchies_backend.spring_boot.services.FriendshipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/friendship")

@@ -17,8 +17,8 @@ public class S3Controller {
     }
 
     @GetMapping("/presigned-url")
-    public Map<String, String> getPresignedUrl(@RequestParam String fileName, @RequestParam String fileType) {
-        String presignedUrl = s3Service.generatePresignedUrl(fileName, fileType);
+    public Map<String, String> getPresignedUrl(@RequestParam String fileName, @RequestParam String reviewId) {
+        String presignedUrl = s3Service.generatePresignedUrl(fileName, reviewId);
         Map<String, String> response = new HashMap<>();
         response.put("url", presignedUrl);
         return response;

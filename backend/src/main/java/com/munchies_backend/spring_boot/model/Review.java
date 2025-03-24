@@ -1,12 +1,15 @@
 package com.munchies_backend.spring_boot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "reviews", schema = "public")
@@ -40,6 +43,16 @@ public class Review {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "review_photos",
+            joinColumns = @JoinColumn(name = "review_id")
+    )
+    @Column(name = "photo_url")
+    private List<String> photos = new ArrayList<>();
+
+
+    @JsonProperty("id")
     public Integer getId() {
         return id;
     }
@@ -96,4 +109,24 @@ public class Review {
         this.user = user;
     }
 
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", caption='" + caption + '\'' +
+                ", rating=" + rating +
+                ", date='" + date + '\'' +
+                ", likes=" + likes +
+                ", user=" + (user != null ? user.getId() : "null") +
+                '}';
+    }
 }

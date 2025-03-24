@@ -29,7 +29,7 @@ public class S3Service {
         bucketName = dotenv.get("AWS_S3_BUCKET_NAME");
     }
 
-    public String generatePresignedUrl(String fileName, String contentType) {
+    public String generatePresignedUrl(String fileName, String reviewId) {
         if (accessKeyId == null || secretAccessKey == null || bucketName == null) {
             throw new IllegalStateException("AWS credentials or bucket name are missing.");
         }
@@ -43,7 +43,7 @@ public class S3Service {
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
                 .signatureDuration(Duration.ofMinutes(5))
-                .putObjectRequest(b -> b.bucket(bucketName).key( fileName).contentType("image/*"))
+                .putObjectRequest(b -> b.bucket(bucketName).key( "review/" +reviewId + "/"+fileName).contentType("image/*"))
                 .build();
 
         return presigner.presignPutObject(presignRequest).url().toString();

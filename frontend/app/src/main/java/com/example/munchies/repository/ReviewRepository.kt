@@ -3,6 +3,7 @@ package com.example.munchies.repository
 import android.util.Log
 import com.example.munchies.api.ApiClient
 import com.example.munchies.model.Review
+import com.google.android.libraries.places.api.model.kotlin.review
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -18,12 +19,14 @@ class ReviewRepository {
         apiService.createReview(review).enqueue(object : Callback<Review> {
             override fun onResponse(call: Call<Review>, response: Response<Review>) {
                 if (response.isSuccessful) {
-                    Log.d("ReviewRepository", "Review submitted successfully! Response: ${response.body()}")
+                    Log.d("ReviewRepository", "Review submitted successfully! Response: ${response}")
                     onResult(response.body())
                 } else {
                     Log.e("ReviewRepository", "Error Response Code: ${response.code()}, Body: ${response.errorBody()?.string()}")
                     onResult(null)
                 }
+
+
             }
 
             override fun onFailure(call: Call<Review>, t: Throwable) {
@@ -52,8 +55,8 @@ class ReviewRepository {
         })
     }
 
-    fun requestPresignedUrl(fileName: String, fileType: String, onUrlReceived: (String) -> Unit) {
-        apiService.getPreSignedUrl(fileName, fileType).enqueue(object : Callback<Map<String, String>> {
+    fun requestPresignedUrl(fileName: String, reviewId: String, onUrlReceived: (String) -> Unit) {
+        apiService.getPreSignedUrl(fileName, reviewId).enqueue(object : Callback<Map<String, String>> {
             override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
                 if (response.isSuccessful) {
                     val presignedUrl = response.body()?.get("url") ?: ""
@@ -69,4 +72,21 @@ class ReviewRepository {
             }
         })
     }
+
+    fun updateReviewPhotos(reviewId: Int, photoUrls: List<String>) {
+        apiService.updateReviewPhotos(reviewId, photoUrls).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("ReviewRepository", "Successfully updated review photos!")
+                } else {
+                    Log.e("ReviewRepository", "Failed to update photos. Code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("ReviewRepository", "Network error when updating photos: ${t.message}")
+            }
+        })
+    }
+
 }

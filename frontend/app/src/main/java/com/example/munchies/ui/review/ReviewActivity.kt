@@ -58,8 +58,6 @@ class ReviewActivity : AppCompatActivity() {
     private val repository = FriendRepository()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private val reviewRepository = ReviewRepository();
-    private val inputStreams: ArrayList<InputStream> = ArrayList<InputStream>();
-    private val outputStreams: ArrayList<OutputStream> = ArrayList<OutputStream>();
     private var selectedImageUri: List<Uri> = emptyList();
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
@@ -171,7 +169,7 @@ class ReviewActivity : AppCompatActivity() {
 
         binding.submitReviewButton.setOnClickListener {
             Log.d("ReviewActivity", "Submit Review clicked")
-            try{
+            try {
                 val overallRating = binding.overallRatingBar.rating.toDouble()
                 val reviewText = binding.reviewText.text.toString().trim()
 
@@ -185,54 +183,64 @@ class ReviewActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                if(selectedImageUri.isNotEmpty()) {
+                val user = UserManager.currentUser
+                if (user == null) {
+                    Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
-                    selectedImageUri.forEach { uri ->
+                val review = Review(
+                    reviewID = null,  // Let backend assign this
+                    user = user,
+                    caption = reviewText,
+                    photos = emptyList(),
+                    date = Instant.now().toString(),
+                    rating = overallRating,
+                    likes = 0
+                )
 
-                        val file = createTempFile(uri, this);
+                reviewViewModel.submitReview(review) { reviewResponse ->
+                    val reviewId = reviewResponse?.reviewID
+                    val photos = mutableListOf<String>();
+                    if (reviewId == null) {
+                        Toast.makeText(this, "Failed to submit review", Toast.LENGTH_SHORT).show()
+                        return@submitReview
+                    }
 
-                        Log.d("PARMIN: ", "${file?.extension}")
-                        file?.name?.let { it1 ->
-                            file.extension.let { it2 ->
+                    Log.d("ReviewActivity", "Review submitted with ID: $reviewId")
+
+                    // Upload images if any
+                    if (selectedImageUri.isNotEmpty()) {
+                        selectedImageUri.forEach { uri ->
+                            val file = createTempFile(uri,)
+
+                            if (file != null) {
+                                val photoUrl = "https://munchies-ece452.s3.us-east-2.amazonaws.com/review/${reviewId}/${file.name}"
+                                Log.d("ReviewActivity: ", photoUrl)
                                 reviewRepository.requestPresignedUrl(
-                                    it1, it2,
+                                    file.name,
+                                    reviewResponse.reviewID.toString(),
                                     onUrlReceived = { url ->
                                         uploadToS3(url, file)
                                     }
                                 )
+                                photos.add(photoUrl);
                             }
-                        };
-
-
+                        }
                     }
-                }
+                    // update the review to have the photos
+                    reviewRepository.updateReviewPhotos(reviewId, photos)
 
-                val review = UserManager.currentUser?.let { it1 ->
-                    Log.d("ReviewActivity", "User: ${it1}")
-                    Review(
-                        reviewID = 0,
-                        user = it1,
-                        caption = reviewText,
-                        photos = emptyList(),
-//                        location = Location(id = 1), // selectedLocation ?: "",
-                        date = Instant.now().toString(),
-                        rating = overallRating,
-                        likes = 0
-                    )
+                    Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
-
-                Log.d("ReviewActivity", "Submitting Review")
-                if (review != null) {
-                    reviewViewModel.submitReview(review)
-                }
-
-                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
-                finish()
             } catch (e: Exception) {
                 Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
                 e.printStackTrace()
+                Toast.makeText(this, "Error submitting review", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -255,7 +263,7 @@ class ReviewActivity : AppCompatActivity() {
         }
     }
 
-    private fun createTempFile(uri: Uri, context: Context): File? {
+    private fun createTempFile(uri: Uri): File? {
 
         return try {
             val inputStream = contentResolver.openInputStream(uri)

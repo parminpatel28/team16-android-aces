@@ -20,7 +20,13 @@ interface ReviewApiService {
     fun createReview(@Body review: Review): Call<Review>
 
     @GET("/api/s3/presigned-url")
-    fun getPreSignedUrl(@Query ("fileName") fileName: String, @Query ("fileType") fileType: String): Call<Map<String, String>>
+    fun getPreSignedUrl(@Query ("fileName") fileName: String, @Query ("reviewId") reviewId: String): Call<Map<String, String>>
+
+    @PUT("api/reviews/{reviewId}/photos")
+    fun updateReviewPhotos(
+        @Path("reviewId") reviewId: Int,
+        @Body photoUrls: List<String>
+    ): Call<Void>
 
     // Delete review by ID
     @DELETE("api/reviews/{reviewId}")
