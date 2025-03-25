@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.MultiAutoCompleteTextView
@@ -55,6 +56,8 @@ class ReviewActivity : AppCompatActivity() {
             contentResolver.takePersistableUriPermission(uris[0], flag)
             handleImageUrl(uris.take(3));
             selectedImageUri = uris.take(3);
+
+            binding.tvFileName.visibility = View.INVISIBLE;
             Log.d("PhotoPicker", "Selected URI: $uris")
         } else {
             Log.d("PhotoPicker", "No media selected")
