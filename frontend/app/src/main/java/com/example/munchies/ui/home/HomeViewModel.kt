@@ -27,42 +27,23 @@ class HomeViewModel : ViewModel() {
     private val friendRepository = FriendRepository()
 
     private fun fetchReviews() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
+        friendRepository.getUserFriends(userId) { friends ->
+            viewModelScope.launch {
+                val allReviews = friends.orEmpty().mapNotNull { friend ->
+                    try {
+                        reviewRepository.getReviewsByUser(friend.id)
+                    } catch (e: Exception) {
+                        Log.e("HomeViewModel", "Failed to fetch reviews for ${friend.id}", e)
+                        null
+                    }
+                }.flatten()
 
-
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-            if (userId != null) {
-                friendRepository.getUserFriends(userId) { friends ->
-
-                        var fetchedReviews : List<Review> = emptyList()
-
-
-                        viewModelScope.launch {//worst code ever written please change this when you wake up tomorrow
-
-                            friends.orEmpty().map { friend ->
-
-                                async{
-                                    reviewRepository.getReviewsByUser(friend.id) { revs ->
-                                        if (revs != null) {
-                                            fetchedReviews += revs
-                                            _reviews.value = fetchedReviews
-                                        }
-                                    }
-
-                                }
-
-
-                            }
-                        }
-
-
-
-                        Log.d("HomeViewModel", "${fetchedReviews}")
-                        _reviews.value = fetchedReviews
-
-                }
+                _reviews.value = allReviews
+                Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews")
             }
-
+        }
     }
 
     init {
