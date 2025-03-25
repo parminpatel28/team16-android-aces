@@ -152,6 +152,13 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/photosContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"/>
+
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
