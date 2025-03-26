@@ -3,6 +3,7 @@ package com.example.munchies.api
 import com.example.munchies.model.Review
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ReviewApiService {
@@ -13,7 +14,7 @@ interface ReviewApiService {
 
     // Fetch reviews by user
     @GET("api/reviews/user/{userId}")
-    fun getReviewsByUser(@Path("userId") userId: String): Call<List<Review>>
+    suspend fun getReviewsByUser(@Path("userId") userId: String): Response<List<Review>>
 
     // Create a new review
     @POST("api/reviews")

@@ -34,23 +34,20 @@ class ReviewRepository {
         })
     }
 
-    fun getReviewsByUser(userId: String, onResult: (List<Review>?) -> Unit) {
-        apiService.getReviewsByUser(userId).enqueue(object : Callback<List<Review>> {
-            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
-                if (response.isSuccessful) {
-                    Log.d("ReviewRepository", "Fetched reviews successfully: ${response.body()}")
-                    onResult(response.body())
-                } else {
-                    Log.e("ReviewRepository", "Error fetching reviews: ${response.code()}, Body: ${response.errorBody()?.string()}")
-                    onResult(null)
-                }
+    suspend fun getReviewsByUser(userId: String): List<Review>? {
+        return try {
+            val response = apiService.getReviewsByUser(userId)
+            if (response.isSuccessful) {
+                Log.d("ReviewRepository", "Fetched reviews successfully: ${response.body()}")
+                response.body()
+            } else {
+                Log.e("ReviewRepository", "Error fetching reviews: ${response.code()}, Body: ${response.errorBody()?.string()}")
+                null
             }
-
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
-                Log.e("ReviewRepository", "API request failed: ${t.message}")
-                onResult(null)
-            }
-        })
+        } catch (e: Exception) {
+            Log.e("ReviewRepository", "API request failed: ${e.message}", e)
+            null
+        }
     }
 
     fun requestPresignedUrl(fileName: String, reviewId: String, onUrlReceived: (String) -> Unit) {
