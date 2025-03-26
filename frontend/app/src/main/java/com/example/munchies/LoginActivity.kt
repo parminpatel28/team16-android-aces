@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.munchies.databinding.ActivityLoginBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -36,11 +37,14 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         } else {
-                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "Login failed", Snackbar.LENGTH_SHORT).show()
                         }
                     }
             } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Please fill in all fields", Snackbar.LENGTH_SHORT).show()
+
             }
         }
 
