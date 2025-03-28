@@ -8,6 +8,7 @@ import com.example.munchies.databinding.ActivityRegisterBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -48,11 +49,19 @@ class RegisterActivity : AppCompatActivity() {
                             finish()
                         } else {
                             val exception = task.exception
-                            Toast.makeText(this, "Registration failed: ${exception?.message}", Toast.LENGTH_LONG).show()
+                            if (AppMode.isTest()) {
+                                Snackbar.make(binding.root, "Registration failed: ${exception?.message}", Snackbar.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this, "Registration failed: ${exception?.message}", Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
             } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_LONG).show()
+                if (AppMode.isTest()) {
+                    Snackbar.make(binding.root, "Please fill in all fields", Snackbar.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -70,8 +79,11 @@ class RegisterActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Toast.makeText(this, "Google Sign In Failed: ${e.statusCode}", Toast.LENGTH_LONG)
-                    .show()
+                if (AppMode.isTest()) {
+                    Snackbar.make(binding.root, "Google Sign In Failed: ${e.statusCode}", Snackbar.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Google Sign In Failed: ${e.statusCode}", Toast.LENGTH_LONG).show()
+                }
                 e.printStackTrace()
             }
         }
@@ -89,7 +101,11 @@ class RegisterActivity : AppCompatActivity() {
                     }
                     finish()
                 } else {
-                    Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                    if (AppMode.isTest()) {
+                        Snackbar.make(binding.root, "Google Sign In Failed", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
     }

@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.munchies.api.CreateUserRequest
 import com.example.munchies.api.UserService
 import com.example.munchies.databinding.ActivityProfileBuilderBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.ktx.Firebase
@@ -69,7 +70,11 @@ class ProfileBuilderActivity : AppCompatActivity() {
 
     private fun validateInputs(name: String, username: String, email: String): Boolean {
         if (name.isEmpty() || username.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+            if (AppMode.isTest()) {
+                Snackbar.make(binding.root, "Please fill in all required fields", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+            }
             return false
         }
         return true

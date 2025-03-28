@@ -38,6 +38,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -58,9 +61,7 @@ dependencies {
     implementation(libs.firebase.appcheck.playintegrity)
     implementation(libs.places)
     implementation(libs.androidx.swiperefreshlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.espresso.contrib)
     implementation(libs.play.services.auth)
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.play.services.maps)
@@ -68,10 +69,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
-    androidTestImplementation("androidx.test:rules:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("com.squareup.picasso:picasso:2.8")
-    androidTestImplementation("androidx.test:rules:1.5.0")
     implementation("com.google.android.material:material:1.11.0")
-
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:rules:1.5.0")
 }
