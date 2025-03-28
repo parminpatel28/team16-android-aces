@@ -88,6 +88,50 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Photo Upload Section -->
+            <TextView
+                android:id="@+id/tvFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="No file selected"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="349dp"
+                android:layout_height="113dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/selectedImageView"
+                    android:layout_width="87dp"
+                    android:layout_height="75dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/selectedImageView2"
+                    android:layout_width="87dp"
+                    android:layout_height="75dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/selectedImageView3"
+                    android:layout_width="87dp"
+                    android:layout_height="75dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnChooseFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/orange"
+                android:padding="12dp"
+                android:text="Choose File"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/photoUploadLayout"
                 android:layout_width="match_parent"
@@ -96,35 +140,7 @@
                 android:hint="@string/add_photos"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeWidth="2dp"
-                app:boxStrokeColor="@color/gray">
-
-                <LinearLayout
-                    android:id="@+id/photoUploadContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/uploadImageIcon"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:contentDescription="@string/add_photos"
-                        android:src="@android:drawable/ic_menu_upload"
-                        app:tint="@color/gray"/>
-
-                    <TextView
-                        android:id="@+id/uploadText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/add_photos"
-                        android:textSize="14sp"
-                        android:textColor="@color/gray"
-                        android:layout_marginStart="8dp"/>
-                </LinearLayout>
-
-            </com.google.android.material.textfield.TextInputLayout>
+                app:boxStrokeColor="@color/gray"/>
 
             <!-- Tag Restaurant -->
             <com.google.android.material.textfield.TextInputLayout
@@ -187,6 +203,18 @@
                 android:padding="12dp"
                 android:textAllCaps="false"
                 android:layout_marginTop="16dp"/>
+
+            <Button
+                android:id="@+id/btnUploadFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload File"
+                android:backgroundTint="@color/orange"
+                android:textColor="@color/white"
+                android:padding="12dp"
+                android:textAllCaps="false"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

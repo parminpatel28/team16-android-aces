@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentReviewBinding
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReviewFragment : Fragment() {
 
@@ -24,19 +28,23 @@ class ReviewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
         setupSwipeToRefresh()
-        if (userId != null) {
-            Log.d("ReviewFragment", "UserId: ${userId}")
-            fetchReviewsByUser(userId)
-        }  // Fetch reviews when fragment loads
 
         binding.addReviewButton.setOnClickListener {
             startActivity(Intent(requireContext(), ReviewActivity::class.java))
         }
 
-        return binding.root
+        userId?.let {
+            Log.d("ReviewFragment", "UserId: $it")
+            fetchReviewsByUser(it)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -60,10 +68,14 @@ class ReviewFragment : Fragment() {
     }
 
     private fun fetchReviewsByUser(userId: String) {
-        binding.swipeRefreshLayout.isRefreshing = true // Show refresh indicator
+        binding.swipeRefreshLayout.isRefreshing = true
 
-        reviewRepository.getReviewsByUser(userId) { reviews ->
-            binding.swipeRefreshLayout.isRefreshing = false // Hide refresh indicator
+        viewLifecycleOwner.lifecycleScope.launch {
+            val reviews = withContext(Dispatchers.IO) {
+                reviewRepository.getReviewsByUser(userId)
+            }
+
+            binding.swipeRefreshLayout.isRefreshing = false
             if (reviews != null) {
                 adapter.submitList(reviews)
             } else {

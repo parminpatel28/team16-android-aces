@@ -24,6 +24,22 @@ public class ReviewController {
         return ResponseEntity.ok(savedReview);
     }
 
+    @PutMapping("/{reviewId}/photos")
+    public ResponseEntity<Review> updateReviewPhotos(@PathVariable Integer reviewId, @RequestBody List<String> photoUrls) {
+
+        Optional<Review> reviewOpt = reviewService.findReviewById(reviewId);
+
+        if (reviewOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Review review = reviewOpt.get();
+        review.setPhotos(photoUrls);
+        reviewService.saveReview(review);
+
+        return ResponseEntity.ok().build();
+
+    }
     // Get a review by ID
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Integer id) {

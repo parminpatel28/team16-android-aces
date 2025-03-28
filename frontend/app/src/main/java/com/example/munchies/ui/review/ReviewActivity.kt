@@ -2,22 +2,22 @@ package com.example.munchies.ui.review
 
 import android.R
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.munchies.MainActivity
-import com.example.munchies.api.ApiClient
-import com.example.munchies.api.UserApiService
+
 import com.example.munchies.api.UserService
 import com.example.munchies.databinding.ActivityReviewBinding
-import com.example.munchies.model.Location
 import com.example.munchies.model.Review
-import com.example.munchies.model.User
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
@@ -25,6 +25,16 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
 import com.google.firebase.auth.FirebaseAuth
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import okio.IOException
+import java.io.File
+import java.io.FileOutputStream
 
 
 class ReviewActivity : AppCompatActivity() {
@@ -36,6 +46,23 @@ class ReviewActivity : AppCompatActivity() {
     private var selectedLocation: String? = null
     private val repository = FriendRepository()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private val reviewRepository = ReviewRepository();
+    private var selectedImageUri: List<Uri> = emptyList();
+
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+        if (uris != null) {
+
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uris[0], flag)
+            handleImageUrl(uris.take(3));
+            selectedImageUri = uris.take(3);
+
+            binding.tvFileName.visibility = View.INVISIBLE;
+            Log.d("PhotoPicker", "Selected URI: $uris")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     private fun loadUserIfNeeded(userId: String) {
         if (UserManager.currentUser == null) {
@@ -127,9 +154,13 @@ class ReviewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Leave a Review"
 
+        binding.btnChooseFile.setOnClickListener {
+            pickMedia.launch("image/*")
+        }
+
         binding.submitReviewButton.setOnClickListener {
             Log.d("ReviewActivity", "Submit Review clicked")
-            try{
+            try {
                 val overallRating = binding.overallRatingBar.rating.toDouble()
                 val reviewText = binding.reviewText.text.toString().trim()
 
@@ -143,32 +174,64 @@ class ReviewActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                val review = UserManager.currentUser?.let { it1 ->
-                    Log.d("ReviewActivity", "User: ${it1}")
-                    Review(
-                        reviewID = 0,
-                        user = it1,
-                        caption = reviewText,
-                        photos = emptyList(),
-//                        location = Location(id = 1), // selectedLocation ?: "",
-                        date = Instant.now().toString(),
-                        rating = overallRating,
-                        likes = 0
-                    )
+                val user = UserManager.currentUser
+                if (user == null) {
+                    Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
 
-                Log.d("ReviewActivity", "Submitting Review")
-                if (review != null) {
-                    reviewViewModel.submitReview(review)
-                }
+                val review = Review(
+                    reviewID = null,  // Let backend assign this
+                    user = user,
+                    caption = reviewText,
+                    photos = emptyList(),
+                    date = Instant.now().toString(),
+                    rating = overallRating,
+                    likes = 0
+                )
 
-                Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
-                finish()
+                reviewViewModel.submitReview(review) { reviewResponse ->
+                    val reviewId = reviewResponse?.reviewID
+                    val photos = mutableListOf<String>();
+                    if (reviewId == null) {
+                        Toast.makeText(this, "Failed to submit review", Toast.LENGTH_SHORT).show()
+                        return@submitReview
+                    }
+
+                    Log.d("ReviewActivity", "Review submitted with ID: $reviewId")
+
+                    // Upload images if any
+                    if (selectedImageUri.isNotEmpty()) {
+                        selectedImageUri.forEach { uri ->
+                            val file = createTempFile(uri,)
+
+                            if (file != null) {
+                                val photoUrl = "https://munchies-ece452.s3.us-east-2.amazonaws.com/review/${reviewId}/${file.name}"
+                                Log.d("ReviewActivity: ", photoUrl)
+                                reviewRepository.requestPresignedUrl(
+                                    file.name,
+                                    reviewResponse.reviewID.toString(),
+                                    onUrlReceived = { url ->
+                                        uploadToS3(url, file)
+                                    }
+                                )
+                                photos.add(photoUrl);
+                            }
+                        }
+                    }
+                    // update the review to have the photos
+                    reviewRepository.updateReviewPhotos(reviewId, photos)
+
+                    Toast.makeText(this, "Review Submitted!", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             } catch (e: Exception) {
                 Log.e("ReviewActivity", "Crash in submit button: ${e.message}")
                 e.printStackTrace()
+                Toast.makeText(this, "Error submitting review", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -177,5 +240,63 @@ class ReviewActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun handleImageUrl(uris: List<Uri>) {
+
+        val ids = listOf(binding.selectedImageView.id, binding.selectedImageView2.id, binding.selectedImageView3.id);
+
+
+        for (idx in uris.indices) {
+            val imageView = findViewById<ImageView>(ids[idx])
+            imageView.setImageURI(uris[idx])
+
+        }
+    }
+
+    private fun createTempFile(uri: Uri): File? {
+
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val tempFile = File(this.cacheDir, "upload_${System.currentTimeMillis()}.jpg")
+            inputStream.use { input ->
+                FileOutputStream(tempFile).use { output ->
+                    input?.copyTo(output)
+                }
+            }
+            tempFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun uploadToS3(presignedUrl: String, file: File) {
+        Thread {
+            val client = OkHttpClient()
+            val mediaType = "image/*".toMediaTypeOrNull()  // Make sure this matches exactly
+            val requestBody = file.asRequestBody(mediaType)
+
+            val request = Request.Builder()
+                .url(presignedUrl)
+                .put(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("S3Upload", "Upload failed: ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        Log.d("S3Upload", "Upload successful: ${response.code}")
+                    } else {
+                        val errorBody = response.body?.string()
+                        Log.e("S3Upload", "Upload failed with code: ${response.code}. Error: $errorBody")
+                    }
+                }
+            })
+        }.start()
+
     }
 }
