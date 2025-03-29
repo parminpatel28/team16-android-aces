@@ -48,7 +48,7 @@ class MapFragmentTest {
 
         // Wait for map to load
         onView(isRoot()).perform(waitFor(5000))
-        
+
         // Type the search query
         onView(allOf(isAssignableFrom(EditText::class.java), isDescendantOfA(withId(R.id.searchView))))
             .perform(typeText("Lazeez Shawarma"), closeSoftKeyboard())

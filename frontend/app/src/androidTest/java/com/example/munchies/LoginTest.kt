@@ -6,6 +6,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import com.google.firebase.auth.FirebaseAuth
 import org.junit.After
 import org.junit.Before
@@ -91,12 +92,30 @@ class LoginActivityTest {
     fun successfullyLogout() {
         performLogin("taylor@gmail.com")
 
-        // Navigate to the Profile page
-        onView(withId(R.id.navigation_profile)).perform(click())
+        onView(isRoot()).perform(waitFor(2000))
 
-        // Wait for page to load
-        onView(isRoot()).perform(waitFor(1500))
+        // Wait for the MainActivity to load by checking a known view
+        onView(withId(R.id.recyclerFeed))
+            .check(matches(isDisplayed()))
 
-        // Click logout button
+        // Then try clicking the profile tab
+        onView(withId(R.id.navigation_profile))
+            .perform(click())
+
+        // Wait for profile content
+        onView(withId(R.id.btnLogout))
+            .check(matches(isDisplayed()))
+
+        // Click the Logout button
+        onView(withId(R.id.btnLogout)).perform(click())
+
+        // Confirm the AlertDialog
+        onView(withText("Confirm")).inRoot(isDialog()).perform(click())
+
+        // Wait for navigation
+        onView(isRoot()).perform(waitFor(2000))
+
+        // Check that we're back on the Login screen
+        onView(withId(R.id.loginBtn)).check(matches(isDisplayed()))
     }
 }
