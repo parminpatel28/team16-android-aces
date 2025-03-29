@@ -21,13 +21,8 @@ class FeedTest {
     @get:Rule
     val activityRule = ActivityTestRule(LoginActivity::class.java)
 
-    @Before
-    fun setUp() {
-        FirebaseAuth.getInstance().signOut()
-    }
-
-    @After
-    fun cleanUp() {
+    @Before @After
+    fun logoutUser() {
         FirebaseAuth.getInstance().signOut()
     }
 

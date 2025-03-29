@@ -7,6 +7,7 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import com.google.firebase.auth.FirebaseAuth
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +19,7 @@ class LoginActivityTest {
     @get:Rule
     val activityRule = ActivityTestRule(LoginActivity::class.java)
 
-    @Before
+    @Before @After
     fun logoutUser() {
         FirebaseAuth.getInstance().signOut()
     }

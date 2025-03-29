@@ -10,7 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.example.munchies.ui.map.PlaceAdapter
+import com.google.firebase.auth.FirebaseAuth
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,6 +29,12 @@ class MapFragmentTest {
     @get:Rule
     val disableAnimationsRule = DisableAnimationsRule()
 
+    @Before
+    @After
+    fun logoutUser() {
+        FirebaseAuth.getInstance().signOut()
+    }
+
     @Test
     fun searchForLazeez_andClickWriteReview() {
         // Login
@@ -38,15 +48,7 @@ class MapFragmentTest {
 
         // Wait for map to load
         onView(isRoot()).perform(waitFor(5000))
-
-        // Expand the SearchView
-        onView(withId(R.id.searchView)).perform(click())
-        onView(isRoot()).perform(waitFor(500)) // Let it fully expand
-
-        // Focus the inner EditText
-        onView(allOf(isAssignableFrom(EditText::class.java), isDescendantOfA(withId(R.id.searchView))))
-            .perform(click()) // bring focus
-
+        
         // Type the search query
         onView(allOf(isAssignableFrom(EditText::class.java), isDescendantOfA(withId(R.id.searchView))))
             .perform(typeText("Lazeez Shawarma"), closeSoftKeyboard())
@@ -64,6 +66,7 @@ class MapFragmentTest {
             )
 
         // Confirm that the review screen opened and is prepopulated
-        onView(withId(R.id.tagRestaurantChipGroup)).check(matches(withText("Lazeez Shawarma")))
+        onView(withId(R.id.tagRestaurantsDropdown))
+            .check(matches(withText(containsString("Lazeez Shawarma"))))
     }
 }

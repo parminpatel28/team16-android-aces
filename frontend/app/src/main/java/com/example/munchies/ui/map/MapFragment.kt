@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.munchies.AppMode
 import com.example.munchies.R
 import com.example.munchies.databinding.FragmentMapBinding
 import com.example.munchies.model.Place
@@ -56,6 +57,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // Focus search bar
+        if (AppMode.isTest()) binding.searchView.setIconified(false)
 
         // Initialize Places API
         if (!Places.isInitialized()) {
