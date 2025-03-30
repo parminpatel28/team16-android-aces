@@ -1,10 +1,12 @@
 package com.example.munchies
 
+import android.content.Context
 import android.view.View
 import android.widget.RatingBar
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.Espresso.onView
@@ -12,6 +14,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import java.io.File
+import java.io.FileOutputStream
+
+
+
 
 
 fun waitFor(millis: Long): ViewAction {
@@ -84,6 +91,30 @@ fun setRating(rating: Float): ViewAction {
         override fun getDescription(): String = "Set RatingBar to $rating stars"
         override fun perform(uiController: UiController, view: View) {
             (view as RatingBar).rating = rating
+        }
+    }
+}
+
+fun copyAssetToExternalStorage(context: Context, assetName: String, destPath: String): File {
+    val inputStream = context.assets.open(assetName)
+    val outputFile = File(destPath)
+    outputFile.parentFile?.mkdirs()
+    inputStream.use { input ->
+        FileOutputStream(outputFile).use { output ->
+            input.copyTo(output)
+        }
+    }
+    return outputFile
+}
+
+fun withRating(expectedRating: Float): Matcher<View> {
+    return object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: org.hamcrest.Description) {
+            description.appendText("with rating: $expectedRating")
+        }
+
+        override fun matchesSafely(view: View): Boolean {
+            return view is RatingBar && view.rating == expectedRating
         }
     }
 }
