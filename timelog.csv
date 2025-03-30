@@ -28,12 +28,18 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-03-10,2.5,0,0,0,0,0,updated database and frontend to fix review submissions and fetching
 2025-03-15,0.75,0.75,0.75,0.75,0.75,0.75,progress check in and plans for next demo
 2025-03-15,4,0,0,0,0,0,fixed review fetching and cleaned up pages
+2025-03-16,0,0,0,0,0,8,linked our postgres and firebase databases for user creation
+2025-03-16,0,0,0,0,0,2,changed user table schema in postgres and created user API endpoint and routes
 2025-03-17,1,1,1,1,1,1,meeting to address blockers and next steps
 2025-03-17,2,0,0,0,0,0,fixed reviews to match new user behaviour
+2025-03-17,0,0,0,0,0,5,implemented searching for restaurants in the map tab
 2025-03-18,2.25,0,0,0,0,0,update review functionality with new user functionality and changed logo
+2025-03-18,0,0,0,0,0,2,added write a review button to the map to redirect to the review page
+2025-03-19,0,0,0,0,0,4,added styling to all pages + landing page
 2025-03-19,0.5,0.5,0.5,0.5,0.5,0.5,prepped for demo 3 + planned for final iteration
 2025-03-19,0.5,0,0,0,0,0,set up project proposal document
 2025-03-25,4,0,0,0,0,0,refactored reviews for optimization + started writing ui tests
 2025-03-28,3,0,0,0,0,0,add more tests
 2025-03-29,3.5,0,0,0,0,0,added review tests + refined other tests + worked on connecting map and review functionality
 2025-03-30,3.5,0,0,0,0,0,more ui tests + create demo slides
+2025-03-30,0,0,0,0,0,2,worked on profile page

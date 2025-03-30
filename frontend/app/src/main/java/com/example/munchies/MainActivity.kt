@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // If the user is not logged in, redirect to LoginActivity
-        if (auth.currentUser == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
+        // Always redirect to LandingActivity if launched directly
+        if (intent?.action == Intent.ACTION_MAIN) {
+            startActivity(Intent(this, LandingActivity::class.java))
             finish()
             return
         }
