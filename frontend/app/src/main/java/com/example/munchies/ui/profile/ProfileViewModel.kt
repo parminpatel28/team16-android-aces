@@ -19,19 +19,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ProfileViewModel : ViewModel() {
 
     // User Profile Data
-
-
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName
 
     private val _userEmail = MutableLiveData<String>()
     val userEmail: LiveData<String> = _userEmail
-
-    private val _userReviews = MutableLiveData<List<String>>(emptyList())
-    val userReviews: LiveData<List<String>> = _userReviews
-
-    private val _userFriends = MutableLiveData<List<String>>(emptyList())
-    val userFriends: LiveData<List<String>> = _userFriends
 
     private val _userBio = MutableLiveData<String>()
     val userBio: LiveData<String> = _userBio
