@@ -18,11 +18,16 @@ import org.junit.runner.RunWith
 class LoginActivityTest {
 
     @get:Rule
-    val activityRule = ActivityTestRule(LoginActivity::class.java)
+    val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Before @After
     fun logoutUser() {
         FirebaseAuth.getInstance().signOut()
+    }
+
+    @Before
+    fun setUp() {
+        onView(withId(R.id.loginButton)).perform(click())
     }
 
     @Test

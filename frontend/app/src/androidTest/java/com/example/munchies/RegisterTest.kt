@@ -14,10 +14,12 @@ import org.junit.runner.RunWith
 class RegisterActivityTest {
 
     @get:Rule
-    val activityRule = ActivityTestRule(RegisterActivity::class.java)
+    val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
     fun emptyFields_showsSnackbarError() {
+        onView(withId(R.id.registerButton)).perform(click())
+
         onView(withId(R.id.createAccountBtn)).perform(click())
 
         onView(withText("Please fill in all fields"))

@@ -34,7 +34,7 @@ import java.time.Instant
 class ReviewTest {
 
     @get:Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java)
+    val activityRule = ActivityTestRule(LoginActivity::class.java)
 
     @Before
     @After
@@ -160,7 +160,7 @@ class ReviewTest {
 
         val uniqueID = Instant.now()
         onView(withId(R.id.reviewText))
-            .perform(replaceText("Espresso test review $uniqueID"), closeSoftKeyboard())
+            .perform(replaceText("Espresso test image review $uniqueID"), closeSoftKeyboard())
 
         // Submit the review
         onView(withId(R.id.submitReviewButton)).perform(click())

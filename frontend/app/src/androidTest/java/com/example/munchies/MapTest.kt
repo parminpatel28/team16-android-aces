@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 class MapFragmentTest {
 
     @get:Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java)
+    val activityRule = ActivityTestRule(LoginActivity::class.java)
 
     @get:Rule
     val disableAnimationsRule = DisableAnimationsRule()
