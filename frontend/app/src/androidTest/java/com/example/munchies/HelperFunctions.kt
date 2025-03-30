@@ -10,7 +10,9 @@ import org.hamcrest.TypeSafeMatcher
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import junit.framework.AssertionFailedError
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -18,8 +20,26 @@ import java.io.File
 import java.io.FileOutputStream
 
 
+fun waitUntilViewIsDisplayed(viewMatcher: Matcher<View>, timeoutMs: Long = 10000) {
+    val startTime = System.currentTimeMillis()
+    val endTime = startTime + timeoutMs
 
+    do {
+        try {
+            onView(viewMatcher).check(matches(isDisplayed()))
+            return // Success!
+        } catch (e: NoMatchingViewException) {
+            // View not found yet, keep looping
+        } catch (e: AssertionFailedError) {
+            // View found but not visible, keep looping
+        }
 
+        Thread.sleep(100)
+    } while (System.currentTimeMillis() < endTime)
+
+    // Timeout
+    throw AssertionError("View $viewMatcher was not displayed within $timeoutMs ms.")
+}
 
 fun waitFor(millis: Long): ViewAction {
     return object : ViewAction {
@@ -34,6 +54,7 @@ fun waitFor(millis: Long): ViewAction {
 }
 
 fun performLogin(email: String, password: String = "munchies") {
+    waitUntilViewIsDisplayed(withId(R.id.emailLogin))
     onView(withId(R.id.emailLogin))
         .perform(replaceText(email), closeSoftKeyboard())
 
@@ -117,4 +138,22 @@ fun withRating(expectedRating: Float): Matcher<View> {
             return view is RatingBar && view.rating == expectedRating
         }
     }
+}
+
+fun loginAndNavigateToFriends(email: String = "taylor@gmail.com") {
+    performLogin(email)
+
+    // Wait for the main screen to load (feed)
+    onView(isRoot()).perform(waitFor(2000))
+    onView(withId(R.id.recyclerFeed))
+        .check(matches(isDisplayed()))
+
+    // Now go to the Friends tab
+    onView(withId(R.id.navigation_friends))
+        .perform(click())
+
+    // Wait for the friends page to load
+    onView(isRoot()).perform(waitFor(1000))
+    onView(withId(R.id.recyclerFriends))
+        .check(matches(isDisplayed()))
 }

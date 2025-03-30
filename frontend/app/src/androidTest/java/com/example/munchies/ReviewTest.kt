@@ -22,7 +22,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.google.firebase.auth.FirebaseAuth
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matchers.any
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -80,7 +79,7 @@ class ReviewTest {
 
     @Test
     fun submitNewReview_displaysInListAfterRefresh() {
-        loginAndNavigateToReviews("elaine@gmail.com")
+        loginAndNavigateToReviews()
 
         // Tap the add review button
         onView(withId(R.id.addReviewButton)).perform(click())
@@ -115,7 +114,7 @@ class ReviewTest {
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        loginAndNavigateToReviews("taylor@gmail.com")
+        loginAndNavigateToReviews()
 
         // Prepare image for upload
         val destFile = File(
