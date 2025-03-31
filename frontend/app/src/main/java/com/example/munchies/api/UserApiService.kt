@@ -1,6 +1,7 @@
 package com.example.munchies.api
 
 import com.example.munchies.model.Friendship
+import com.example.munchies.model.Review
 import com.example.munchies.model.User
 import retrofit2.Call
 import retrofit2.http.*
@@ -18,6 +19,12 @@ interface UserApiService {
     // Delete user by ID
     @DELETE("api/user/{userId}")
     fun deleteUser(@Path("userId") userId: String): Call<Void>
+
+    @PUT("api/user/{userId}/likes")
+    fun updateLikes(
+        @Path("userId") userId: String,
+        @Body review: Review
+    ): Call<Void>
 
     // Fetch all user friends
     @GET("api/friendship/{userId}")

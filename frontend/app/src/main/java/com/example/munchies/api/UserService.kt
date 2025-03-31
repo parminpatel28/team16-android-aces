@@ -1,5 +1,6 @@
 package com.example.munchies.api
 
+import com.example.munchies.model.Review
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,7 +24,8 @@ data class User(
     val profilePicture: String?,
     val userBio: String?,
     val accountCreationDate: String,
-    val emailAddress: String
+    val emailAddress: String,
+    val savedReviews: List<Review>? = emptyList(),
 )
 
 interface UserService {

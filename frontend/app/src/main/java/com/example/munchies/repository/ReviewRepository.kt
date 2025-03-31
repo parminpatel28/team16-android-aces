@@ -84,4 +84,37 @@ class ReviewRepository {
         })
     }
 
+    fun likeReview(reviewId: Int) {
+        apiService.likeReview(reviewId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("ReviewRepository", "Successfully liked review!")
+                } else {
+                    Log.e("ReviewRepository", "Failed to like review. Code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("ReviewRepository", "Network error when liking review: ${t.message}")
+            }
+        })
+    }
+
+    fun dislikeReview(reviewId: Int) {
+        apiService.dislikeReview(reviewId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("ReviewRepository", "Successfully removed like!")
+                } else {
+                    Log.e("ReviewRepository", "Failed to remove like. Code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("ReviewRepository", "Network error when liking review: ${t.message}")
+            }
+        })
+    }
+
+
 }

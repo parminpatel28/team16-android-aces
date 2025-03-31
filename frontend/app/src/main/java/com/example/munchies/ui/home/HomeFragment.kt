@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentHomeBinding
+import com.example.munchies.model.Review
 import com.example.munchies.ui.home.adapter.FeedAdapter
 
 class HomeFragment : Fragment() {
@@ -29,7 +30,14 @@ class HomeFragment : Fragment() {
         // Set up RecyclerView with FeedAdapter
         val recyclerView = binding.recyclerFeed
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = FeedAdapter()
+        val adapter = FeedAdapter{ review: Review -> run{
+            homeViewModel.likeReview(review)
+
+        }
+
+
+
+        }
         recyclerView.adapter = adapter
 
         // Observe the LiveData from the ViewModel
@@ -37,7 +45,19 @@ class HomeFragment : Fragment() {
             adapter.submitList(reviewList)  // Update the list in the RecyclerView
         }
 
+        homeViewModel.refresh.observe(viewLifecycleOwner) {
+            binding.swipeRefreshLayout.isRefreshing = it
+        }
+
+        setupSwipeToRefresh()
+
         return root
+    }
+
+    private fun setupSwipeToRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            homeViewModel.refreshFeed()
+        }
     }
 
     override fun onDestroyView() {

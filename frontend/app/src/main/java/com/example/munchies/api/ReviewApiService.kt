@@ -29,6 +29,17 @@ interface ReviewApiService {
         @Body photoUrls: List<String>
     ): Call<Void>
 
+    @PUT("api/reviews/{reviewId}/like")
+    fun likeReview(
+        @Path("reviewId") reviewId: Int
+    ): Call<Void>
+
+    @PUT("api/reviews/{reviewId}/dislike")
+    fun dislikeReview(
+        @Path("reviewId") reviewId: Int
+    ): Call<Void>
+
+
     // Delete review by ID
     @DELETE("api/reviews/{reviewId}")
     fun deleteReview(@Path("reviewId") reviewId: Long): Call<Void>
