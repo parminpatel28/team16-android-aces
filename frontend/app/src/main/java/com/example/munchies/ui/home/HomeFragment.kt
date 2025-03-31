@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         // Set up RecyclerView with FeedAdapter
         val recyclerView = binding.recyclerFeed
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = FeedAdapter{ review: Review -> run{
+        adapter = FeedAdapter(requireContext()){ review: Review -> run{
             homeViewModel.likeReview(review)
 
         }
@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
 
         // Observe the LiveData from the ViewModel
         homeViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
-            adapter.submitList(reviewList)  // Update the list in the RecyclerView
+            adapter.submitList(reviewList.toList())  // Update the list in the RecyclerView
         }
 
 
@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
     private fun setupSwipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.refreshFeed()
-            populateFeed()
+            //populateFeed()
 
         }
     }
@@ -82,6 +82,8 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         homeViewModel.refreshFeed()
-        populateFeed()
+        //populateFeed()
     }
+
+
 }

@@ -93,7 +93,6 @@ class HomeViewModel : ViewModel() {
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-
         friendRepository.getUserFriends(userId) { friends ->
             viewModelScope.launch {
                 var allReviews = friends.orEmpty().mapNotNull { friend ->

@@ -136,8 +136,8 @@
 
                 <ImageView
                     android:id="@+id/heartIcon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="4dp"
                     android:contentDescription="@string/likes"
                     android:src="@drawable/ic_heart_orange_24dp" />
@@ -149,7 +149,7 @@
                     android:gravity="center"
                     android:text="@string/no_likes"
                     android:textColor="@color/orange"
-                    android:textSize="18sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
