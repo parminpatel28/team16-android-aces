@@ -48,10 +48,10 @@ public class User {
 //    @JdbcTypeCode(SqlTypes.JSON)
 //    private List<User> friends;
 
-//    @ColumnDefault("'[]'::jsonb")
-//    @Column(name = "saved_reviews")
-//    @JdbcTypeCode(SqlTypes.JSON)
-//    private List<Review> savedReviews;
+    @ColumnDefault("'[]'::jsonb")
+    @Column(name = "saved_reviews")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<Review> savedReviews;
 
     public String getId() {
         return id;
@@ -121,12 +121,14 @@ public class User {
 //
 //    public void setFriends(List<User> friends) {}
 
-//    public List<Review> getSavedReviews() {
-//        return savedReviews;
-//    }
+    public List<Review> getSavedReviews() {
+        return savedReviews;
+    }
 
-//    public void setSavedReviews(List<Review> savedReviews) {
-//        this.savedReviews = savedReviews;
-//    }
+    public void setSavedReviews(List<Review> savedReviews) {
+        this.savedReviews = savedReviews;
+    }
+
+
 
 }

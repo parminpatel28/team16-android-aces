@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.munchies.api.ApiClient.userService
 import com.example.munchies.databinding.FragmentReviewBinding
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
+import com.example.munchies.repository.UserRepository
+import com.example.munchies.ui.home.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,11 +27,15 @@ class ReviewFragment : Fragment() {
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ReviewAdapter
+    private lateinit var reviewViewModel: ReviewViewModel
     private val reviewRepository = ReviewRepository()
+    private val userRepository = UserRepository()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
+        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
         return binding.root
     }
 
@@ -41,9 +49,14 @@ class ReviewFragment : Fragment() {
             startActivity(Intent(requireContext(), ReviewActivity::class.java))
         }
 
-        userId?.let {
-            Log.d("ReviewFragment", "UserId: $it")
-            fetchReviewsByUser(it)
+        // Observe the LiveData from the ViewModel
+        reviewViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
+            adapter.submitList(reviewList)  // Update the list in the RecyclerView
+        }
+
+
+        reviewViewModel.refresh.observe(viewLifecycleOwner) {
+            binding.swipeRefreshLayout.isRefreshing = it
         }
     }
 
@@ -62,7 +75,7 @@ class ReviewFragment : Fragment() {
     private fun setupSwipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (userId != null) {
-                fetchReviewsByUser(userId)
+                reviewViewModel.refreshFeed()
             }  // Refresh reviews
         }
     }
@@ -83,6 +96,8 @@ class ReviewFragment : Fragment() {
             }
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
