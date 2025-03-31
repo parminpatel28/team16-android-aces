@@ -41,7 +41,7 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-03-19,0.5,0,0,0,0,0,set up final report document
 2025-03-24,0,0,6,0,0,0,updated backend to save a url for review photos and frontend sends the request
 2025-03-25,4,0,0,0,0,0,refactored reviews for optimization + started writing ui tests
-2025-03-24,0,0,5,0,0,0,photo is displayed on the review details tab and UI for Reviews is completed
+2025-03-25,0,0,5,0,0,0,photo is displayed on the review details tab and UI for Reviews is completed
 2025-03-30,2.5,0,0,0,0,0,create demo slides + work on final report
 2025-03-30,0,0,0,0,0,2,worked on profile page
 2025-03-31,1,1,1,1,1,1,planned final demo + troubleshooting
