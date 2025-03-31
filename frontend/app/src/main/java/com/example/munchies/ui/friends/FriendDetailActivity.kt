@@ -24,9 +24,17 @@ class FriendDetailActivity() : AppCompatActivity() {
         friendsViewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
         val context = this
 
-//        setupObservers()
-//        setupClickListeners()
-//        friendsViewModel.loadUserData(this.id)
+        // Set up toolbar
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.title = "Friend Profile"
+
+        // Handle back button click
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         val id = intent.getStringExtra("friend_id") ?: "Unknown"
         val name = intent.getStringExtra("friend_name") ?: "Unknown"
         val username = intent.getStringExtra("friend_username") ?: "Unknown"
