@@ -140,14 +140,14 @@ class HomeViewModel : ViewModel() {
                         }
                     } else {
                         val errorBody = response.errorBody()?.string()
-                        Log.e("ProfileViewModel", "Error response: $errorBody")
+                        Log.e("HomeViewModel", "Error response: $errorBody")
                     }
 
                 }
 
 
             } catch (e: Exception) {
-                Log.e("ProfileViewModel", "Exception loading user data", e)
+                Log.e("HomeViewModel", "Exception loading user data", e)
 
                 e.printStackTrace()
             }

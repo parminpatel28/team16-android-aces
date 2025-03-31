@@ -16,6 +16,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var adapter: FeedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +31,7 @@ class HomeFragment : Fragment() {
         // Set up RecyclerView with FeedAdapter
         val recyclerView = binding.recyclerFeed
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = FeedAdapter{ review: Review -> run{
+        adapter = FeedAdapter{ review: Review -> run{
             homeViewModel.likeReview(review)
 
         }
@@ -45,6 +46,7 @@ class HomeFragment : Fragment() {
             adapter.submitList(reviewList)  // Update the list in the RecyclerView
         }
 
+
         homeViewModel.refresh.observe(viewLifecycleOwner) {
             binding.swipeRefreshLayout.isRefreshing = it
         }
@@ -54,14 +56,32 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun populateFeed() {
+
+        adapter.submitList(null)
+        // Observe the LiveData from the ViewModel
+        homeViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
+            adapter.submitList(reviewList)  // Update the list in the RecyclerView
+        }
+
+
+    }
     private fun setupSwipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.refreshFeed()
+            populateFeed()
+
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.refreshFeed()
+        populateFeed()
     }
 }
