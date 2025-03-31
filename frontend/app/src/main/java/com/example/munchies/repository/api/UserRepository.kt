@@ -2,6 +2,7 @@ package com.example.munchies.repository
 
 import android.util.Log
 import com.example.munchies.api.ApiClient
+import com.example.munchies.model.Review
 import com.example.munchies.model.User
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,5 +56,22 @@ class UserRepository {
             }
         })
 
+    }
+
+    fun updateLikes(userId: String, review: Review){
+        Log.d("UserRepository", "Updating likes")
+        apiService.updateLikes(userId, review).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("UserRepository", "Successfully updated likes")
+                } else {
+                    Log.e("UserRepository", "Failed to update likes. Code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("UserRepository", "Network error while updating: ${t.message}")
+            }
+        })
     }
 }

@@ -41,7 +41,6 @@ class ReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReviewBinding
     private val reviewViewModel: ReviewViewModel by viewModels()
-    private lateinit var userService: UserService
     private var taggedRestaurants: MutableList<String> = mutableListOf()
     private var selectedLocation: String? = null
     private val repository = FriendRepository()
@@ -157,6 +156,7 @@ class ReviewActivity : AppCompatActivity() {
         binding.btnChooseFile.setOnClickListener {
             pickMedia.launch("image/*")
         }
+
 
         binding.submitReviewButton.setOnClickListener {
             Log.d("ReviewActivity", "Submit Review clicked")

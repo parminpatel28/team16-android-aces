@@ -1,6 +1,7 @@
 package com.munchies_backend.spring_boot.controller;
 
 import com.munchies_backend.spring_boot.model.CreateUserRequest;
+import com.munchies_backend.spring_boot.model.Review;
 import com.munchies_backend.spring_boot.model.User;
 import com.munchies_backend.spring_boot.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,29 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{id}/likes")
+    public ResponseEntity<User> updateLikes(@PathVariable String id, @RequestBody Review review) {
+        Optional<User> userOpt = userService.getUserById(id);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = userOpt.get();
+
+        List<Review> reviews = user.getSavedReviews();
+        if (reviews.contains(review)) {
+            reviews.remove(review);
+        }
+        else{
+            reviews.add(review);
+        }
+        user.setSavedReviews(reviews);
+
+        userService.saveUser(user);
+        return ResponseEntity.ok(user);
+
     }
 
     // Delete a user

@@ -40,6 +40,40 @@ public class ReviewController {
         return ResponseEntity.ok().build();
 
     }
+
+    @PutMapping("/{reviewId}/like")
+    public ResponseEntity<Review> likeReview(@PathVariable Integer reviewId) {
+
+        Optional<Review> reviewOpt = reviewService.findReviewById(reviewId);
+
+        if (reviewOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Review review = reviewOpt.get();
+        review.setLikes(review.getLikes() + 1);
+        reviewService.saveReview(review);
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PutMapping("/{reviewId}/dislike")
+    public ResponseEntity<Review> dislikeReview(@PathVariable Integer reviewId) {
+
+        Optional<Review> reviewOpt = reviewService.findReviewById(reviewId);
+
+        if (reviewOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Review review = reviewOpt.get();
+        review.setLikes(review.getLikes() - 1);
+        reviewService.saveReview(review);
+
+        return ResponseEntity.ok().build();
+
+    }
     // Get a review by ID
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Integer id) {
