@@ -9,10 +9,10 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_home) // Activity context
-        val placeAddress = intent.getStringExtra("address")
+        val placeID = intent.getStringExtra("placeID")
         val fromMap = intent.getBooleanExtra("fromMap", false)
 
-        val fragment = HomeFragment().newInstance(placeAddress, fromMap)
+        val fragment = HomeFragment().newInstance(placeID, fromMap)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.home, fragment)
