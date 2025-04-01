@@ -21,6 +21,8 @@ import com.example.munchies.model.Review
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
+import com.example.munchies.ui.map.MapActivity
+import com.google.android.libraries.places.api.model.kotlin.place
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -137,6 +139,9 @@ class ReviewActivity : AppCompatActivity() {
         val restaurantId = intent.getStringExtra("RESTAURANT_ID")
         val restaurantAddress = intent.getStringExtra("RESTAURANT_ADDRESS")
 
+        if (restaurantId != null) {
+            Log.d("ReviewActivity", restaurantId + "Restaurant ID")
+        }
         // Pre-fill restaurant if provided
         if (restaurantName != null) {
             binding.tagRestaurantsDropdown.setText(restaurantName)
@@ -157,6 +162,19 @@ class ReviewActivity : AppCompatActivity() {
             pickMedia.launch("image/*")
         }
 
+        binding.btnChooseLocation.setOnClickListener {
+            Log.d("ReviewActivity", " Choose Location Button Clicked")
+            val context = applicationContext
+//            sharedUIViewModel._fromReview.value = true
+            //Log.d("ReviewActivity", sharedUIViewModel._fromReview.value.toString())
+            val intent = Intent(context, MapActivity::class.java)
+
+
+            intent.putExtra("fromReview", true)
+
+            startActivity(intent)
+        }
+
 
         binding.submitReviewButton.setOnClickListener {
             Log.d("ReviewActivity", "Submit Review clicked")
@@ -173,6 +191,10 @@ class ReviewActivity : AppCompatActivity() {
                     Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
+                if(restaurantName.isNullOrEmpty() || restaurantId.isNullOrEmpty() || restaurantAddress.isNullOrEmpty()) {
+                    Toast.makeText(this, "Location must be selected", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
                 val user = UserManager.currentUser
                 if (user == null) {
@@ -187,7 +209,8 @@ class ReviewActivity : AppCompatActivity() {
                     photos = emptyList(),
                     date = Instant.now().toString(),
                     rating = overallRating,
-                    likes = 0
+                    likes = 0,
+                    restaurantId = restaurantId
                 )
 
                 reviewViewModel.submitReview(review) { reviewResponse ->

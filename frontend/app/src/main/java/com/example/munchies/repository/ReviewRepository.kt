@@ -116,5 +116,21 @@ class ReviewRepository {
         })
     }
 
+    fun getReviewsByRestaurantId(restaurantId: String ):List<Review>? {
+        return try {
+            val response = apiService.getReviewsByRestaurantId(restaurantId)
+            if (response.isSuccessful) {
+                Log.d("ReviewRepository", "Fetched reviews successfully using RestaurantId: ${response.body()}")
+                response.body()
+            } else {
+                Log.e("ReviewRepository", "Error fetching reviews: ${response.code()}, Body: ${response.errorBody()?.string()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("ReviewRepository", "API request failed: ${e.message}", e)
+            null
+        }
+    }
+
 
 }

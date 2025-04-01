@@ -88,6 +88,7 @@ class ReviewViewModel : ViewModel() {
 
     private fun fetchReviewsByUser() {
         _refresh.value = true
+        _reviews.value = emptyList()
         viewModelScope.launch {
             if(userId != null){
                 val reviews = withContext(Dispatchers.IO) {

@@ -31,6 +31,7 @@
     <string name="no_likes">0</string>
     <string name="reviewed_by">"Reviewed by: "</string>
     <string name="reviewed_on">"On: "</string>
+    <string name="empty_feed">"Nothing from your friends just yet."</string>
 
     <!--Friends-->
     <string name="add_friend">Add Friend</string>
@@ -43,6 +44,7 @@
     <string name="accept_request">Accept</string>
     <string name="view_friend_requests">View Friend Requests</string>
     <string name="you_have_no_friend_requests">You have no friend requests</string>
+    <string name="title_activity_maps">MapsActivity</string>
     <string name="requests">Requests</string>
     <string name="friends">My Friends</string>
     <string name="options">Options</string>

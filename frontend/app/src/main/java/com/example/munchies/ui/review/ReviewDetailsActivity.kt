@@ -54,6 +54,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
 
 
         val review: Review? = intent.getParcelableExtra<Review>("review")
+
         review?.let {
 
 
