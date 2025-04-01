@@ -15,7 +15,7 @@ data class Review(
     @SerializedName("rating") val rating: Double,
     @SerializedName("likes") val likes: Int = 0,
     @SerializedName("liked") var liked: Boolean? = false,
-    @SerializedName("savedReviews") val savedReviews: List<Review>? = emptyList(),
+    //@SerializedName("savedReviews") val savedReviews: List<Review>? = emptyList(),
 //    val comments: List<Comment> = emptyList()
 
 

@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
 
         // Observe the LiveData from the ViewModel
         homeViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
-            adapter.submitList(reviewList.toList())  // Update the list in the RecyclerView
+            adapter.submitList(reviewList)  // Update the list in the RecyclerView
         }
 
 

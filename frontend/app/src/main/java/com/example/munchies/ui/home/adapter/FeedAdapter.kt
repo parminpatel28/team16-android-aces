@@ -2,7 +2,7 @@ package com.example.munchies.ui.home.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -29,6 +29,8 @@ class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)
     inner class ReviewViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: Review) {
 
+            mContext = context
+
             binding.feedContent.text = review.caption
             binding.userName.text = review.user.username
 
@@ -43,10 +45,19 @@ class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)
             if(!review.photos.isNullOrEmpty()){
                 val url = review.photos[0]
                 if (!url.isNullOrEmpty()) {
-                    Glide.with(mContext)
+                    Log.d("FeedAdapter", "Loading image from URL: ${url}")
+                    Glide.with(binding.feedImage.context)
                         .load(url)
                         .into(binding.feedImage)
                 }
+                else{
+                    binding.feedImage.setImageResource(R.drawable.sample_image)
+
+                }
+
+            }
+            else{
+                binding.feedImage.setImageResource(R.drawable.sample_image)
 
             }
 
