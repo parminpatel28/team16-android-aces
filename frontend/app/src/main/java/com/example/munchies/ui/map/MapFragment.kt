@@ -2,15 +2,20 @@ package com.example.munchies.ui.map
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.R
 import com.example.munchies.databinding.FragmentMapBinding
 import com.example.munchies.model.Place
+import com.example.munchies.ui.home.HomeActivity
 import com.example.munchies.ui.review.ReviewActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -57,6 +62,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val calledByAddReview = arguments?.getBoolean("fromReview")
+
         // Initialize Places API
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), "AIzaSyDk5Au-odk_HsBK8dRT_6GvFWnwS8EeQjA")
@@ -85,12 +92,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     putExtra("RESTAURANT_ADDRESS", place.address)
                 }
                 startActivity(intent)
+            },
+            onViewReviewsClick = { place ->
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                intent.putExtra("Address", place.address)
+                intent.putExtra("fromMap", true)
+                Log.d("OnViewReviewsClick", place.address)
+                startActivity(intent)
             }
         )
 
         binding.searchResultsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = placeAdapter
+        }
+
+        if (calledByAddReview == true) {
+            binding.returnButton.isEnabled = true
+            binding.returnButton.visibility = VISIBLE
+        } else {
+            binding.returnButton.isEnabled = false
+            binding.returnButton.visibility = INVISIBLE
+        }
+        binding.returnButton.setOnClickListener {
+            binding.returnButton.isEnabled = false
+            binding.returnButton.visibility = INVISIBLE
+            activity?.finish()
         }
 
         // Set up search functionality
@@ -166,6 +193,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun newInstance(fromReview : Boolean): MapFragment {
+        val fragment = MapFragment()
+
+        val bundle = Bundle().apply {
+            putBoolean("fromReview", fromReview)
+        }
+
+        fragment.arguments = bundle
+        return fragment
     }
 
     override fun onMapReady(map: GoogleMap) {
