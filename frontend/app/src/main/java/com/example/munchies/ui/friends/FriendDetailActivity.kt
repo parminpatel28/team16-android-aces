@@ -1,4 +1,5 @@
 package com.example.munchies.ui.friends
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,15 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.munchies.R
 import com.example.munchies.databinding.ActivityFriendDetailBinding
 import com.example.munchies.model.User
+import com.example.munchies.ui.review.ReviewAdapter
+import com.example.munchies.ui.review.ReviewDetailsActivity
+import com.example.munchies.repository.ReviewRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FriendDetailActivity() : AppCompatActivity() {
     private lateinit var _binding: ActivityFriendDetailBinding
     private lateinit var friendsViewModel: FriendsViewModel
+    private lateinit var adapter: ReviewAdapter
+    private val reviewRepository = ReviewRepository()
 
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +99,35 @@ class FriendDetailActivity() : AppCompatActivity() {
                 .into(binding.imageProfilePicture)
         }
 
+        fetchFriendReviews(id)
+        setupRecyclerView()
+
+    }
+
+    private fun setupRecyclerView() {
+        adapter = ReviewAdapter { selectedReview ->
+            Log.d("Review Clicked", "Review: $selectedReview")
+            Log.d("Review Clicked", "User: ${selectedReview.user}")
+            val intent = Intent(this@FriendDetailActivity, ReviewDetailsActivity::class.java)
+            intent.putExtra("review", selectedReview)
+            startActivity(intent)
+        }
+        binding.recyclerFriendReviews.layoutManager = LinearLayoutManager(this@FriendDetailActivity)
+        binding.recyclerFriendReviews.adapter = adapter
+    }
+
+    private fun fetchFriendReviews(friendId: String) {
+        lifecycleScope.launch {
+            val reviews = withContext(Dispatchers.IO) {
+                reviewRepository.getReviewsByUser(friendId)
+            }
+
+            if (reviews != null) {
+                adapter.submitList(reviews)
+            } else {
+                Log.e("FriendDetailActivity", "Failed to fetch reviews for user $friendId")
+            }
+        }
     }
 
 //    private fun setupObservers() {
