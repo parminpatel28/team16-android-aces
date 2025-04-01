@@ -11,7 +11,7 @@ data class Review(
     @SerializedName("caption") val caption: String,
     @SerializedName("photos") val photos: List<String>? = emptyList(),
 //    @SerializedName("location_id") val location: Location?,
-    @SerializedName("restaurantId") val restaurantId: String,
+    @SerializedName("restaurantId") val restaurantId: String?,
     @SerializedName("date") val date: String,
     @SerializedName("rating") val rating: Double,
     @SerializedName("likes") val likes: Int = 0,
