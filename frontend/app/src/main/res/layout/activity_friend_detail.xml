@@ -121,6 +121,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginBottom="8dp"/>
 
+                <TextView
+                    android:id="@+id/textNoReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No recent reviews"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/textReviewSectionTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <Button
                     android:id="@+id/addFriendButton"
                     android:layout_width="wrap_content"

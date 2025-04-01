@@ -122,10 +122,14 @@ class FriendDetailActivity() : AppCompatActivity() {
                 reviewRepository.getReviewsByUser(friendId)
             }
 
-            if (reviews != null) {
+            if (!reviews.isNullOrEmpty()) {
                 adapter.submitList(reviews)
+
+                binding.recyclerFriendReviews.visibility = View.VISIBLE
+                binding.textNoReviews.visibility = View.GONE
             } else {
-                Log.e("FriendDetailActivity", "Failed to fetch reviews for user $friendId")
+                binding.recyclerFriendReviews.visibility = View.GONE
+                binding.textNoReviews.visibility = View.VISIBLE
             }
         }
     }
