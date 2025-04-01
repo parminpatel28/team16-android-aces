@@ -8,6 +8,15 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.friends.FriendSearchActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:title="@string/add_friends"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/arrow_left" />
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"

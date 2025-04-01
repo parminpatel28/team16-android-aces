@@ -62,6 +62,14 @@ class HomeFragment : Fragment() {
         // Observe the LiveData from the ViewModel
         homeViewModel.reviews.observe(viewLifecycleOwner) { reviewList ->
             adapter.submitList(reviewList)  // Update the list in the RecyclerView
+
+            if (reviewList.isNullOrEmpty()) {
+                binding.recyclerFeed.visibility = View.GONE
+                binding.textNoFeed.visibility = View.VISIBLE
+            } else {
+                binding.recyclerFeed.visibility = View.VISIBLE
+                binding.textNoFeed.visibility = View.GONE
+            }
         }
 
 

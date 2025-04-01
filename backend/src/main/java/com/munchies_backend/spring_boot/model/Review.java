@@ -35,6 +35,9 @@ public class Review {
     @Column(name = "likes")
     private Integer likes;
 
+    @Column(name = "restaurant_id", length = 255)
+    private String restaurantId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "location_id")
@@ -116,6 +119,14 @@ public class Review {
 
     public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     @Override

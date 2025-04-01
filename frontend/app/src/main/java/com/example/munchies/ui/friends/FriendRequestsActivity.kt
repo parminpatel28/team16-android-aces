@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.munchies.R
 import com.example.munchies.model.User
 import com.example.munchies.ui.home.adapter.FriendAdapter
 import com.example.munchies.databinding.ActivityFriendRequestsBinding
@@ -35,6 +37,16 @@ class FriendRequestsActivity: AppCompatActivity() {
         friendAdapter = FriendAdapter(userList, friendsViewModel, this)
         recyclerView.adapter = friendAdapter
         friendsViewModel.fetchAllUsers()
+
+        // Back button
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Friend Requests"
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         // Observe the LiveData from the ViewModel
         friendsViewModel.incomingRequestsList.observe(this) { userList ->
