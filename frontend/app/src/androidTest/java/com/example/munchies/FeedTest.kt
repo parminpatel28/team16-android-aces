@@ -59,4 +59,23 @@ class FeedTest {
         onView(withId(R.id.reviewText))
             .check(matches(isDisplayed()))
     }
+
+//    @Test
+//    fun likeAndUnlikeReview() {
+//        performLogin("kailin@gmail.com")
+//
+//        // Wait for feed to load
+//        onView(isRoot()).perform(waitFor(5000))
+//
+//        onView(withId(R.id.recyclerFeed))
+//            .check(matches(isDisplayed()))
+//
+//        // Click first review
+//        onView(withId(R.id.recyclerFeed))
+//            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+//        like_button
+//        // Confirm we're in ReviewDetailsActivity
+//        onView(withId(R.id.reviewText))
+//            .check(matches(isDisplayed()))
+//    }
 }
