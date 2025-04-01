@@ -20,7 +20,7 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-03-01,0,0,0,0,0,5,finished Firebase setup and account creation
 2025-03-01,0,0,5,0,0,0,created the JPA entity and services and controller
 2025-03-02,6,0,0,0,0,0,worked on review frontend and backend
-2025-03-02,0,0,0,0,0,2,worked on getting the map up and running
+2025-03-02,0,0,0,0,1,2,worked on getting the map up and running
 2025-03-03,0.25,0.25,0.25,0.25,0.25,0.25,check in for demo 2 and discuss blockers
 2025-03-03,3,0,0,0,0,0,worked on backend functionality for reviews
 2025-03-04,4.5,0,0,0,0,0,set up frontend review submission with backend
@@ -32,7 +32,7 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-03-16,0,0,0,0,0,2,changed user table schema in postgres and created user API endpoint and routes
 2025-03-17,1,1,1,1,1,1,meeting to address blockers and next steps
 2025-03-17,2,0,0,0,0,0,fixed reviews to match new user behaviour
-2025-03-17,0,0,0,0,0,5,implemented searching for restaurants in the map tab
+2025-03-17,0,0,0,0,1,5,implemented searching for restaurants in the map tab
 2025-03-18,2.25,0,0,0,0,0,update review functionality with new user functionality and changed logo
 2025-03-18,0,0,0,0,0,2,added write a review button to the map to redirect to the review page
 2025-03-19,0,0,0,0,0,4,added styling to all pages + landing page
@@ -47,3 +47,5 @@ date,Taylor,Elaine,Parmin,Kailin,Annan,Matthew,task
 2025-03-30,5,0,0,0,0,0,more ui tests + create demo slides + work on final report
 2025-03-30,0,0,0,0,0,2,worked on profile page
 2025-03-31,1,1,1,1,1,1,planned final demo + troubleshooting
+2025-04-01,0,0,0,0,5,0,added a feature to allow users to view the reviews for a location from the map and to add the location with the map when adding reviews
+
