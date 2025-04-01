@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.firebase.appcheck.playintegrity)
     implementation(libs.places)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

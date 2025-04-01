@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.R
 import com.example.munchies.databinding.FragmentMapBinding
 import com.example.munchies.model.Place
-//import com.example.munchies.ui.home.HomeActivity
+import com.example.munchies.ui.home.HomeActivity
 import com.example.munchies.ui.review.ReviewActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -94,12 +94,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 startActivity(intent)
             },
             onViewReviewsClick = { place ->
-
-//                val intent = Intent(requireContext(), HomeActivity::class.java)
-//                intent.putExtra("Address", place.address)
-//                intent.putExtra("fromMap", true)
-//                Log.d("OnViewReviewsClick", place.address)
-//                startActivity(intent)
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                intent.putExtra("Address", place.address)
+                intent.putExtra("fromMap", true)
+                Log.d("OnViewReviewsClick", place.address)
+                startActivity(intent)
             }
         )
 
