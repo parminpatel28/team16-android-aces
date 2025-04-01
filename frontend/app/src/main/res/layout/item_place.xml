@@ -13,11 +13,20 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+
         <TextView
             android:id="@+id/placeNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/placeRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:textSize="8sp"
             android:textStyle="bold" />
 
         <TextView
@@ -40,6 +49,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Write Review"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewReviewsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="View Reviews"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
     </LinearLayout>

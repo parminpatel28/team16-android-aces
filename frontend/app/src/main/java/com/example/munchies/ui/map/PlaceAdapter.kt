@@ -10,7 +10,8 @@ import com.example.munchies.model.Place
 
 class PlaceAdapter(
     private val onPlaceClick: (Place) -> Unit,
-    private val onWriteReviewClick: (Place) -> Unit
+    private val onWriteReviewClick: (Place) -> Unit,
+    private val onViewReviewsClick: (Place) -> Unit
 ) : ListAdapter<Place, PlaceAdapter.PlaceViewHolder>(PlaceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
@@ -41,6 +42,13 @@ class PlaceAdapter(
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onWriteReviewClick(getItem(position))
+                }
+            }
+
+            binding.viewReviewsButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onViewReviewsClick(getItem(position))
                 }
             }
         }

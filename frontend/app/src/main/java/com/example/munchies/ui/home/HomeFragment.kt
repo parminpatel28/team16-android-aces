@@ -3,6 +3,8 @@ package com.example.munchies.ui.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.munchies.databinding.FragmentHomeBinding
 import com.example.munchies.model.Review
 import com.example.munchies.ui.home.adapter.FeedAdapter
+import com.example.munchies.ui.map.MapFragment
 
 class HomeFragment : Fragment() {
 
@@ -27,6 +30,22 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val calledByViewReviews = arguments?.getBoolean("fromMap")
+        val placeAdress = arguments?.getString("address")
+
+        if (calledByViewReviews == true) {
+            binding.returnButtonFeed.isEnabled = true
+            binding.returnButtonFeed.visibility = VISIBLE
+        } else {
+            binding.returnButtonFeed.isEnabled = false
+            binding.returnButtonFeed.visibility = INVISIBLE
+        }
+        binding.returnButtonFeed.setOnClickListener {
+            binding.returnButtonFeed.isEnabled = false
+            binding.returnButtonFeed.visibility = INVISIBLE
+            activity?.finish()
+        }
+
         // Set up RecyclerView with FeedAdapter
         val recyclerView = binding.recyclerFeed
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -34,7 +53,6 @@ class HomeFragment : Fragment() {
             homeViewModel.likeReview(review)
 
         }
-
 
 
         }
@@ -66,6 +84,18 @@ class HomeFragment : Fragment() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.refreshFeed()
         }
+    }
+
+    fun newInstance(address : String?, fromMap: Boolean): HomeFragment {
+        val fragment = HomeFragment()
+
+        val bundle = Bundle().apply {
+            putString("address", address)
+            putBoolean("fromMap", fromMap)
+        }
+
+        fragment.arguments = bundle
+        return fragment
     }
 
     override fun onDestroyView() {
