@@ -101,8 +101,16 @@ public class FriendshipService {
     }
 
     public void acceptFriendship(String userId, String friendId) {
-        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
-                .orElseThrow(() -> new RuntimeException("Friend request not found"));
+        Friendship friendship;
+        Optional<Friendship> first = friendshipRepository.findByUserIdAndFriendId(friendId, userId);
+        Optional<Friendship> second = friendshipRepository.findByUserIdAndFriendId(userId, friendId);
+        if (first.isPresent()) {
+            friendship = first.get();
+        } else if (second.isPresent()) {
+            friendship = second.get();
+        } else {
+            throw new RuntimeException("Friendship not found");
+        }
 
         // Update status
         friendship.accept();
@@ -137,8 +145,16 @@ public class FriendshipService {
     }
 
     public void deleteFriendship(String userId, String friendId) {
-        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
-                .orElseThrow(() -> new RuntimeException("Friend request not found"));
+        Friendship friendship;
+        Optional<Friendship> first = friendshipRepository.findByUserIdAndFriendId(friendId, userId);
+        Optional<Friendship> second = friendshipRepository.findByUserIdAndFriendId(userId, friendId);
+        if (first.isPresent()) {
+            friendship = first.get();
+        } else if (second.isPresent()) {
+            friendship = second.get();
+        } else {
+            throw new RuntimeException("Friendship not found");
+        }
         friendshipRepository.delete(friendship);
     }
 }
