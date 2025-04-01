@@ -33,6 +33,14 @@ class HomeViewModel : ViewModel() {
     private val _refresh = MutableLiveData<Boolean>()
     val refresh: LiveData<Boolean> = _refresh
 
+    /* placeID */
+    private val _placeID = MutableLiveData<String>()
+    val placeID: LiveData<String> = _placeID
+
+    private val _fromMap = MutableLiveData<Boolean>()
+    val fromMap: LiveData<Boolean> = _fromMap
+    /* placeID */
+
     private val reviewRepository = ReviewRepository()
     private val friendRepository = FriendRepository()
     private val userRepository = UserRepository()
@@ -88,34 +96,67 @@ class HomeViewModel : ViewModel() {
         fetchReviews()
         _refresh.value = false
     }
+    /* placeID */
+    fun setPlaceID(place_ID : String) {
+        _placeID.value = place_ID
+        //Log.d("HomeViewModel", _placeID.value.toString())
+    }
+
+    fun setFromMap(from_Map : Boolean) {
+        if (from_Map) {
+            _fromMap.value = true
+        } else {
+            _fromMap.value = false
+        }
+        //Log.d("HomeViewModel", _fromMap.value.toString())
+    }
+    /* placeID */
 
     private fun fetchReviews() {
+        /* placeID */
+        if (_fromMap.value == true) {
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+            var allReviews = reviewRepository.getReviewsByRestaurantId(_placeID.value.toString())
 
 
-        friendRepository.getUserFriends(userId) { friends ->
-            viewModelScope.launch {
-                var allReviews = friends.orEmpty().mapNotNull { friend ->
-                    try {
-                        reviewRepository.getReviewsByUser(friend.id)
-                    } catch (e: Exception) {
-                        Log.e("HomeViewModel", "Failed to fetch reviews for ${friend.id}", e)
-                        null
-                    }
-                }.flatten()
+            allReviews?.forEach { review: Review ->
+                run {
+                    review.liked = savedReviewids.value?.contains(review.reviewID)
 
-                allReviews.forEach{ review: Review -> run {
-                        review.liked = savedReviewids.value?.contains(review.reviewID)
-
-                    }
                 }
-
-                _reviews.value = allReviews
-                Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
             }
-        }
+            _reviews.value = allReviews!!
+            Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
+        } else {
+            /* placeID */
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
+
+            friendRepository.getUserFriends(userId) { friends ->
+                viewModelScope.launch {
+                    var allReviews = friends.orEmpty().mapNotNull { friend ->
+                        try {
+                            reviewRepository.getReviewsByUser(friend.id)
+                        } catch (e: Exception) {
+                            Log.e("HomeViewModel", "Failed to fetch reviews for ${friend.id}", e)
+                            null
+                        }
+                    }.flatten()
+
+                    allReviews.forEach { review: Review ->
+                        run {
+                            review.liked = savedReviewids.value?.contains(review.reviewID)
+
+                        }
+                    }
+
+                    _reviews.value = allReviews
+                    Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
+                }
+            }
+            /* placeID */
+        }
+        /* placeID */
     }
 
     private fun loadUserData() {

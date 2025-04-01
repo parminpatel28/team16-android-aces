@@ -10,8 +10,11 @@ class MapActivity : AppCompatActivity() {
         setContentView(R.layout.activity_maps)
 
         val choosingLocation = intent.getBooleanExtra("fromReview", true)
-
-        val fragment = MapFragment().newInstance(choosingLocation)
+        /* review Persistence */
+        val caption = intent.getStringExtra("caption")
+        val rating = intent.getFloatExtra("rating", 0.0f)
+        /* review Persistence */
+        val fragment = MapFragment().newInstance(choosingLocation, /* review Persistence */ rating, caption /* review Persistence */)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.map, fragment)

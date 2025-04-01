@@ -1,6 +1,7 @@
 package com.example.munchies.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -30,15 +31,29 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        /* placeID */
         val calledByViewReviews = arguments?.getBoolean("fromMap")
-        val placeAdress = arguments?.getString("address")
+        val placeID = arguments?.getString("placeID")
 
-        if (calledByViewReviews == true) {
+        Log.d("HomeFragment", placeID.toString())
+        /* placeID */
+
+        // Check if the activity was called from the map
+        Log.d("HomeFragment", calledByViewReviews.toString())
+        if (calledByViewReviews != null && calledByViewReviews == true) {
             binding.returnButtonFeed.isEnabled = true
             binding.returnButtonFeed.visibility = VISIBLE
+            /* placeID */
+            homeViewModel.setFromMap(true)
+            homeViewModel.setPlaceID(placeID!!)
+            /* placeID */
         } else {
             binding.returnButtonFeed.isEnabled = false
             binding.returnButtonFeed.visibility = INVISIBLE
+
+            /* placeID */
+            homeViewModel.setFromMap(false)
+            /* placeID */
         }
         binding.returnButtonFeed.setOnClickListener {
             binding.returnButtonFeed.isEnabled = false
@@ -86,11 +101,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun newInstance(address : String?, fromMap: Boolean): HomeFragment {
+    fun newInstance(placeID : String?, fromMap: Boolean): HomeFragment {
         val fragment = HomeFragment()
 
         val bundle = Bundle().apply {
-            putString("address", address)
+            /* placeID */
+            putString("placeID", placeID)
+            /* placeID */
             putBoolean("fromMap", fromMap)
         }
 
