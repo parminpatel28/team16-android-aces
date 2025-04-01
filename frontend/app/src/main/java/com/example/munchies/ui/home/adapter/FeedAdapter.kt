@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -32,6 +33,7 @@ class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)
             mContext = context
 
             binding.feedContent.text = review.caption
+            binding.ratingBar.rating = review.rating.toFloat()
             binding.userName.text = review.user.username
 
             binding.root.setOnClickListener {
@@ -42,23 +44,17 @@ class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)
                 }
                 context.startActivity(intent)
             }
-            if(!review.photos.isNullOrEmpty()){
+            if (!review.photos.isNullOrEmpty()) {
                 val url = review.photos[0]
-                if (!url.isNullOrEmpty()) {
-                    Log.d("FeedAdapter", "Loading image from URL: ${url}")
-                    Glide.with(binding.feedImage.context)
-                        .load(url)
-                        .into(binding.feedImage)
-                }
-                else{
-                    binding.feedImage.setImageResource(R.drawable.sample_image)
-
-                }
-
-            }
-            else{
-                binding.feedImage.setImageResource(R.drawable.sample_image)
-
+                Log.d("FeedAdapter", "Loading image from URL: $url")
+                binding.feedImage.visibility = View.VISIBLE
+                Glide.with(binding.feedImage.context)
+                    .load(url)
+                    .placeholder(R.drawable.sample_image) // show while loading
+                    .error(R.drawable.sample_image)       // if URL fails
+                    .into(binding.feedImage)
+            } else {
+                binding.feedImage.visibility = View.GONE
             }
 
         }
