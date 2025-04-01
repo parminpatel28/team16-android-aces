@@ -132,6 +132,17 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 
+            <Button
+                android:id="@+id/btnChooseLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/orange"
+                android:padding="12dp"
+                android:text="Choose Location"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/photoUploadLayout"
                 android:layout_width="match_parent"
@@ -176,21 +187,21 @@
 
 
             <!-- TODO: Select Location -->
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/selectLocationLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:hint="Select Location">-->
+            <!--            <com.google.android.material.textfield.TextInputLayout-->
+            <!--                android:id="@+id/selectLocationLayout"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:hint="Select Location">-->
 
-<!--                <AutoCompleteTextView-->
-<!--                    android:id="@+id/selectLocationDropdown"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingVertical="12dp"-->
-<!--                    android:minHeight="48dp"-->
-<!--                    android:inputType="text"/>-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
+            <!--                <AutoCompleteTextView-->
+            <!--                    android:id="@+id/selectLocationDropdown"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:paddingVertical="12dp"-->
+            <!--                    android:minHeight="48dp"-->
+            <!--                    android:inputType="text"/>-->
+            <!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <!-- Submit Button -->
             <Button

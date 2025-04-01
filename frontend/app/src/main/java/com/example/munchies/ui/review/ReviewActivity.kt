@@ -21,6 +21,7 @@ import com.example.munchies.model.Review
 import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
+import com.example.munchies.ui.map.MapActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -155,6 +156,19 @@ class ReviewActivity : AppCompatActivity() {
 
         binding.btnChooseFile.setOnClickListener {
             pickMedia.launch("image/*")
+        }
+
+        binding.btnChooseLocation.setOnClickListener {
+            Log.d("ReviewActivity", " Choose Location Button Clicked")
+            val context = applicationContext
+//            sharedUIViewModel._fromReview.value = true
+            //Log.d("ReviewActivity", sharedUIViewModel._fromReview.value.toString())
+            val intent = Intent(context, MapActivity::class.java)
+
+
+            intent.putExtra("fromReview", true)
+
+            startActivity(intent)
         }
 
 
