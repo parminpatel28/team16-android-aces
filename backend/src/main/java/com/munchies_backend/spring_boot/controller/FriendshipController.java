@@ -38,7 +38,7 @@ public class FriendshipController {
         return ResponseEntity.noContent().build();
     }
 
-    // Reject a friend request
+    // Reject a friend request (unused)
     @PostMapping("/{senderId}/{receiverId}/reject")
     public ResponseEntity<Friendship> rejectFriendship(@PathVariable String senderId, @PathVariable String receiverId) {
         friendshipService.rejectFriendship(senderId, receiverId);
@@ -59,7 +59,7 @@ public class FriendshipController {
         return ResponseEntity.ok(friendships);
     }
 
-    // Get all of a user's incoming friend requests
+    // Get all of a user's outgoing friend requests
     @GetMapping("/{userId}/outgoing")
     public ResponseEntity<List<User>> getOutgoingRequests(@PathVariable String userId) {
         List<User> friendships = friendshipService.getOutgoingRequests(userId);
