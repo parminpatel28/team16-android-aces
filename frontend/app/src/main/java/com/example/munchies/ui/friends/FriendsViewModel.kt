@@ -37,12 +37,6 @@ class FriendsViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     var error: LiveData<String?> = _error
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "These are your friends! \nYou currently have none :("
-    }
-    
-    val text: LiveData<String> = _text
-
     private val _friendsList = MutableLiveData<List<User>?>()
     val friendsList: MutableLiveData<List<User>?> = _friendsList
 
@@ -203,23 +197,23 @@ class FriendsViewModel : ViewModel() {
     }
 
     fun isFriend(friendId: String): Boolean {
-        Log.d("FriendsViewModel", "Checking if $friendId is a friend of $userId")
+//        Log.d("FriendsViewModel", "Checking if $friendId is a friend of $userId")
         val res = UserManager.friends?.any { it.id == friendId } == true
-        Log.d("FriendsViewModel", "Result: $res")
+//        Log.d("FriendsViewModel", "Result: $res")
         return res
     }
 
     fun isIncomingFriendRequest(friendId: String): Boolean {
-        Log.d("FriendsViewModel", "Checking if $friendId has a pending friend request from $userId")
+//        Log.d("FriendsViewModel", "Checking if $friendId has a pending friend request from $userId")
         val res = UserManager.incomingFriendRequests?.any { it.id == friendId } == true
-        Log.d("FriendsViewModel", "Result: $res")
+//        Log.d("FriendsViewModel", "Result: $res")
         return res
     }
 
     fun isOutgoingFriendRequest(friendId: String): Boolean {
-        Log.d("FriendsViewModel", "Checking if $userId has a pending friend request to $friendId")
+//        Log.d("FriendsViewModel", "Checking if $userId has a pending friend request to $friendId")
         val res = UserManager.outgoingFriendRequests?.any { it.id == friendId } == true
-        Log.d("FriendsViewModel", "Result: $res")
+//        Log.d("FriendsViewModel", "Result: $res")
         return res
     }
 

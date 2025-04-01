@@ -15,6 +15,7 @@ import com.example.munchies.R
 import com.example.munchies.databinding.FragmentFriendsBinding
 import com.example.munchies.model.User
 import com.example.munchies.ui.home.adapter.FriendAdapter
+import com.google.android.material.tabs.TabLayout
 
 class FriendsFragment : Fragment() {
     private var _binding: FragmentFriendsBinding? = null
@@ -23,6 +24,8 @@ class FriendsFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var friendAdapter: FriendAdapter
+
+    private var currentTab = 0
 
 
     override fun onCreateView(
@@ -49,21 +52,57 @@ class FriendsFragment : Fragment() {
         }
 
         val btnSearchFriends = binding.btnAddFriends
-        val btnFriendRequests = binding.btnFriendRequests
 
-        // Observe the LiveData from the ViewModel
+        val tabLayout = binding.friendsTabLayout
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                currentTab = tab?.position ?: 0
+                when (currentTab) {
+                    0 -> {
+                        Log.d("FriendsFragment", "Friends tab selected, updating FriendAdapter")
+                        friendsViewModel.friendsList.value?.let { friendAdapter.updateList(it) }
+                    }
+                    1 -> {
+                        Log.d("FriendsFragment", "Requests tab selected, updating FriendAdapter")
+                        friendsViewModel.incomingRequestsList.value?.let { friendAdapter.updateList(it) }
+                    }
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
+        // Initialize adapter with friends list (default tab is Friends)
+
+        friendsViewModel.friendsList.value?.let {
+            Log.d("FriendsFragment", "Initializing adapter with friends list")
+            friendAdapter.updateList(it)
+        }
+
+        // Observe friends list
         friendsViewModel.friendsList.observe(viewLifecycleOwner) { friendList ->
-            Log.d("FriendsFragment", "Friend list updated: $friendList")
-            if (friendList != null) {
+            // Update only if the Friends tab is active
+            if (currentTab == 0 && friendList != null) {
+                Log.d("FriendsFragment", "Current Tab: $currentTab, Friend list updated: $friendList")
                 friendAdapter.updateList(friendList)
-            }  // Update the list in the RecyclerView
+                binding.noFriendRequests.visibility = View.GONE
+                binding.noFriends.visibility = if (friendList.isEmpty()) View.VISIBLE else View.GONE
+            }
+        }
+
+        // Observe incoming friend requests
+        friendsViewModel.incomingRequestsList.observe(viewLifecycleOwner) { friendList ->
+            // Update only if the Requests tab is active
+            if (currentTab == 1 && friendList != null) {
+                Log.d("FriendsFragment", "Current Tab: $currentTab, Incoming requests updating: $friendList")
+                friendAdapter.updateList(friendList)
+                binding.noFriendRequests.visibility = if (friendList.isEmpty()) View.VISIBLE else View.GONE
+                binding.noFriends.visibility = View.GONE
+            }
         }
 
         btnSearchFriends.setOnClickListener {
             startActivity(Intent(context, FriendSearchActivity::class.java))
-        }
-        btnFriendRequests.setOnClickListener {
-            startActivity(Intent(context, FriendRequestsActivity::class.java))
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
