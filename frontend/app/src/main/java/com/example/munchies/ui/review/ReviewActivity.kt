@@ -138,6 +138,9 @@ class ReviewActivity : AppCompatActivity() {
         val restaurantId = intent.getStringExtra("RESTAURANT_ID")
         val restaurantAddress = intent.getStringExtra("RESTAURANT_ADDRESS")
 
+        if (restaurantId != null) {
+            Log.d("ReviewActivity", restaurantId + "Restaurant ID")
+        }
         // Pre-fill restaurant if provided
         if (restaurantName != null) {
             binding.tagRestaurantsDropdown.setText(restaurantName)
@@ -185,6 +188,10 @@ class ReviewActivity : AppCompatActivity() {
 
                 if (overallRating < 0.5) {
                     Toast.makeText(this, "Rating must be >= 0.5 stars", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if(restaurantName.isNullOrEmpty() || restaurantId.isNullOrEmpty() || restaurantAddress.isNullOrEmpty()) {
+                    Toast.makeText(this, "Location must be selected", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
