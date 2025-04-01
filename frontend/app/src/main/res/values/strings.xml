@@ -31,6 +31,7 @@
     <string name="no_likes">0</string>
     <string name="reviewed_by">"Reviewed by: "</string>
     <string name="reviewed_on">"On: "</string>
+    <string name="empty_feed">"Nothing from your friends just yet."</string>
 
     <!--Friends-->
     <string name="add_friend">Add Friend</string>
