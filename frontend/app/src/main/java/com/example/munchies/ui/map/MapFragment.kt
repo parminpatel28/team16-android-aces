@@ -64,6 +64,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val calledByAddReview = arguments?.getBoolean("fromReview")
 
+        // parmin
+        /* review Persistence */
+        val rating = arguments?.getFloat("rating", 0.0f)
+        val caption = arguments?.getString("caption")
+        /* review Persistence */
+
         // Initialize Places API
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), "AIzaSyDk5Au-odk_HsBK8dRT_6GvFWnwS8EeQjA")
@@ -90,12 +96,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     putExtra("RESTAURANT_NAME", place.name)
                     putExtra("RESTAURANT_ID", place.id)
                     putExtra("RESTAURANT_ADDRESS", place.address)
+
+                    // parmin
+                    /* review Persistence */
+                    putExtra("rating", rating)
+                    putExtra("caption", caption)
+                    /* review Persistence */
                 }
                 startActivity(intent)
             },
             onViewReviewsClick = { place ->
                 val intent = Intent(requireContext(), HomeActivity::class.java)
-                intent.putExtra("Address", place.address)
+                intent.putExtra("placeID", place.id)
                 intent.putExtra("fromMap", true)
                 Log.d("OnViewReviewsClick", place.address)
                 startActivity(intent)
@@ -195,11 +207,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    fun newInstance(fromReview : Boolean): MapFragment {
+    // parmin
+    fun newInstance(fromReview : Boolean, /* review Persistence */ rating : Float, caption : String? /* review Persistence */): MapFragment {
         val fragment = MapFragment()
 
         val bundle = Bundle().apply {
             putBoolean("fromReview", fromReview)
+            /* review Persistence */
+            putString("caption", caption)
+            putFloat("rating", rating)
+            /* review Persistence */
         }
 
         fragment.arguments = bundle
