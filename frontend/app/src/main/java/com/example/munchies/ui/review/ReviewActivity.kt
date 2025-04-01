@@ -22,6 +22,7 @@ import com.example.munchies.model.UserManager
 import com.example.munchies.repository.FriendRepository
 import com.example.munchies.repository.ReviewRepository
 import com.example.munchies.ui.map.MapActivity
+import com.google.android.libraries.places.api.model.kotlin.place
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Instant
@@ -208,7 +209,8 @@ class ReviewActivity : AppCompatActivity() {
                     photos = emptyList(),
                     date = Instant.now().toString(),
                     rating = overallRating,
-                    likes = 0
+                    likes = 0,
+                    restaurantId = restaurantId
                 )
 
                 reviewViewModel.submitReview(review) { reviewResponse ->
