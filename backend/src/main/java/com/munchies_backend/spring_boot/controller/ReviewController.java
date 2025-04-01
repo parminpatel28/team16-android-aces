@@ -74,6 +74,12 @@ public class ReviewController {
         return ResponseEntity.ok().build();
 
     }
+
+    @GetMapping ("restaurantId/{restaurantId}")
+    public ResponseEntity<List<Review>> getReviewsByRestaurantId(@PathVariable String restaurantId) {
+        List<Review> reviews = reviewService.findReviewsByRestaurantId(restaurantId);
+        return ResponseEntity.ok(reviews);
+    }
     // Get a review by ID
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Integer id) {

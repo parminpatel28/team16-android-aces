@@ -43,4 +43,9 @@ public class ReviewService {
     public Optional<Review> findReviewById(Integer reviewId) {
         return reviewRepository.findById(reviewId);
     }
+
+    public List<Review> findReviewsByRestaurantId(String restaurantId) {
+
+        return reviewRepository.findReviewsByRestaurantId(restaurantId);
+    }
 }
