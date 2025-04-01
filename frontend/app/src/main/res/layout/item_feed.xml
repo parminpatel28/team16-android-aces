@@ -57,6 +57,7 @@
             android:layout_marginTop="8dp">
 
             <!-- Like Button (Bottom Left) -->
+            <!--
             <ImageButton
                 android:id="@+id/like_button"
                 android:layout_width="48dp"
@@ -69,6 +70,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
+             -->
 
             <!-- Comment Button (Bottom Left) -->
             <!--
