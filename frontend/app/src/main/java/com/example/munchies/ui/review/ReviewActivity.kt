@@ -139,8 +139,6 @@ class ReviewActivity : AppCompatActivity() {
         val restaurantId = intent.getStringExtra("RESTAURANT_ID")
         val restaurantAddress = intent.getStringExtra("RESTAURANT_ADDRESS")
 
-        // parmin
-        /* review Persistence */
         // Maintain the caption and rating after coming from the map
         val rating = intent.getFloatExtra("rating", 0.0f)
         binding.overallRatingBar.rating = rating
@@ -149,7 +147,6 @@ class ReviewActivity : AppCompatActivity() {
         if (!caption.isNullOrEmpty()) {
             binding.reviewText.setText(caption)
         }
-        /* review Persistence */
 
         if (restaurantId != null) {
             Log.d("ReviewActivity", restaurantId + "Restaurant ID")
@@ -181,13 +178,11 @@ class ReviewActivity : AppCompatActivity() {
 
             intent.putExtra("fromReview", true)
 
-            // parmin
-            /* review Persistence */
             intent.putExtra("caption", binding.reviewText.text.toString().trim())
-            intent.putExtra("rating", binding.overallRatingBar.rating.toDouble())
-            /* review Persistence */
+            intent.putExtra("rating", binding.overallRatingBar.rating)
 
             startActivity(intent)
+            finish()
         }
 
 
