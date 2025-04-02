@@ -134,26 +134,35 @@
                     app:layout_constraintTop_toBottomOf="@id/textReviewSectionTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+                <LinearLayout
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                <Button
-                    android:id="@+id/addFriendButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
-                    android:text="@string/add_friend"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-                <Button
-                    android:id="@+id/removeFriendButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
-                    android:text="@string/remove_friend"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    <Button
+                        android:id="@+id/addFriendButton"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/add_friend"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <Button
+                        android:id="@+id/removeFriendButton"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/remove_friend"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:visibility="gone"
+                        app:strokeColor="@color/orange"
+                        app:strokeWidth="1dp" />
+                </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

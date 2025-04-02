@@ -40,9 +40,13 @@
     <string name="add_friends">Add Friends</string>
     <string name="remove_friend">Remove Friend</string>
     <string name="cancel_request">Cancel Request</string>
-    <string name="reject_request">Reject Request</string>
-    <string name="accept_request">Accept Request</string>
+    <string name="reject_request">Reject</string>
+    <string name="accept_request">Accept</string>
     <string name="view_friend_requests">View Friend Requests</string>
-    <string name="you_have_no_friend_requests">You have no friend requests</string>
     <string name="title_activity_maps">Choose a location</string>
+    <string name="you_have_no_friend_requests">You have no incoming friend requests</string>
+    <string name="requests">Requests</string>
+    <string name="friends">My Friends</string>
+    <string name="options">Options</string>
+    <string name="you_have_no_friends">You have no friends yet. Try adding some!</string>
 </resources>

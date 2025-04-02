@@ -61,7 +61,7 @@ class FriendDetailActivity() : AppCompatActivity() {
         if (friendsViewModel.isFriend(id)) {
             Log.d("FriendDetailActivity", "Friend is already a friend")
             binding.addFriendButton.visibility = View.GONE
-            binding.removeFriendButton.visibility = View.VISIBLE
+            binding.removeFriendButton.visibility = View.GONE
             binding.removeFriendButton.setOnClickListener {
                 friendsViewModel.deleteFriend(id)
             }

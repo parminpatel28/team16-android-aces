@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.PopupMenu
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +17,7 @@ import com.example.munchies.databinding.ItemFriendBinding
 import com.example.munchies.model.User
 import com.example.munchies.ui.friends.FriendDetailActivity
 import com.example.munchies.ui.friends.FriendsViewModel
+
 
 class FriendAdapter(private var friendList: MutableList<User>,
                     private val viewModel: FriendsViewModel,
@@ -40,6 +42,7 @@ lifecycleOwner: LifecycleOwner
     }
 
     fun updateList(newList: List<User>?) {
+        Log.d("FriendAdapter", "Updating friend list: $newList")
         if (newList != null) {
             friendList = newList.toMutableList()
             filteredFriendList = newList
@@ -47,31 +50,52 @@ lifecycleOwner: LifecycleOwner
         }
     }
 
+
+
     inner class FriendViewHolder(private val binding: ItemFriendBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private fun showRemoveFriendConfirmation(friend: User) {
+            val context = binding.root.context
+            androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle("Confirm Removal")
+                .setMessage("Are you sure you want to remove ${friend.username} from your friends?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    viewModel.deleteFriend(friend.id)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+
         fun bind(friend: User) {
             val context = binding.root.context
             binding.friendProfilePicture.contentDescription = friend.profilePicture
             binding.friendname.text = friend.name
             binding.friendUserName.text = friend.username
             if (viewModel.isFriend(friend.id)) {
-                Log.d("FriendAdapter", "Friend is already a friend")
+                Log.d("FriendAdapter", "${friend.username} is already a friend")
                 binding.addFriendButton.visibility = View.GONE
-                binding.removeFriendButton.visibility = View.VISIBLE
-                binding.removeFriendButton.setOnClickListener {
-                    viewModel.deleteFriend(friend.id)
-                }
+                binding.removeFriendButton.visibility = View.GONE
+                binding.optionsButton.visibility = View.VISIBLE
+
             } else if (viewModel.isOutgoingFriendRequest(friend.id)) {
-                Log.d("FriendAdapter", "Friend has a pending friend request")
+                Log.d("FriendAdapter", "${friend.username} has a pending friend request")
                 binding.addFriendButton.visibility = View.GONE
                 binding.removeFriendButton.visibility = View.VISIBLE
+                binding.optionsButton.visibility = View.GONE
                 binding.removeFriendButton.text = context.getString(R.string.cancel_request)
                 binding.removeFriendButton.setOnClickListener {
                     viewModel.deleteFriend(friend.id)
                 }
             } else if (viewModel.isIncomingFriendRequest(friend.id)) {
-                Log.d("FriendAdapter", "Friend has a pending friend request")
+                Log.d("FriendAdapter", "${friend.username} has a pending friend request")
                 binding.addFriendButton.visibility = View.VISIBLE
                 binding.removeFriendButton.visibility = View.VISIBLE
+                binding.optionsButton.visibility = View.GONE
                 binding.addFriendButton.text = context.getString(R.string.accept_request)
                 binding.addFriendButton.setOnClickListener {
                     viewModel.acceptFriendRequest(friend.id)
@@ -81,16 +105,17 @@ lifecycleOwner: LifecycleOwner
                     viewModel.deleteFriend(friend.id)
                 }
             } else {
-                Log.d("FriendAdapter", "Friend is not a friend")
+                Log.d("FriendAdapter", "${friend.username} is not a friend")
                 binding.addFriendButton.visibility = View.VISIBLE
+                binding.addFriendButton.text = context.getString(R.string.add_friend)
                 binding.removeFriendButton.visibility = View.GONE
+                binding.optionsButton.visibility = View.GONE
                 binding.addFriendButton.setOnClickListener {
                     viewModel.addFriend(friend.id)
                 }
             }
 
             binding.root.setOnClickListener {
-                val context = binding.root.context
                 val intent =
                     Intent(context, FriendDetailActivity()::class.java).apply {
                         putExtra("friend_id", friend.id)
@@ -101,6 +126,21 @@ lifecycleOwner: LifecycleOwner
                         putExtra("friend_pfp", friend.profilePicture)
                     }
                 context.startActivity(intent)
+            }
+
+            binding.optionsButton.setOnClickListener{ v ->
+                val popup: PopupMenu = PopupMenu(v.context, v)
+                popup.menuInflater.inflate(R.menu.item_friend_menu, popup.menu)
+                popup.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.actionRemoveFriend -> {
+                            showRemoveFriendConfirmation(friend)
+                            true
+                        }
+                        else -> return@setOnMenuItemClickListener false
+                    }
+                }
+                popup.show()
             }
         }
     }
@@ -137,9 +177,11 @@ lifecycleOwner: LifecycleOwner
             return oldItem == newItem
         }
     }
+
     init {
-//        // Observe changes from the view model and update the adapter when the friend list changes.
+        // Observe changes from the view model and update the adapter when the friend list changes.
 //        viewModel.friendsList.observe(lifecycleOwner) { newList ->
+//            Log.d("FriendAdapter", "Friends list changed: $newList")
 //            updateList(newList)
 //        }
 //        viewModel.userList.observe(lifecycleOwner) { newList ->

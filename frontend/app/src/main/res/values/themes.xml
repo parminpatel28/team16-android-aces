@@ -12,6 +12,9 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+<!--        <item name="android:fontFamily">@font/poppins</item>-->
+<!--        <item name="fontFamily">@font/poppins</item>-->
     </style>
 
     <!-- Theme for Login and Register Activities -->
