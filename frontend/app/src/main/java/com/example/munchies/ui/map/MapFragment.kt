@@ -64,11 +64,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val calledByAddReview = arguments?.getBoolean("fromReview")
 
-        // parmin
-        /* review Persistence */
         val rating = arguments?.getFloat("rating", 0.0f)
         val caption = arguments?.getString("caption")
-        /* review Persistence */
 
         // Initialize Places API
         if (!Places.isInitialized()) {
@@ -206,7 +203,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    // parmin
     fun newInstance(fromReview : Boolean, /* review Persistence */ rating : Float, caption : String? /* review Persistence */): MapFragment {
         val fragment = MapFragment()
 
