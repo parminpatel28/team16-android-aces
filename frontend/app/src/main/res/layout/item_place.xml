@@ -21,14 +21,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <RatingBar
-            android:id="@+id/placeRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:textSize="8sp"
-            android:textStyle="bold" />
-
         <TextView
             android:id="@+id/placeAddressTextView"
             android:layout_width="match_parent"

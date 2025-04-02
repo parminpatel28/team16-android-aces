@@ -8,6 +8,7 @@ class PlaceReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_reviews)
+        supportActionBar?.hide()
 
         val placeID = intent.getStringExtra("placeID")
         val fragment = PlaceReviewsFragment.newInstance(placeID!!)

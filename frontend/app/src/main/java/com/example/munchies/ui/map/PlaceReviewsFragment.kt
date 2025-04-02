@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import com.google.android.material.appbar.MaterialToolbar
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.munchies.R
 import com.example.munchies.databinding.FragmentPlaceReviewsBinding
 import com.example.munchies.model.Review
 import com.example.munchies.repository.ReviewRepository
 import com.example.munchies.ui.review.ReviewAdapter
 import com.example.munchies.ui.review.ReviewDetailsActivity
+import com.google.android.libraries.places.api.model.kotlin.place
 
 class PlaceReviewsFragment : Fragment() {
 
@@ -39,6 +42,12 @@ class PlaceReviewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = binding.topAppBar
+        toolbar.title = arguments?.getString("placeName") ?: "Restaurant Reviews"
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
 
         adapter = ReviewAdapter { review: Review ->
             val intent = Intent(requireContext(), ReviewDetailsActivity::class.java)
