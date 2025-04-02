@@ -19,4 +19,16 @@ class HomeActivity : AppCompatActivity() {
                 .commit()
         }
     }
+
+    companion object {
+        fun newInstance(placeID: String?, fromMap: Boolean): HomeFragment {
+            val fragment = HomeFragment()
+            val args = Bundle().apply {
+                putString("placeID", placeID)
+                putBoolean("fromMap", fromMap)
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
 }

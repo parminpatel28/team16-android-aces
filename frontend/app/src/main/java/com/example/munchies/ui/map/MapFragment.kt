@@ -102,7 +102,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 activity?.finish()
             },
             onViewReviewsClick = { place ->
-                val intent = Intent(requireContext(), HomeActivity::class.java)
+                val intent = Intent(requireContext(), PlaceReviewsActivity::class.java)
                 intent.putExtra("placeID", place.id)
                 intent.putExtra("fromMap", true)
                 Log.d("OnViewReviewsClick", place.address)
