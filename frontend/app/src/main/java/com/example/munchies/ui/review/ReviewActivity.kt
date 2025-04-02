@@ -149,7 +149,7 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         if (restaurantId != null) {
-            Log.d("ReviewActivity", restaurantId + "Restaurant ID")
+            Log.d("ReviewActivity", restaurantName + "Restaurant ID")
         }
         // Pre-fill restaurant if provided
         if (restaurantName != null) {
@@ -220,7 +220,8 @@ class ReviewActivity : AppCompatActivity() {
                     date = Instant.now().toString(),
                     rating = overallRating,
                     likes = 0,
-                    restaurantId = restaurantId
+                    restaurantId = restaurantId,
+                    restaurantName = restaurantName
                 )
 
                 reviewViewModel.submitReview(review) { reviewResponse ->

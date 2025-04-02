@@ -43,6 +43,7 @@ class ReviewAdapter(private val onItemClick: (Review) -> Unit) :
             binding.reviewText.text = review.caption
             binding.ratingBar.rating = review.rating.toFloat()
             binding.dateText.text = formatDate(review.date)
+            binding.restaurantName.text = review.restaurantName ?: "Unknown Restaurant"
         }
     }
 

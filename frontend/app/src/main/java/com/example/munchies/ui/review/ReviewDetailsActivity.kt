@@ -70,12 +70,13 @@ class ReviewDetailsActivity : AppCompatActivity() {
                 }
             }
 
-            binding.restaurantName.text = "Restaurant" // TODO: get location
+
+              // TODO: get location
             binding.reviewerName.text = it.user.name
             binding.reviewText.text = it.caption
             binding.overallRatingBar.rating = it.rating.toFloat()
             binding.reviewDate.text = formatDate(it.date)
-
+            binding.restaurantName.text = it.restaurantName ?: "Unknown Restaurant"
 
 
             val container = binding.photosContainer
