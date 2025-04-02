@@ -6,7 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:gravity="center"
     tools:context=".ui.friends.FriendSearchActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -16,6 +22,7 @@
         android:title="@string/add_friends"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/arrow_left" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <SearchView
         android:id="@+id/searchView"
@@ -23,10 +30,19 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:queryHint="Search For Friends" />
+    <TextView
+        android:id="@+id/noResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/no_results_found"
+        android:visibility="visible" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

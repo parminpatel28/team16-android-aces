@@ -9,6 +9,17 @@
     tools:context=".ui.friends.FriendsFragment"
     android:background="@color/white">
 
+    <Button
+        android:id="@+id/btnAddFriends"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/orange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_plus_white"
+        android:text="@string/add_friends"
+        />
+
 <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,12 +32,12 @@
             android:layout_height="wrap_content"
             app:tabBackground="@drawable/selected_tab_background"
             app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
             app:tabPaddingEnd="24dp"
             app:tabPaddingStart="24dp"
             app:tabPaddingTop="0dp"
             app:tabPaddingBottom="0dp"
             app:tabTextColor="@color/orange"
+            app:tabSelectedTextColor="@color/white"
             app:tabInlineLabel="true">
 
             <com.google.android.material.tabs.TabItem
@@ -41,13 +52,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/requests"/>
         </com.google.android.material.tabs.TabLayout>
-
-    <Button
-        android:id="@+id/btnAddFriends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:text="@string/add_friends" />
     </LinearLayout>
 
     <LinearLayout

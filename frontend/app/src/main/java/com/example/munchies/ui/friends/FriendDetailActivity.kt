@@ -99,10 +99,16 @@ class FriendDetailActivity() : AppCompatActivity() {
                 .into(binding.imageProfilePicture)
         }
 
-        fetchFriendReviews(id)
         setupRecyclerView()
+        fetchFriendReviews(id)
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            fetchFriendReviews(id)
+        }
+
 
     }
+
 
     private fun setupRecyclerView() {
         adapter = ReviewAdapter { selectedReview ->
@@ -132,6 +138,7 @@ class FriendDetailActivity() : AppCompatActivity() {
                 binding.textNoReviews.visibility = View.VISIBLE
             }
         }
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
 //    private fun setupObservers() {
