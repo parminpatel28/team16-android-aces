@@ -35,6 +35,7 @@ class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)
             binding.feedContent.text = review.caption
             binding.ratingBar.rating = review.rating.toFloat()
             binding.userName.text = review.user.username
+            binding.restaurantName.text = review.restaurantName ?: "Unknown Restaurant"
 
             binding.root.setOnClickListener {
                 val context = binding.root.context

@@ -38,6 +38,9 @@ public class Review {
     @Column(name = "restaurant_id", length = 255)
     private String restaurantId;
 
+    @Column(name = "restaurant_name", length = 255)
+    private String restaurantName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "location_id")
@@ -127,6 +130,15 @@ public class Review {
 
     public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    @JsonProperty("restaurantName")
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
     @Override

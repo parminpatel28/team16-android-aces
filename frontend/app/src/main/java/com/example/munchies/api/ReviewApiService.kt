@@ -24,7 +24,9 @@ interface ReviewApiService {
     fun getPreSignedUrl(@Query ("fileName") fileName: String, @Query ("reviewId") reviewId: String): Call<Map<String, String>>
 
     @GET("/api/reviews/restaurantId/{restaurantId}")
-    fun getReviewsByRestaurantId(@Path("restaurantId") restaurantId: String): Response<List<Review>>
+    suspend fun getReviewsByRestaurantId(
+        @Path("restaurantId") restaurantId: String
+    ): Response<List<Review>>
 
     @PUT("api/reviews/{reviewId}/photos")
     fun updateReviewPhotos(

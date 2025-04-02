@@ -9,14 +9,24 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_home) // Activity context
-        val placeAddress = intent.getStringExtra("address")
-        val fromMap = intent.getBooleanExtra("fromMap", false)
 
-        val fragment = HomeFragment().newInstance(placeAddress, fromMap)
+        val fragment = HomeFragment()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.home, fragment)
                 .commit()
+        }
+    }
+
+    companion object {
+        fun newInstance(placeID: String?, fromMap: Boolean): HomeFragment {
+            val fragment = HomeFragment()
+            val args = Bundle().apply {
+                putString("placeID", placeID)
+                putBoolean("fromMap", fromMap)
+            }
+            fragment.arguments = args
+            return fragment
         }
     }
 }
