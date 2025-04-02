@@ -66,6 +66,12 @@ class PlaceReviewsFragment : Fragment() {
 
         viewModel.reviews.observe(viewLifecycleOwner) { reviews ->
             adapter.submitList(reviews)
+
+            if (reviews.isNullOrEmpty()) {
+                binding.emptyStateText.visibility = View.VISIBLE
+            } else {
+                binding.emptyStateText.visibility = View.GONE
+            }
         }
 
         placeID?.let {
