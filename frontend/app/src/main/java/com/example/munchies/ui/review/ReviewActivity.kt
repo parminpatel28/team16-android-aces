@@ -184,10 +184,11 @@ class ReviewActivity : AppCompatActivity() {
             // parmin
             /* review Persistence */
             intent.putExtra("caption", binding.reviewText.text.toString().trim())
-            intent.putExtra("rating", binding.overallRatingBar.rating.toDouble())
+            intent.putExtra("rating", binding.overallRatingBar.rating)
             /* review Persistence */
 
             startActivity(intent)
+            finish()
         }
 
 

@@ -97,13 +97,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     putExtra("RESTAURANT_ID", place.id)
                     putExtra("RESTAURANT_ADDRESS", place.address)
 
-                    // parmin
-                    /* review Persistence */
                     putExtra("rating", rating)
                     putExtra("caption", caption)
-                    /* review Persistence */
+
                 }
                 startActivity(intent)
+                activity?.finish()
             },
             onViewReviewsClick = { place ->
                 val intent = Intent(requireContext(), HomeActivity::class.java)
