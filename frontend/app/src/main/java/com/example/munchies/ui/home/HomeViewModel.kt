@@ -33,15 +33,6 @@ class HomeViewModel : ViewModel() {
     private val _refresh = MutableLiveData<Boolean>()
     val refresh: LiveData<Boolean> = _refresh
 
-    // parmin
-    /* placeID */
-    private val _placeID = MutableLiveData<String>()
-    val placeID: LiveData<String> = _placeID
-
-    private val _fromMap = MutableLiveData<Boolean>()
-    val fromMap: LiveData<Boolean> = _fromMap
-    /* placeID */
-
     private val reviewRepository = ReviewRepository()
     private val friendRepository = FriendRepository()
     private val userRepository = UserRepository()
@@ -98,68 +89,29 @@ class HomeViewModel : ViewModel() {
         _refresh.value = false
     }
 
-    // parmin
-    /* placeID */
-    fun setPlaceID(place_ID : String) {
-        _placeID.value = place_ID
-    }
 
-    fun setFromMap(from_Map : Boolean) {
-        if (from_Map) {
-            _fromMap.value = true
-        } else {
-            _fromMap.value = false
-        }
-    }
-    /* placeID */
-
-    // parmin
     private fun fetchReviews() {
-        /* placeID */
-        // If called from the map with View Reviews, display custom feed based on placeID
-        if (_fromMap.value == true) {
-            var allReviews = reviewRepository.getReviewsByRestaurantId(_placeID.value.toString())
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-
-            allReviews?.forEach { review: Review ->
-                run {
-                    review.liked = savedReviewids.value?.contains(review.reviewID)
-
-                }
-            }
-            _reviews.value = allReviews!!
-            Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
-        }
-        // If called normally display feed normally
-        else {
-            /* placeID */
-            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-
-            friendRepository.getUserFriends(userId) { friends ->
-                viewModelScope.launch {
-                    var allReviews = friends.orEmpty().mapNotNull { friend ->
-                        try {
-                            reviewRepository.getReviewsByUser(friend.id)
-                        } catch (e: Exception) {
-                            Log.e("HomeViewModel", "Failed to fetch reviews for ${friend.id}", e)
-                            null
-                        }
-                    }.flatten()
-
-                    allReviews.forEach { review: Review ->
-                        run {
-                            review.liked = savedReviewids.value?.contains(review.reviewID)
-
-                        }
+        friendRepository.getUserFriends(userId) { friends ->
+            viewModelScope.launch {
+                val allReviews = friends.orEmpty().mapNotNull { friend ->
+                    try {
+                        reviewRepository.getReviewsByUser(friend.id)
+                    } catch (e: Exception) {
+                        Log.e("HomeViewModel", "Failed to fetch reviews for ${friend.id}", e)
+                        null
                     }
+                }.flatten()
 
-                    _reviews.value = allReviews
-                    Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
+                allReviews.forEach { review ->
+                    review.liked = savedReviewids.value?.contains(review.reviewID)
                 }
+
+                _reviews.value = allReviews
+                Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews")
             }
-            /* placeID */
         }
-        /* placeID */
     }
 
     private fun loadUserData() {

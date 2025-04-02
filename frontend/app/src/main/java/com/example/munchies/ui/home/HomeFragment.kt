@@ -32,31 +32,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // parmin
-        /* placeID */
-        val calledByViewReviews = arguments?.getBoolean("fromMap")
-        val placeID = arguments?.getString("placeID")
+        binding.returnButtonFeed.isEnabled = false
+        binding.returnButtonFeed.visibility = INVISIBLE
 
-        Log.d("HomeFragment", placeID.toString())
-        /* placeID */
-
-        // parmin
-        if (calledByViewReviews == true) {
-            binding.returnButtonFeed.isEnabled = true
-            binding.returnButtonFeed.visibility = VISIBLE
-
-            /* placeID */
-            homeViewModel.setFromMap(true)
-            homeViewModel.setPlaceID(placeID!!)
-            /* placeID */
-        } else {
-            binding.returnButtonFeed.isEnabled = false
-            binding.returnButtonFeed.visibility = INVISIBLE
-
-            /* placeID */
-            homeViewModel.setFromMap(false)
-            /* placeID */
-        }
         binding.returnButtonFeed.setOnClickListener {
             binding.returnButtonFeed.isEnabled = false
             binding.returnButtonFeed.visibility = INVISIBLE
@@ -116,18 +94,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // parmin
-    fun newInstance(placeID : String?, fromMap: Boolean): HomeFragment {
-        val fragment = HomeFragment()
-
-        val bundle = Bundle().apply {
-            putString("placeID", placeID)
-            putBoolean("fromMap", fromMap)
-        }
-
-        fragment.arguments = bundle
-        return fragment
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
