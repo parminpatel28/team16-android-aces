@@ -79,34 +79,34 @@ class ReviewActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRestaurantTagging() {
-        val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
-        val restaurantAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, restaurantList)
-
-        binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
-        binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
-
-        // Handle tag selection
-        binding.tagRestaurantsDropdown.setOnItemClickListener { _, _, position, _ ->
-            val selectedRestaurant = restaurantAdapter.getItem(position) ?: return@setOnItemClickListener
-
-            // Prevent duplicate selection
-            if (!taggedRestaurants.contains(selectedRestaurant)) {
-                taggedRestaurants.add(selectedRestaurant)
-                addChipToGroupList(selectedRestaurant, binding.tagRestaurantChipGroup)
-            }
-            binding.tagRestaurantsDropdown.text.clear()
-        }
-    }
+//    private fun setupRestaurantTagging() {
+//        val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
+//        val restaurantAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, restaurantList)
+//
+//        binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
+//        binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+//
+//        // Handle tag selection
+//        binding.tagRestaurantsDropdown.setOnItemClickListener { _, _, position, _ ->
+//            val selectedRestaurant = restaurantAdapter.getItem(position) ?: return@setOnItemClickListener
+//
+//            // Prevent duplicate selection
+//            if (!taggedRestaurants.contains(selectedRestaurant)) {
+//                taggedRestaurants.add(selectedRestaurant)
+//                addChipToGroupList(selectedRestaurant, binding.tagRestaurantChipGroup)
+//            }
+////            binding.tagRestaurantsDropdown.text.clear()
+//        }
+//    }
 
     private fun addChipToGroupList(text: String, chipGroup: ChipGroup) {
         val chip = Chip(this).apply {
             this.text = text
-            this.isCloseIconVisible = true
-            this.setOnCloseIconClickListener {
-                chipGroup.removeView(this)
-                taggedRestaurants.remove(text)
-            }
+//            this.isCloseIconVisible = true
+//            this.setOnCloseIconClickListener {
+//                chipGroup.removeView(this)
+//                taggedRestaurants.remove(text)
+//            }
         }
         chipGroup.addView(chip)
     }
@@ -153,7 +153,7 @@ class ReviewActivity : AppCompatActivity() {
         }
         // Pre-fill restaurant if provided
         if (restaurantName != null) {
-            binding.tagRestaurantsDropdown.setText(restaurantName)
+//            binding.tagRestaurantsDropdown.setText(restaurantName)
             // Add the restaurant as a chip
             if (!taggedRestaurants.contains(restaurantName)) {
                 taggedRestaurants.add(restaurantName)
@@ -161,7 +161,7 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
-        setupRestaurantTagging()
+//        setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
