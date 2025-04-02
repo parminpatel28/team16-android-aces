@@ -43,6 +43,7 @@
                     android:contentDescription="Profile Picture"
                     android:scaleType="centerCrop"
                     android:background="@drawable/circle_background"
+                    android:src="@drawable/default_profile_picture"
                     app:shapeAppearanceOverlay="@style/CircleImageView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

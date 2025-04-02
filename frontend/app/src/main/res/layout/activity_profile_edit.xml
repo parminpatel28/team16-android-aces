@@ -43,7 +43,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/darker_gray"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_person"
+                android:src="@drawable/default_profile_picture"
                 app:shapeAppearanceOverlay="@style/CircleImageView" />
 
             <TextView

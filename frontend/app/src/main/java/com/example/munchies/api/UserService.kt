@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import java.io.Serializable
 
@@ -35,4 +36,7 @@ interface UserService {
 
     @GET("api/user/{id}")
     suspend fun getUserById(@Path("id") id: String): Response<User>
+
+    @PUT("api/user/{id}")
+    suspend fun updateUser(@Path("id") id: String, @Body request: CreateUserRequest): Response<User>
 } 
