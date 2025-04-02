@@ -154,29 +154,6 @@
                 app:boxStrokeColor="@color/gray"/>
 
             <!-- Tag Restaurant -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tagRestaurantLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeColor="@color/orange"
-                android:hint="Tag Restaurants">
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/tagRestaurantsDropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:paddingVertical="12dp"
-                    android:minHeight="48dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:paddingStart="16dp"
-                    android:textSize="14sp"
-                    android:hint=""/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/tagRestaurantChipGroup"
                 android:layout_width="match_parent"

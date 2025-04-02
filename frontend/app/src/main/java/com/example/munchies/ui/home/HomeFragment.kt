@@ -1,6 +1,7 @@
 package com.example.munchies.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -31,16 +32,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val calledByViewReviews = arguments?.getBoolean("fromMap")
-        val placeAdress = arguments?.getString("address")
+        binding.returnButtonFeed.isEnabled = false
+        binding.returnButtonFeed.visibility = INVISIBLE
 
-        if (calledByViewReviews == true) {
-            binding.returnButtonFeed.isEnabled = true
-            binding.returnButtonFeed.visibility = VISIBLE
-        } else {
-            binding.returnButtonFeed.isEnabled = false
-            binding.returnButtonFeed.visibility = INVISIBLE
-        }
         binding.returnButtonFeed.setOnClickListener {
             binding.returnButtonFeed.isEnabled = false
             binding.returnButtonFeed.visibility = INVISIBLE
@@ -100,17 +94,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun newInstance(address : String?, fromMap: Boolean): HomeFragment {
-        val fragment = HomeFragment()
-
-        val bundle = Bundle().apply {
-            putString("address", address)
-            putBoolean("fromMap", fromMap)
-        }
-
-        fragment.arguments = bundle
-        return fragment
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

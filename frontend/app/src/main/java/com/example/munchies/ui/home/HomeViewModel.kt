@@ -89,13 +89,13 @@ class HomeViewModel : ViewModel() {
         _refresh.value = false
     }
 
-    private fun fetchReviews() {
 
+    private fun fetchReviews() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         friendRepository.getUserFriends(userId) { friends ->
             viewModelScope.launch {
-                var allReviews = friends.orEmpty().mapNotNull { friend ->
+                val allReviews = friends.orEmpty().mapNotNull { friend ->
                     try {
                         reviewRepository.getReviewsByUser(friend.id)
                     } catch (e: Exception) {
@@ -104,17 +104,14 @@ class HomeViewModel : ViewModel() {
                     }
                 }.flatten()
 
-                allReviews.forEach{ review: Review -> run {
-                        review.liked = savedReviewids.value?.contains(review.reviewID)
-
-                    }
+                allReviews.forEach { review ->
+                    review.liked = savedReviewids.value?.contains(review.reviewID)
                 }
 
                 _reviews.value = allReviews
-                Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews ${allReviews}")
+                Log.d("HomeViewModel", "Fetched ${allReviews.size} total reviews")
             }
         }
-
     }
 
     private fun loadUserData() {

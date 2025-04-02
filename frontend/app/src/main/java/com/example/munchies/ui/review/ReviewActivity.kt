@@ -79,34 +79,34 @@ class ReviewActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRestaurantTagging() {
-        val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
-        val restaurantAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, restaurantList)
-
-        binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
-        binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
-
-        // Handle tag selection
-        binding.tagRestaurantsDropdown.setOnItemClickListener { _, _, position, _ ->
-            val selectedRestaurant = restaurantAdapter.getItem(position) ?: return@setOnItemClickListener
-
-            // Prevent duplicate selection
-            if (!taggedRestaurants.contains(selectedRestaurant)) {
-                taggedRestaurants.add(selectedRestaurant)
-                addChipToGroupList(selectedRestaurant, binding.tagRestaurantChipGroup)
-            }
-            binding.tagRestaurantsDropdown.text.clear()
-        }
-    }
+//    private fun setupRestaurantTagging() {
+//        val restaurantList = listOf("Pizza Palace", "Sushi World", "Burger Haven", "Taco Town", "Pasta Paradise")
+//        val restaurantAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, restaurantList)
+//
+//        binding.tagRestaurantsDropdown.setAdapter(restaurantAdapter)
+//        binding.tagRestaurantsDropdown.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+//
+//        // Handle tag selection
+//        binding.tagRestaurantsDropdown.setOnItemClickListener { _, _, position, _ ->
+//            val selectedRestaurant = restaurantAdapter.getItem(position) ?: return@setOnItemClickListener
+//
+//            // Prevent duplicate selection
+//            if (!taggedRestaurants.contains(selectedRestaurant)) {
+//                taggedRestaurants.add(selectedRestaurant)
+//                addChipToGroupList(selectedRestaurant, binding.tagRestaurantChipGroup)
+//            }
+////            binding.tagRestaurantsDropdown.text.clear()
+//        }
+//    }
 
     private fun addChipToGroupList(text: String, chipGroup: ChipGroup) {
         val chip = Chip(this).apply {
             this.text = text
-            this.isCloseIconVisible = true
-            this.setOnCloseIconClickListener {
-                chipGroup.removeView(this)
-                taggedRestaurants.remove(text)
-            }
+//            this.isCloseIconVisible = true
+//            this.setOnCloseIconClickListener {
+//                chipGroup.removeView(this)
+//                taggedRestaurants.remove(text)
+//            }
         }
         chipGroup.addView(chip)
     }
@@ -139,12 +139,21 @@ class ReviewActivity : AppCompatActivity() {
         val restaurantId = intent.getStringExtra("RESTAURANT_ID")
         val restaurantAddress = intent.getStringExtra("RESTAURANT_ADDRESS")
 
+        // Maintain the caption and rating after coming from the map
+        val rating = intent.getFloatExtra("rating", 0.0f)
+        binding.overallRatingBar.rating = rating
+
+        val caption = intent.getStringExtra("caption")
+        if (!caption.isNullOrEmpty()) {
+            binding.reviewText.setText(caption)
+        }
+
         if (restaurantId != null) {
-            Log.d("ReviewActivity", restaurantId + "Restaurant ID")
+            Log.d("ReviewActivity", restaurantName + "Restaurant ID")
         }
         // Pre-fill restaurant if provided
         if (restaurantName != null) {
-            binding.tagRestaurantsDropdown.setText(restaurantName)
+//            binding.tagRestaurantsDropdown.setText(restaurantName)
             // Add the restaurant as a chip
             if (!taggedRestaurants.contains(restaurantName)) {
                 taggedRestaurants.add(restaurantName)
@@ -152,7 +161,7 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
-        setupRestaurantTagging()
+//        setupRestaurantTagging()
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -165,14 +174,15 @@ class ReviewActivity : AppCompatActivity() {
         binding.btnChooseLocation.setOnClickListener {
             Log.d("ReviewActivity", " Choose Location Button Clicked")
             val context = applicationContext
-//            sharedUIViewModel._fromReview.value = true
-            //Log.d("ReviewActivity", sharedUIViewModel._fromReview.value.toString())
             val intent = Intent(context, MapActivity::class.java)
-
 
             intent.putExtra("fromReview", true)
 
+            intent.putExtra("caption", binding.reviewText.text.toString().trim())
+            intent.putExtra("rating", binding.overallRatingBar.rating)
+
             startActivity(intent)
+            finish()
         }
 
 
@@ -210,7 +220,8 @@ class ReviewActivity : AppCompatActivity() {
                     date = Instant.now().toString(),
                     rating = overallRating,
                     likes = 0,
-                    restaurantId = restaurantId
+                    restaurantId = restaurantId,
+                    restaurantName = restaurantName
                 )
 
                 reviewViewModel.submitReview(review) { reviewResponse ->
