@@ -4,7 +4,7 @@
     <item android:state_selected="true"  >
         <inset android:insetLeft="8dp" android:insetRight="8dp">
             <shape android:shape="rectangle">
-                <solid android:color="?android:attr/colorPressedHighlight" />
+                <solid android:color="@color/orange" />
                 <corners android:radius="8dp" />
                 <stroke android:width="0.5dp" android:color="@color/gray" />
             </shape>
@@ -14,5 +14,13 @@
 
 
     <!-- Default state (transparent background) -->
-    <item android:drawable="@android:color/transparent" />
+    <item  >
+    <inset android:insetLeft="8dp" android:insetRight="8dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/light_orange" />
+            <corners android:radius="8dp" />
+            <stroke android:width="0.5dp" android:color="@color/gray" />
+        </shape>
+    </inset>
+    </item>
 </selector>

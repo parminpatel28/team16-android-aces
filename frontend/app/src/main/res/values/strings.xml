@@ -46,7 +46,8 @@
     <string name="title_activity_maps">Choose a location</string>
     <string name="you_have_no_friend_requests">You have no incoming friend requests</string>
     <string name="requests">Requests</string>
-    <string name="friends">My Friends</string>
+    <string name="friends">.My Friends</string>
     <string name="options">Options</string>
     <string name="you_have_no_friends">You have no friends yet. Try adding some!</string>
+    <string name="no_results_found">No results found</string>
 </resources>

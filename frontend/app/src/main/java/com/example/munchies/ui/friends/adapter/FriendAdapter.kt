@@ -148,6 +148,7 @@ lifecycleOwner: LifecycleOwner
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
+                Log.d("FriendAdapter", "Filtering with constraint: $constraint")
                 val query = constraint.toString().lowercase()
                 filteredFriendList = if (query.isEmpty()) {
                     friendList
@@ -158,6 +159,7 @@ lifecycleOwner: LifecycleOwner
                 }
                 val results = FilterResults()
                 results.values = filteredFriendList
+                results.count = filteredFriendList.size
                 return results
             }
 

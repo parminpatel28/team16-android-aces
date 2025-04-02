@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -41,6 +42,9 @@ class FriendSearchActivity: AppCompatActivity() {
         friendAdapter = FriendAdapter(userList, friendsViewModel, this)
         recyclerView.adapter = friendAdapter
         friendsViewModel.fetchAllUsers()
+        recyclerView.visibility = View.GONE
+        binding.noResults.visibility = View.VISIBLE
+        binding.noResults.text = "Please enter at least 3 characters to search"
 
         // Back button
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -76,7 +80,29 @@ class FriendSearchActivity: AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                friendAdapter.filter.filter(newText)
+                // Check if at least 3 characters have been entered
+                if (newText == null || newText.length < 3) {
+                    // Hide the list and show a message prompting for more characters
+                    recyclerView.visibility = View.GONE
+                    binding.noResults.visibility = View.VISIBLE
+                    binding.noResults.text = "Please enter at least 3 characters to search"
+                    // Optionally update adapter with an empty list
+                } else {
+                    // Show the list (in case it was hidden) and filter the results
+                    recyclerView.visibility = View.VISIBLE
+                    friendAdapter.filter.filter(newText) { count ->
+                        if (count == 0) {
+                            // If filtering returns no results, hide the list and show "no results" message
+                            recyclerView.visibility = View.GONE
+                            binding.noResults.visibility = View.VISIBLE
+                            binding.noResults.text = "No results found"
+                        } else {
+                            // Otherwise, show the list and hide the empty message
+                            recyclerView.visibility = View.VISIBLE
+                            binding.noResults.visibility = View.GONE
+                        }
+                    }
+                }
                 return true
             }
         })
