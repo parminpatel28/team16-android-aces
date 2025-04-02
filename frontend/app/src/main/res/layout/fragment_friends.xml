@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.friends.FriendsFragment">
+    android:gravity="center"
+    tools:context=".ui.friends.FriendsFragment"
+    android:background="@color/white">
 
 <LinearLayout
         android:layout_width="match_parent"
@@ -20,12 +22,12 @@
             app:tabBackground="@drawable/selected_tab_background"
             app:tabIndicatorHeight="0dp"
             app:tabMode="fixed"
-            app:tabPaddingEnd="16dp"
-            app:tabPaddingStart="16dp"
+            app:tabPaddingEnd="24dp"
+            app:tabPaddingStart="24dp"
             app:tabPaddingTop="0dp"
             app:tabPaddingBottom="0dp"
-            app:tabSelectedTextColor="@color/orange"
-            app:tabTextColor="@color/orange">
+            app:tabTextColor="@color/orange"
+            app:tabInlineLabel="true">
 
             <com.google.android.material.tabs.TabItem
                 style="?android:attr/buttonBarButtonStyle"
@@ -34,7 +36,7 @@
                 android:text="@string/friends"/>
 
             <com.google.android.material.tabs.TabItem
-                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/requests"/>
@@ -42,7 +44,6 @@
 
     <Button
         android:id="@+id/btnAddFriends"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
@@ -66,7 +67,7 @@
 
     <TextView
         android:id="@+id/noFriendRequests"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/you_have_no_friend_requests"
@@ -74,7 +75,7 @@
 
     <TextView
         android:id="@+id/noFriends"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/you_have_no_friends"

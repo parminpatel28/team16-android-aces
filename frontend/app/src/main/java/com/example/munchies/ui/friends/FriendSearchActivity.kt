@@ -1,5 +1,4 @@
 package com.example.munchies.ui.friends
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -86,6 +85,10 @@ class FriendSearchActivity: AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true);
         supportActionBar?.title = "Add Friends"
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

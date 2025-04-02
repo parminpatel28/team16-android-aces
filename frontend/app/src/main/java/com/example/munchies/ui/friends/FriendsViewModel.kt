@@ -101,7 +101,8 @@ class FriendsViewModel : ViewModel() {
             userRepository.getAllUsers { response ->
                 if (response != null) {
                     Log.d("FriendsViewModel", "Get all users")
-                    _userList.value = response
+                    val filteredUsers = response.filter { user -> user.id != userId }
+                    _userList.value = filteredUsers
                 } else {
                     Log.e("FriendsViewModel", "Failed to get all users")
                 }

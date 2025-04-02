@@ -50,7 +50,27 @@ lifecycleOwner: LifecycleOwner
         }
     }
 
+
+
     inner class FriendViewHolder(private val binding: ItemFriendBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private fun showRemoveFriendConfirmation(friend: User) {
+            val context = binding.root.context
+            androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle("Confirm Removal")
+                .setMessage("Are you sure you want to remove ${friend.username} from your friends?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    viewModel.deleteFriend(friend.id)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+
         fun bind(friend: User) {
             val context = binding.root.context
             binding.friendProfilePicture.contentDescription = friend.profilePicture
@@ -61,9 +81,7 @@ lifecycleOwner: LifecycleOwner
                 binding.addFriendButton.visibility = View.GONE
                 binding.removeFriendButton.visibility = View.GONE
                 binding.optionsButton.visibility = View.VISIBLE
-                binding.removeFriendButton.setOnClickListener {
-                    viewModel.deleteFriend(friend.id)
-                }
+
             } else if (viewModel.isOutgoingFriendRequest(friend.id)) {
                 Log.d("FriendAdapter", "${friend.username} has a pending friend request")
                 binding.addFriendButton.visibility = View.GONE
@@ -98,7 +116,6 @@ lifecycleOwner: LifecycleOwner
             }
 
             binding.root.setOnClickListener {
-                val context = binding.root.context
                 val intent =
                     Intent(context, FriendDetailActivity()::class.java).apply {
                         putExtra("friend_id", friend.id)
@@ -112,12 +129,14 @@ lifecycleOwner: LifecycleOwner
             }
 
             binding.optionsButton.setOnClickListener{ v ->
-                val popup: PopupMenu = PopupMenu(v.getContext(), v)
-                popup.getMenuInflater().inflate(com.example.munchies.R.menu.item_friend_menu, popup.menu)
+                val popup: PopupMenu = PopupMenu(v.context, v)
+                popup.menuInflater.inflate(R.menu.item_friend_menu, popup.menu)
                 popup.setOnMenuItemClickListener { item ->
-                    when (item.getItemId()) {
-                        com.example.munchies.R.id.actionRemoveFriend ->                         // Handle delete action
-                            return@setOnMenuItemClickListener true
+                    when (item.itemId) {
+                        R.id.actionRemoveFriend -> {
+                            showRemoveFriendConfirmation(friend)
+                            true
+                        }
                         else -> return@setOnMenuItemClickListener false
                     }
                 }
@@ -158,6 +177,7 @@ lifecycleOwner: LifecycleOwner
             return oldItem == newItem
         }
     }
+
     init {
         // Observe changes from the view model and update the adapter when the friend list changes.
 //        viewModel.friendsList.observe(lifecycleOwner) { newList ->
