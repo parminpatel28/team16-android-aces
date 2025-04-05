@@ -1,4 +1,4 @@
-package com.example.munchies.ui.home.adapter
+package com.example.munchies.ui.friends
 
 import android.content.Intent
 import android.util.Log
@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.munchies.R
 import com.example.munchies.databinding.ItemFriendBinding
 import com.example.munchies.model.User
-import com.example.munchies.ui.friends.FriendDetailActivity
-import com.example.munchies.ui.friends.FriendsViewModel
 
 
 class FriendAdapter(private var friendList: MutableList<User>,

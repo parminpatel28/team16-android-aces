@@ -1,4 +1,4 @@
-package com.example.munchies.ui.home.adapter
+package com.example.munchies.ui.home
 
 import android.content.Context
 import android.content.Intent
@@ -15,7 +15,9 @@ import com.example.munchies.databinding.ItemFeedBinding
 import com.example.munchies.model.Review
 import com.example.munchies.ui.review.ReviewDetailsActivity
 
-class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)  ) : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
+class FeedAdapter (private val context: Context, val onLike : ((Review) -> Unit)  ) : ListAdapter<Review, FeedAdapter.ReviewViewHolder>(
+    ReviewDiffCallback()
+) {
     private lateinit var mContext: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val binding = ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
